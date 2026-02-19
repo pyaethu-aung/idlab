@@ -61,21 +61,25 @@ function App() {
 
   return (
     <div className="app-shell relative isolate overflow-hidden">
-      <main className="relative z-10 mx-auto flex max-w-6xl flex-col gap-12 px-4 py-16 lg:py-24">
-        <div className="flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => setShortcutHelpOpen(true)}
-            className="theme-ghost-button inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition"
-            aria-label="Open keyboard shortcuts reference"
-          >
-            <span aria-hidden="true">?</span>
-            <span>Shortcuts</span>
-          </button>
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
-        </div>
-        <Hero feedback={feedback} />
+      {/* Top Navigation Bar: Shortcuts & Theme Toggle */}
+      <div className="relative z-20 flex items-center justify-end gap-3 px-4 py-4 md:px-8">
+        <button
+          type="button"
+          onClick={() => setShortcutHelpOpen(true)}
+          className="theme-ghost-button inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition"
+          aria-label="Open keyboard shortcuts reference"
+        >
+          <span aria-hidden="true">?</span>
+          <span>Shortcuts</span>
+        </button>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+      </div>
 
+      {/* Hero Section: Full Width (Full Bleed) */}
+      <Hero feedback={feedback} />
+
+      {/* Main Content: Constrained Width */}
+      <main className="relative z-10 mx-auto flex max-w-6xl flex-col gap-12 px-4 py-12 lg:py-16">
         <section className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
           <article className="min-w-0 overflow-hidden rounded-[32px] border theme-border-subtle theme-card theme-shadow-card p-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

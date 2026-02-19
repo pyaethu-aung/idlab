@@ -10,6 +10,8 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: ["src/setupTests.js"],
+    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    exclude: ["**/node_modules/**", "**/dist/**", "**/.agent/**", "**/.agents/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],

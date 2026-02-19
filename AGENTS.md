@@ -4,7 +4,7 @@ This document provides guidelines for AI coding assistants (Antigravity, Gemini 
 
 ## Constitution Reference
 
-Refer to `.specify/memory/constitution.md` (v2.1.0) for the authoritative governance document. This file summarizes key rules for quick reference during development.
+Refer to `.specify/memory/constitution.md` (v2.2.0) for the authoritative governance document. This file summarizes key rules for quick reference during development.
 
 ## Core Principles Summary
 
@@ -22,8 +22,13 @@ Refer to `.specify/memory/constitution.md` (v2.1.0) for the authoritative govern
 
 ## Required Skills
 
-The Agent MUST consult these skills during planning and implementation:
+The Agent MUST consult these skills during planning and implementation.
+> **Note**: These paths point to `.agent/skills`, which are project-specific symlinks to the master skills in `.agents/skills`. Always use the `.agent/skills` path.
 
+- **Design System Synthesis**: `.agent/skills/design-md/SKILL.md`
+- **Enhance Prompt**: `.agent/skills/enhance-prompt/SKILL.md`
+- **React Components**: `.agent/skills/react-components/SKILL.md`
+- **Web Design Guidelines**: `.agent/skills/web-design-guidelines/SKILL.md`
 - **React & Vite Essentials**: `.agent/skills/react-vite-essentials/SKILL.md`
 - **Docker CI/CD Integration**: `.agent/skills/docker-cicd-integration/SKILL.md`
 - **Docker Multi-Stage Optimization**: `.agent/skills/docker-multi-stage-optimization/SKILL.md`
@@ -109,4 +114,4 @@ When implementing code, provide brief comments (1-sentence) explaining *why* a c
 
 ---
 
-**Synced with Constitution**: v2.1.0 | **Last Updated**: 2026-02-16
+**Synced with Constitution**: v2.2.0 | **Last Updated**: 2026-02-19

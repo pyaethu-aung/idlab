@@ -77,7 +77,7 @@ describe("App", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.getByText(/Instant UUID generator/i)).toBeInTheDocument();
+    expect(screen.getByText(/Instant UUID generator built for flow/i)).toBeInTheDocument();
     expect(screen.getByText("Copied!")).toBeInTheDocument();
 
     await user.click(

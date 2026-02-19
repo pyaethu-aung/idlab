@@ -4,6 +4,12 @@
 
 
 
+
+.hero-bg {
+  background: var(--hero-bg);
+  transition: background 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
 .theme-border-subtle {
   border-color: var(--border-subtle) !important;
 }

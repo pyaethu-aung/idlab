@@ -33,6 +33,7 @@
     --btn-text: #020617;
     --btn-hover: #5eead4;
     --btn-active: #6ee7b7;
+    --hero-bg: #030712;
   }
 
   :root[data-theme="light"] {
@@ -66,6 +67,7 @@
     --btn-text: #f0fdfa;
     --btn-hover: #14b8a6;
     --btn-active: #34d399;
+    --hero-bg: #f8fafc;
   }
 
   *,

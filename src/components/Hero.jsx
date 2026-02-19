@@ -8,24 +8,41 @@ function FeedbackBanner({ message }) {
   );
 }
 
+// Note: FeedbackBanner is intentionally removed/replaced by inline success states if needed, 
+// or can be re-integrated. For now, we focus on the new static layout per spec.
+// If feedback prop is critical, we can render it below buttons.
+
 function Hero({ feedback }) {
   return (
-    <header className="space-y-6 text-center">
-      <span className="theme-chip inline-flex items-center justify-center rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em]">
-        Fresh IDs
-      </span>
-      <div className="space-y-4">
-        <h1 className="text-4xl font-semibold theme-text-primary drop-shadow-sm sm:text-5xl">
-          Instant UUID generator built for flow
-        </h1>
-        <p className="mx-auto max-w-2xl text-balance text-base theme-text-secondary sm:text-lg">
-          Generate high-entropy RFC 4122 identifiers, format them for your
-          stack, and copy or download entire batches without touching a
-          terminal.
-        </p>
+    <section aria-label="Hero" className="relative hero-bg pt-12 pb-8 md:pt-16 md:pb-12">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
+        <div className="space-y-6">
+          {/* Badge */}
+          <div className="flex justify-center">
+            <span className="theme-badge inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold tracking-[0.2em] uppercase shadow-sm">
+              Fresh IDs
+            </span>
+          </div>
+
+          {/* Headlines */}
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tighter theme-text-primary leading-[1.05] text-balance">
+              Instant UUID generator built for flow
+            </h1>
+            <p className="mx-auto max-w-2xl text-lg md:text-xl theme-text-secondary leading-relaxed">
+              Generate high-entropy RFC 4122 identifiers, format them for your stack, and copy or download entire batches without touching a terminal.
+            </p>
+          </div>
+
+          {/* Feedback message if any */}
+          {feedback && (
+            <p className="animate-fade-in text-sm font-medium theme-text-accent">
+              {feedback}
+            </p>
+          )}
+        </div>
       </div>
-      <FeedbackBanner message={feedback} />
-    </header>
+    </section>
   );
 }
 

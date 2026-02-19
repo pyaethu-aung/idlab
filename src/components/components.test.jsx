@@ -17,7 +17,7 @@ const defaultOptions = {
 describe("Hero", () => {
   it("renders the headline and optional feedback", () => {
     render(<Hero feedback="Copied!" />);
-    expect(screen.getByText(/Instant UUID generator/i)).toBeInTheDocument();
+    expect(screen.getByText(/Instant UUID generator built for flow/i)).toBeInTheDocument();
     expect(screen.getByText("Copied!")).toBeInTheDocument();
   });
 });
@@ -44,7 +44,7 @@ describe("ThemeToggle", () => {
 
   it("renders sun icon and label in light mode", () => {
     const { container } = render(
-      <ThemeToggle theme="light" onToggle={() => {}} />
+      <ThemeToggle theme="light" onToggle={() => { }} />
     );
     expect(
       screen.getByRole("button", { name: /switch to dark mode/i })
