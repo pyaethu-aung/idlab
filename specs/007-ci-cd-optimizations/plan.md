@@ -72,10 +72,11 @@ specs/007-ci-cd-optimizations/
 #### [NEW] .nvmrc
 
 - Create `.nvmrc` in the repository root containing the value `20`.
+- **Note**: We explicitly rely on the `actions/setup-node` action's native error handling to validate the `.nvmrc` file format.
 
 #### [MODIFY] package.json
 
-- Ensure `package.json` testing/linting scripts work securely and natively.
+- Check `package.json` specifically for `npm run lint` and `npm run test` to ensure they execute cleanly in CI without requiring global installations.
 
 ### GitHub Actions Workflows
 

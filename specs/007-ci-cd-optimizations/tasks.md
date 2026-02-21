@@ -64,7 +64,8 @@ description: "Task list for CI/CD Optimizations"
 - [ ] T005 [P] [US2] Add concurrency cancellation group to `.github/workflows/security.yml`
 - [ ] T006 [P] [US2] Add concurrency cancellation group to `.github/workflows/lint.yml`
 - [ ] T007 [P] [US2] Add push to `main` branch trigger and `actions/cache` for ESLint to `.github/workflows/lint.yml`
-- [ ] T008 [P] [US2] Add inclusion path filters and optimize multi-arch build load in `.github/workflows/docker-publish.yml`
+- [ ] T008 [P] [US2] Add inclusion path filters to trigger only on relevant files in `.github/workflows/docker-publish.yml`
+- [ ] T009 [P] [US2] Optimize multi-arch build load natively for Trivy scan in `.github/workflows/docker-publish.yml`
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -78,11 +79,11 @@ description: "Task list for CI/CD Optimizations"
 
 ### Implementation for User Story 4
 
-- [ ] T009 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/security.yml`
-- [ ] T010 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/docker-publish.yml`
-- [ ] T011 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/lint.yml`
-- [ ] T012 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/deploy.yml`
-- [ ] T013 [US4] Ensure lint validation runs before the build in `.github/workflows/deploy.yml`
+- [ ] T010 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/security.yml`
+- [ ] T011 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/docker-publish.yml`
+- [ ] T012 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/lint.yml`
+- [ ] T013 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/deploy.yml`
+- [ ] T014 [US4] Ensure lint validation runs before the build in `.github/workflows/deploy.yml`
 
 **Checkpoint**: All user stories up to P1 should now be independently functional
 
@@ -96,9 +97,9 @@ description: "Task list for CI/CD Optimizations"
 
 ### Implementation for User Story 3
 
-- [ ] T014 [P] [US3] Update `actions/setup-node` to use `node-version-file: '.nvmrc'` in `.github/workflows/security.yml`
-- [ ] T015 [P] [US3] Update `actions/setup-node` to use `node-version-file: '.nvmrc'` in `.github/workflows/lint.yml`
-- [ ] T016 [P] [US3] Update `actions/setup-node` to use `node-version-file: '.nvmrc'` in `.github/workflows/deploy.yml`
+- [ ] T015 [P] [US3] Update `actions/setup-node` to use `node-version-file: '.nvmrc'` in `.github/workflows/security.yml`
+- [ ] T016 [P] [US3] Update `actions/setup-node` to use `node-version-file: '.nvmrc'` in `.github/workflows/lint.yml`
+- [ ] T017 [P] [US3] Update `actions/setup-node` to use `node-version-file: '.nvmrc'` in `.github/workflows/deploy.yml`
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -108,7 +109,7 @@ description: "Task list for CI/CD Optimizations"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T017 [P] Verify documentation workflows and ensure testing/linting scripts work securely in `package.json`
+- [ ] T018 [P] Verify documentation workflows and ensure testing/linting scripts work securely in `package.json`
 
 ---
 
