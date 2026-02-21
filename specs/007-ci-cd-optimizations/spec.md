@@ -5,11 +5,19 @@
 **Status**: Draft  
 **Input**: User description: "CI/CD performance, security, and maintainability optimizations"
 
+## Clarifications
+
+### Session 2026-02-21
+
+- Q: Handling Missing Optional Secrets → A: Fail the pipeline but mark the failure as non-blocking (allow-failure)
+- Q: Job Timeout Strategy → A: Strict 15-minute global timeout for all jobs
+- Q: Container Build Triggers → A: Includes `docker-publish.yml`, `src/**`, `index.html`, `package.json`, `package-lock.json`, `vite.config.js`, `eslint.config.js` for container builds
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Secure and Reliable CI Execution (Priority: P1)
 
-Developers pushing code need CI actions to use stable, pinned versions and handle missing optional secrets gracefully, ensuring the build process is secure and doesn't fail unnecessarily.
+Developers pushing code need CI actions to use stable, pinned versions and handle missing optional secrets with high visibility, ensuring the build process is secure while allowing development to proceed.
 
 **Why this priority**: Security vulnerabilities and brittleness in CI workflows block development and risk supply chain attacks.
 
@@ -17,7 +25,7 @@ Developers pushing code need CI actions to use stable, pinned versions and handl
 
 **Acceptance Scenarios**:
 
-1. **Given** a pushed commit, **When** the security workflow runs without a mandatory external token, **Then** the optional scan step is skipped and the pipeline continues successfully.
+1. **Given** a pushed commit, **When** the security workflow runs without a mandatory external token, **Then** the optional scan fails but is marked as non-blocking (allow-failure), permitting the pipeline to proceed without blocking merges.
 2. **Given** the code analysis action runs, **When** checking the logs, **Then** there are no deprecation warnings.
 
 ---
@@ -33,7 +41,7 @@ Developers pushing code need redundant jobs canceled, caching enabled for valida
 **Acceptance Scenarios**:
 
 1. **Given** an actively running workflow on a PR, **When** a new commit is pushed to the same PR, **Then** the previous workflow run is automatically canceled.
-2. **Given** a pull request containing only Markdown changes, **When** the CI triggers, **Then** the container build workflow does not run.
+2. **Given** a pull request containing only Markdown changes (not matching explicit include paths), **When** the CI triggers, **Then** the container build workflow does not run.
 3. **Given** a second run of the validation workflow, **When** the linter executes, **Then** it utilizes the validation cache to speed up execution.
 
 ---
@@ -80,13 +88,13 @@ Release managers need deployments to only happen after validation passes, and fo
 - **FR-002**: System MUST upgrade the code analysis action to a non-deprecated version (v4).
 - **FR-003**: System MUST configure concurrency controls in validation and security pipelines to cancel in-progress runs for the same branch/PR context.
 - **FR-004**: System MUST apply a 15-minute execution timeout at the job level across all CI/CD pipelines.
-- **FR-005**: System MUST conditionally execute vulnerability scans only when required environment secrets are present.
+- **FR-005**: System MUST attempt vulnerability scans even when required environment secrets are absent, but properly configure them to allow failure so they do not block CI success.
 - **FR-006**: System MUST enforce successful completion of the code validation suite before allowing any automated deployment steps to run.
 - **FR-007**: System MUST trigger the validation pipeline automatically upon commits to the primary default branch (`main`).
 - **FR-008**: System MUST utilize a centralized `.nvmrc` file for Node.js version management and configure CI workflows to dynamically read from it.
 - **FR-009**: System MUST implement caching for the code validation suite to persist state between runs.
 - **FR-010**: System MUST optimize multi-architecture container builds to minimize execution time during vulnerability scanning processes.
-- **FR-011**: System MUST utilize path-based filtering triggers to prevent container build pipelines from executing when only unrelated files (like documentation) are modified.
+- **FR-011**: System MUST utilize inclusion-based path filters (`.github/workflows/docker-publish.yml`, `src/**`, `index.html`, `package.json`, `package-lock.json`, `vite.config.js`, `eslint.config.js`) for the container build pipeline to prevent it from executing when only unrelated files are modified.
 
 ## Success Criteria *(mandatory)*
 
