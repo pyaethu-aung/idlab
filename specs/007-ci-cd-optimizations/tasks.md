@@ -21,7 +21,7 @@ description: "Task list for CI/CD Optimizations"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create `.nvmrc` in repository root configured to Node.js `20`
+- [x] T001 Create `.nvmrc` in repository root configured to Node.js `20`
 
 ---
 
