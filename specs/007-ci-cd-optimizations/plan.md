@@ -83,7 +83,7 @@ specs/007-ci-cd-optimizations/
 #### [MODIFY] .github/workflows/security.yml
 
 - **Action Version Pinning**: Update Snyk action to `snyk/actions/node@v1.0.0`.
-- **CodeQL Upgrade**: Update `github/codeql-action/upload-sarif@v3` to `v4`.
+- **CodeQL Upgrade**: Update `github/codeql-action/upload-sarif@v3` to `v4`. Add `github/codeql-action/init@v4` and `github/codeql-action/analyze@v4` to perform static code analysis, and configure it to trigger on `src/**` changes.
 - **Concurrency**: Add concurrency control to cancel in-progress runs for the same branch/PR, e.g., `group: ${<!-- -->{ github.workflow }}-${<!-- -->{ github.ref }}`.
 - **Job Timeout**: Add `timeout-minutes: 15` at the job level.
 - **Graceful Failure**: Update the Snyk step to use `continue-on-error: true` (which it already has) and ideally an `if: env.SNYK_TOKEN != ''` condition if secrets exist or are optional. But as per clarification, we should rely on `continue-on-error: true`. Actually, the spec says "attempt vulnerability scans even when required environment secrets are absent, but properly configure them to allow failure".
@@ -105,6 +105,8 @@ specs/007-ci-cd-optimizations/
   - Add `actions/cache` step before `npm run lint` prioritizing `.eslintcache`.
   - Ensure the `npm run lint` step caches correctly.
 - **Node.js Centralization**: Use `node-version-file: '.nvmrc'`.
+- **Build Verification**: Add an `npm run build` step at the end of the job to adhere to Constitution execution discipline, ensuring the PR branch compiles.
+- **Workflow configuration trigger**: Add `.github/workflows/lint.yml` to the `paths` filter.
 
 #### [MODIFY] .github/workflows/deploy.yml
 

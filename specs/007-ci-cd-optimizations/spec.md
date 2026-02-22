@@ -85,7 +85,7 @@ Release managers need deployments to only happen after validation passes, and fo
 ### Functional Requirements
 
 - **FR-001**: System MUST pin CI action versions to specific tags/hashes (e.g., node security action to v1.0.0, trivy action to nearest stable).
-- **FR-002**: System MUST upgrade the code analysis action to a non-deprecated version (v4).
+- **FR-002**: System MUST upgrade the code analysis action to a non-deprecated version (v4) and explicitly initialize and perform static CodeQL analysis on the source code.
 - **FR-003**: System MUST configure concurrency controls in validation and security pipelines to cancel in-progress runs for the same branch/PR context.
 - **FR-004**: System MUST apply a 15-minute execution timeout at the job level across all CI/CD pipelines.
 - **FR-005**: System MUST attempt vulnerability scans even when required environment secrets are absent, but properly configure them to allow failure so they do not block CI success.

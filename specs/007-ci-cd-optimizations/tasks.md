@@ -45,7 +45,7 @@ description: "Task list for CI/CD Optimizations"
 
 ### Implementation for User Story 1
 
-- [x] T002 [P] [US1] Update CodeQL to `v4` and pin Snyk to `v1.0.0` in `.github/workflows/security.yml`
+- [x] T002 [P] [US1] Update CodeQL to `v4`, add static analysis steps for `src/**`, and pin Snyk to `v1.0.0` in `.github/workflows/security.yml`
 - [x] T003 [P] [US1] Pin Trivy action to `0.34.1` in `.github/workflows/docker-publish.yml`
 - [x] T004 [US1] Add `continue-on-error` behavior for Snyk step in `.github/workflows/security.yml` (depends on T002)
 
@@ -61,11 +61,11 @@ description: "Task list for CI/CD Optimizations"
 
 ### Implementation for User Story 2
 
-- [ ] T005 [P] [US2] Add concurrency cancellation group to `.github/workflows/security.yml`
-- [ ] T006 [P] [US2] Add concurrency cancellation group to `.github/workflows/lint.yml`
-- [ ] T007 [P] [US2] Add push to `main` branch trigger and `actions/cache` for ESLint to `.github/workflows/lint.yml`
-- [ ] T008 [P] [US2] Add inclusion path filters to trigger only on relevant files in `.github/workflows/docker-publish.yml`
-- [ ] T009 [P] [US2] Optimize multi-arch build load natively for Trivy scan in `.github/workflows/docker-publish.yml`
+- [x] T005 [P] [US2] Add concurrency cancellation group to `.github/workflows/security.yml`
+- [x] T006 [P] [US2] Add concurrency cancellation group to `.github/workflows/lint.yml`
+- [x] T007 [P] [US2] Add push to `main` branch trigger, workflow trigger paths, `actions/cache` for ESLint, and Build Verification to `.github/workflows/lint.yml`
+- [x] T008 [P] [US2] Add inclusion path filters to trigger only on relevant files in `.github/workflows/docker-publish.yml`
+- [x] T009 [P] [US2] Optimize multi-arch build load natively for Trivy scan in `.github/workflows/docker-publish.yml`
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
