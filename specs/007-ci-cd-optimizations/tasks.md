@@ -79,11 +79,11 @@ description: "Task list for CI/CD Optimizations"
 
 ### Implementation for User Story 4
 
-- [ ] T010 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/security.yml`
-- [ ] T011 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/docker-publish.yml`
-- [ ] T012 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/lint.yml`
-- [ ] T013 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/deploy.yml`
-- [ ] T014 [US4] Ensure lint validation runs before the build in `.github/workflows/deploy.yml`
+- [x] T010 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/security.yml`
+- [x] T011 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/docker-publish.yml`
+- [x] T012 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/lint.yml`
+- [x] T013 [P] [US4] Add `timeout-minutes: 15` to all jobs in `.github/workflows/deploy.yml`
+- [x] T014 [US4] Ensure lint validation runs before the build in `.github/workflows/deploy.yml`
 
 **Checkpoint**: All user stories up to P1 should now be independently functional
 

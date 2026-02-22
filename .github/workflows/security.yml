@@ -33,6 +33,7 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     name: Security Scan
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
