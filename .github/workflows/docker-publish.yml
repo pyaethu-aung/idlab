@@ -22,7 +22,7 @@ on:
       - "package-lock.json"
       - "vite.config.js"
   schedule:
-    - cron: '35 6 * * *'
+    - cron: '35 6 * * 0'  # Every Sunday at 06:35 UTC
 
 env:
   REGISTRY: ghcr.io
