@@ -3,7 +3,6 @@ name: Docker
 on:
   push:
     branches: [ "main" ]
-    tags: [ 'v*.*.*' ]
     paths:
       - ".github/workflows/docker-publish.yml"
       - "src/**"
@@ -11,7 +10,8 @@ on:
       - "package.json"
       - "package-lock.json"
       - "vite.config.js"
-      - "eslint.config.js"
+  release:
+    types: [ published ]
   pull_request:
     branches: [ "main" ]
     paths:
@@ -118,7 +118,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: ${{ startsWith(github.ref, 'refs/tags/') }}
+          push: ${{ github.event_name == 'release' || startsWith(github.ref, 'refs/tags/') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -126,7 +126,7 @@ jobs:
 
       # Sign the resulting Docker image digest except on PRs.
       - name: Sign the published Docker image
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        if: ${{ github.event_name == 'release' || startsWith(github.ref, 'refs/tags/') }}
         env:
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}

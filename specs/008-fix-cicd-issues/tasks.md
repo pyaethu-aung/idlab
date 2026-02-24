@@ -18,7 +18,7 @@
 
 **Purpose**: Confirm the working branch and files are in the expected state before editing.
 
-- [ ] T001 Verify branch is `008-fix-cicd-issues` and all three workflow files match the pre-fix state documented in plan.md
+- [x] T001 Verify branch is `008-fix-cicd-issues` and all three workflow files match the pre-fix state documented in plan.md
 
 > No project init, no dependency install, no tooling config — YAML-only scope.
 
@@ -40,7 +40,7 @@
 
 ### Implementation for User Story 1
 
-- [ ] T002 [US1][US4] In `.github/workflows/docker-publish.yml`, split the `on.push` block into two separate `push:` entries: one with `branches: ["main"]` and `paths:` (retaining the existing path list minus `eslint.config.js`), and one with `tags: ["v*.*.*"]` and no `paths:` key *(also satisfies FR-003/US4 for `push.paths`; `pull_request.paths` is completed by T007)*
+- [x] T002 [US1][US4] In `.github/workflows/docker-publish.yml`, split the `on.push` block into two separate `push:` entries: one with `branches: ["main"]` and `paths:` (retaining the existing path list minus `eslint.config.js`), and one with `tags: ["v*.*.*"]` and no `paths:` key *(also satisfies FR-003/US4 for `push.paths`; `pull_request.paths` is completed by T007)*
 
   **⚠️ Pre-flight — verify duplicate push key behaviour before editing the production workflow**: Create a throwaway branch with a minimal test workflow containing two `push:` entries and confirm both triggers fire independently. If GitHub Actions only honours the last `push:` key, use the `release: [published]` event for the tag trigger instead:
 
