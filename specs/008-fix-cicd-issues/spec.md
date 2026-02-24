@@ -5,6 +5,13 @@
 **Status**: Draft  
 **Input**: User description: "Fix critical and minor CI/CD workflow issues identified during code review of the 007-ci-cd-optimizations branch."
 
+## Clarifications
+
+### Session 2026-02-24
+
+- Q: What mechanism should guard the Snyk SARIF upload step — bash `test -f`, `hashFiles()`, or `steps.<id>.outcome`? → A: `steps.<snyk-step-id>.outcome == 'success'` (native step-outcome expression)
+- Q: How is "no regressions" in SC-005 verified — automated CI gate or manual YAML review? → A: All existing workflows must pass on a pull request to `main` (automated CI gate)
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Tagged Docker Releases Always Publish (Priority: P1)
@@ -84,7 +91,7 @@ As a maintainer, I want the Docker publish workflow's path filters to only inclu
 - **FR-001**: The `docker-publish` workflow MUST trigger on any version tag matching `v*.*.*`, unconditionally of which files changed.
 - **FR-002**: The `docker-publish` workflow MUST continue to trigger on path-filtered pushes to main/master for non-tagged events, with the path filter applied only to the `push` (non-tag) trigger.
 - **FR-003**: The `eslint.config.js` path MUST be removed from the `docker-publish` workflow's path filter list, as ESLint configuration does not affect Docker image contents.
-- **FR-004**: The Snyk SARIF upload step in `security.yml` MUST only execute when the `snyk.sarif` output file is confirmed to exist on disk.
+- **FR-004**: The Snyk SARIF upload step in `security.yml` MUST only execute when the preceding Snyk step's outcome is `success`, using a native GitHub Actions step-outcome expression (`steps.<snyk-step-id>.outcome == 'success'`).
 - **FR-005**: The ESLint cache key in `lint.yml` MUST be derived only from `eslint.config.js` and `package-lock.json`, not from source files under `src/**`.
 - **FR-006**: The ESLint caching step in `lint.yml` MUST include at least one `restore-keys` prefix fallback to allow partial cache restoration across different branches.
 
@@ -92,7 +99,7 @@ As a maintainer, I want the Docker publish workflow's path filters to only inclu
 
 - The workflows reside in the `.github/workflows/` directory and use standard GitHub Actions YAML syntax.
 - The Snyk step already has `continue-on-error: true`; only the upload condition needs to change.
-- "File exists" for the SARIF upload condition can be expressed as a shell-based `hashFiles` check or a native GitHub Actions `if` expression checking file existence.
+- The SARIF upload gate uses `steps.<snyk-step-id>.outcome == 'success'` — a native GitHub Actions step-outcome expression — not `hashFiles()` or a bash `test -f` check.
 - No changes to application source code, Dockerfile content, or test logic are required — this is a GitHub Actions YAML-only change.
 - The `docker-publish` workflow currently uses a single `push` trigger block with both `tags` and `paths` keys; splitting into two separate trigger entries is the intended fix.
 
@@ -104,4 +111,4 @@ As a maintainer, I want the Docker publish workflow's path filters to only inclu
 - **SC-002**: The Snyk SARIF upload step produces zero "file not found" failures across all workflow runs where Snyk itself errors.
 - **SC-003**: ESLint lint runs that involve only source file changes (no config or lockfile changes) restore from cache at least 90% of the time within the same branch lineage.
 - **SC-004**: A change to only `eslint.config.js` does NOT trigger a Docker image build/publish workflow run on a non-tagged push.
-- **SC-005**: All five identified issues are resolved with no regressions introduced into any other workflow trigger or condition.
+- **SC-005**: All five identified issues are resolved and all existing GitHub Actions workflows pass on a pull request to `main` with no new failures introduced.
