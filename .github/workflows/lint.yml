@@ -46,7 +46,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .eslintcache
-          key: ${{ runner.os }}-eslint-${{ hashFiles('eslint.config.js', 'package-lock.json', 'src/**') }}
+          key: ${{ runner.os }}-eslint-${{ hashFiles('eslint.config.js', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-eslint-
 
       - name: Run ESLint
         run: npm run lint -- --cache --cache-location .eslintcache

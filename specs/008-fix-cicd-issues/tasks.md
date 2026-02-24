@@ -141,7 +141,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T005 [US3] In `.github/workflows/lint.yml`, remove `'src/**'` from the `hashFiles()` call in the `key:` of the `Cache ESLint dependencies` step (line 49)
+- [x] T005 [US3] In `.github/workflows/lint.yml`, remove `'src/**'` from the `hashFiles()` call in the `key:` of the `Cache ESLint dependencies` step (line 49)
 
   ```yaml
   # BEFORE
@@ -151,7 +151,7 @@
             key: ${{ runner.os }}-eslint-${{ hashFiles('eslint.config.js', 'package-lock.json') }}
   ```
 
-- [ ] T006 [US3] In `.github/workflows/lint.yml`, add a `restore-keys:` field immediately after the `key:` line in the `Cache ESLint dependencies` step
+- [x] T006 [US3] In `.github/workflows/lint.yml`, add a `restore-keys:` field immediately after the `key:` line in the `Cache ESLint dependencies` step
 
   ```yaml
   # AFTER (full cache step — lines 45–52 result):
