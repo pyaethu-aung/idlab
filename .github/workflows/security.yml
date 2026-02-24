@@ -51,6 +51,7 @@ jobs:
         run: npm audit --audit-level=moderate
 
       - name: Run Snyk vulnerability scanner
+        id: snyk
         uses: snyk/actions/node@v1.0.0
         with:
           args: --severity-threshold=high --sarif-file-output=snyk.sarif
@@ -70,4 +71,4 @@ jobs:
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: snyk.sarif
-        if: always()
+        if: steps.snyk.outcome == 'success'

@@ -106,7 +106,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T003 [US2] In `.github/workflows/security.yml`, add `id: snyk` to the "Run Snyk vulnerability scanner" step (line 53)
+- [x] T003 [US2] In `.github/workflows/security.yml`, add `id: snyk` to the "Run Snyk vulnerability scanner" step (line 53)
 
   ```yaml
   # BEFORE
@@ -119,7 +119,7 @@
         uses: snyk/actions/node@v1.0.0
   ```
 
-- [ ] T004 [US2] In `.github/workflows/security.yml`, replace `if: always()` on the "Upload Snyk results" step (line 73) with `if: steps.snyk.outcome == 'success'`
+- [x] T004 [US2] In `.github/workflows/security.yml`, replace `if: always()` on the "Upload Snyk results" step (line 73) with `if: steps.snyk.outcome == 'success'`
 
   ```yaml
   # BEFORE
