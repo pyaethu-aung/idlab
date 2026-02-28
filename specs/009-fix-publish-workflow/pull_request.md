@@ -6,7 +6,8 @@ Resolves the `libpng` heap buffer overflow vulnerability (`CVE-2026-25646`) that
 
 ## Change Summary
 - **Base Image Upgrade:** Transitioned the Dockerfile base image from `nginx:alpine` to `nginx:alpine-slim` to fundamentally avoid the vulnerable `libpng` dependency altogether.
-- **Removed Waivers:** Eradicated legacy security workarounds including `.trivyignore` component exemptions and reactive `apk upgrade` shell execution cycles from the container configuration.
+- **Removed Waivers:** Eradicated legacy security workarounds including `.trivyignore` component exemptions and reactive `apk upgrade` shell execution cycles from the container configuration. Also stripped the missing `.trivyignore` reference from the Trivy action to prevent pipeline runner errors.
+- **Improved Triggers:** Added `Dockerfile` and `.dockerignore` to the `docker-publish.yml` push and pull request triggers so container modifications effectively trigger validation.
 
 ## Requirement Traceability
 - **FR-002 / SC-002:** Minimal application footprint utilized strictly removing `libpng` presence. Trivy scanning locally confirmed 0 critical items.

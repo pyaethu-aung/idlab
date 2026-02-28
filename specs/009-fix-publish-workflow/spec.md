@@ -42,7 +42,7 @@ As a product owner, I want the automated deployment pipeline to successfully bui
 - **FR-003**: The security scanner configured in the pipeline MUST report the application as clean of critical vulnerabilities related to the graphics library.
 - **FR-004**: The overall architecture and function of the application MUST remain intact and fully operational after the security fix.
 - **FR-005**: All dependencies MUST still function without the graphics library vulnerability, meaning the alternative or patched versions provide sufficient capabilities.
-- **FR-006**: The application repository MUST NOT contain any legacy `.trivyignore` exemptions or inline `apk upgrade` patches for this identified vulnerability.
+- **FR-006**: The application repository MUST NOT contain any legacy `.trivyignore` exemptions and CI/CD pipelines MUST NOT reference them. Inline `apk upgrade` patches for this identified vulnerability MUST also be removed.
 
 ### Key Entities
 
