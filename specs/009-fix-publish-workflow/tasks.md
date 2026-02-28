@@ -19,9 +19,9 @@
 **Goal**: Successfully build, scan, and publish the application package without failing due to the known graphics library vulnerability.
 **Independent Test**: Can be fully tested by triggering the automated deployment pipeline and verifying that the built artifact passes the security scan.
 
-- [ ] T001 [P] [US1] Update the base image to `nginx:alpine-slim` and remove legacy `apk upgrade` commands in `/Dockerfile`
-- [ ] T002 [P] [US1] Remove the `CVE-2026-25646` exemption and any other graphics library workarounds in `/.trivyignore` (or delete the file if it becomes empty)
-- [ ] T003 [US1] Verify execution discipline (Principle VI) by successfully running `npm run build`, `npm run test`, and `npm run lint` locally before transitioning to image testing.
+- [x] T001 [P] [US1] Update the base image to `nginx:alpine-slim` and remove legacy `apk upgrade` commands in `/Dockerfile`
+- [x] T002 [P] [US1] Remove the `CVE-2026-25646` exemption and any other graphics library workarounds in `/.trivyignore` (or delete the file if it becomes empty)
+- [x] T003 [US1] Verify execution discipline (Principle VI) by successfully running `npm run build`, `npm run test`, and `npm run lint` locally before transitioning to image testing.
 
 ## Phase 3: Polish & Cross-Cutting Concerns
 

@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build && npm prune --production
 
 # Stage 2: Runtime
-FROM nginx:alpine AS runtime
+FROM nginx:alpine-slim AS runtime
 
 # Install curl for healthcheck and configure non-root user
 # hadolint ignore=DL3018
