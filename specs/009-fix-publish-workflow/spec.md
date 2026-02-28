@@ -5,6 +5,13 @@
 **Status**: Draft  
 **Input**: User description: "I want to fix GitHub workflow .github/workflows/docker-publish.yml failure at 'Build and load Docker image for scan' stage. Error is as below: libpng: LIBPNG has a heap buffer overflow in png_set_quantize https://avd.aquasec.com/nvd/cve-2026-25646"
 
+## Clarifications
+
+### Session 2026-02-28
+
+- Q: What is the remediation strategy for the graphics library vulnerability? → A: Switch the Docker base image to `nginx:alpine-slim` to entirely eliminate the vulnerable `libpng` dependency.
+- Q: How should we treat existing vulnerability waivers? → A: We should proactively remove any existing `.trivyignore` workarounds and `apk upgrade` patches related to this vulnerability, relying solely on the structural fix.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Deployment Pipeline Executing Without Security Failures (Priority: P1)
@@ -31,10 +38,11 @@ As a product owner, I want the automated deployment pipeline to successfully bui
 ### Functional Requirements
 
 - **FR-001**: The automated deployment pipeline MUST complete successfully during the artifact scanning stage.
-- **FR-002**: The built application package MUST NOT contain the vulnerable version of the graphics library.
+- **FR-002**: The built application package MUST NOT contain the vulnerable version of the graphics library (achieved via minimal upstream application footprints).
 - **FR-003**: The security scanner configured in the pipeline MUST report the application as clean of critical vulnerabilities related to the graphics library.
 - **FR-004**: The overall architecture and function of the application MUST remain intact and fully operational after the security fix.
 - **FR-005**: All dependencies MUST still function without the graphics library vulnerability, meaning the alternative or patched versions provide sufficient capabilities.
+- **FR-006**: The application repository MUST NOT contain any legacy `.trivyignore` exemptions or inline `apk upgrade` patches for this identified vulnerability.
 
 ### Key Entities
 
