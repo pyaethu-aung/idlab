@@ -21,12 +21,13 @@
 
 - [ ] T001 [P] [US1] Update the base image to `nginx:alpine-slim` and remove legacy `apk upgrade` commands in `/Dockerfile`
 - [ ] T002 [P] [US1] Remove the `CVE-2026-25646` exemption and any other graphics library workarounds in `/.trivyignore` (or delete the file if it becomes empty)
+- [ ] T003 [US1] Verify execution discipline (Principle VI) by successfully running `npm run build`, `npm run test`, and `npm run lint` locally before transitioning to image testing.
 
 ## Phase 3: Polish & Cross-Cutting Concerns
 
-- [ ] T003 Verify local docker build succeeds and trivy scan reports 0 critical vulnerabilities based on instructions in `/specs/009-fix-publish-workflow/quickstart.md`
-- [ ] T004 Trigger the GitHub Actions automated pipeline and verify successful execution of the scan stage without `libpng` failures in `/.github/workflows/docker-publish.yml`
-- [ ] T005 Update the specification status to "Implemented" and document the completion date in `/specs/009-fix-publish-workflow/spec.md`
+- [ ] T004 Verify local docker build succeeds and trivy scan reports 0 critical vulnerabilities based on instructions in `/specs/009-fix-publish-workflow/quickstart.md`
+- [ ] T005 Trigger the GitHub Actions automated pipeline and verify successful execution of the scan stage without `libpng` failures in `/.github/workflows/docker-publish.yml`
+- [ ] T006 Update the specification status to "Implemented" and document the completion date in `/specs/009-fix-publish-workflow/spec.md`
 
 ## Dependencies
 
@@ -36,6 +37,7 @@ graph TD
   T002 --> T003
   T003 --> T004
   T004 --> T005
+  T005 --> T006
 ```
 
 ## Parallel Execution
