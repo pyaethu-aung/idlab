@@ -13,7 +13,7 @@
     "docker:run": "docker run --rm -p 8080:80 --name uuid-app --read-only --cap-drop ALL --tmpfs /var/cache/nginx:mode=1777 --tmpfs /var/run:mode=1777 --tmpfs /tmp:mode=1777 uuid-generator:local"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.2.0",
+    "@tailwindcss/vite": "^4.2.1",
     "focus-trap-react": "^12.0.0",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
