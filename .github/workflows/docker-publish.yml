@@ -5,6 +5,8 @@ on:
     branches: [ "main" ]
     paths:
       - ".github/workflows/docker-publish.yml"
+      - "Dockerfile"
+      - ".dockerignore"
       - "src/**"
       - "index.html"
       - "package.json"
@@ -16,6 +18,8 @@ on:
     branches: [ "main" ]
     paths:
       - ".github/workflows/docker-publish.yml"
+      - "Dockerfile"
+      - ".dockerignore"
       - "src/**"
       - "index.html"
       - "package.json"
@@ -107,7 +111,6 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-          trivyignores: .trivyignore
 
       # Build and push Docker image with Buildx (multi-platform)
       # https://github.com/docker/build-push-action
