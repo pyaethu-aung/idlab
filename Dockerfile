@@ -19,7 +19,7 @@ FROM nginx:alpine-slim AS runtime
 # Upgrade base packages to pull in libcrypto3 >=3.5.6-r0 (CVE-2026-28390)
 # hadolint ignore=DL3018
 RUN apk update && apk upgrade --no-cache && \
-    apk add --no-cache curl && \
+    apk add --no-cache curl libcrypto3 libssl3 && \
     adduser -D -H -u 1000 -s /bin/false app && \
     mkdir -p /var/run/nginx /var/log/nginx /var/cache/nginx && \
     touch /var/run/nginx.pid && \
