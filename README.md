@@ -47,6 +47,37 @@ A Tailwind-styled UUID generator built with React 19 and Vite. The app lets you 
 - `uuid` npm package
 - Clipboard and File APIs
 
+## Design System
+
+All design tokens — colour, typography, spacing, radius, and motion — live in `src/design-system/`:
+
+| File | Purpose |
+|------|---------|
+| `tokens.json` | Token definitions in W3C Design Token format |
+| `tokens.css` | CSS custom properties consumed by the app |
+| `Design System.html` | Living reference page; open directly in a browser |
+
+`src/index.css` imports `tokens.css` as the single source of truth for all design values. To browse every token rendered visually, open `src/design-system/Design System.html` in a browser — it links to `tokens.css` automatically.
+
+## Contributing
+
+### End-to-end Testing with Playwright
+
+Before opening a pull request, verify the UI using [Playwright](https://playwright.dev):
+
+```bash
+npx playwright install        # first time only — installs browser binaries
+npx playwright test           # run all E2E tests headlessly
+npx playwright test --ui      # interactive test runner with time-travel
+```
+
+Key flows to cover:
+
+- **Keyboard shortcuts** — regenerate, copy, download, batch size, version switch, formatting toggles
+- **Clipboard & download** — copy feedback, `.txt` file output with correct row count
+- **Theme switching** — dark ↔ light, persistence across reload
+- **Responsive layout** — workbench collapse at the 920 px breakpoint
+
 ## Security & Maintenance
 
 ### Automated Dependency Updates

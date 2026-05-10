@@ -29,7 +29,7 @@ This is a single-page React app with all state managed in custom hooks. `App.jsx
 - `useBrowserThemeSync` — a side-effect-only hook that listens for OS-level `prefers-color-scheme` changes and syncs them while the app is open. Kept separate from `useTheme` so the media query listener lifecycle is isolated.
 - `useKeyboardShortcuts` — attaches a single `keydown` listener on `window` and maps all keyboard shortcuts. Skips events when the target is a text input or when the shortcut overlay is open.
 
-**Theming:** All theme-sensitive colours are CSS custom properties defined in `index.css` under `:root` (dark, the default) and `[data-theme="light"]`. The design token system is documented in `DESIGN.md`. Tailwind is present via `@tailwindcss/vite` but all custom styling uses the token-based CSS classes defined in `index.css`.
+**Theming:** All design tokens (colour, type, space, radius, motion) are defined in `src/design-system/tokens.css` and imported by `index.css`. Theme-sensitive colours are set under `:root`/`[data-theme="dark"]` and `[data-theme="light"]`; accent palettes are set via `[data-accent="<name>"]`. The living token reference is `src/design-system/Design System.html` — open it directly in a browser. Tailwind is present via `@tailwindcss/vite` but all custom styling uses the token-based CSS classes defined in `index.css`.
 
 **UUID utilities (`src/utils/uuid.js`):** All generation and formatting logic is here. `buildBatch` produces arrays, `formatUuid` applies the three output options (uppercase, trimHyphens, wrapBraces) in order. `uuidGenerators` wraps the `uuid` npm package with a `crypto.randomUUID` fallback for environments where the package functions are unavailable.
 
@@ -56,7 +56,7 @@ Refer to `.specify/memory/constitution.md` (v2.3.1) for the authoritative govern
 | II | Testing & Execution Discipline | 85% coverage, every utility has tests, TDD encouraged |
 | III | User Experience Consistency | Consistent interfaces, docs match implementation |
 | IV | Performance Requirements | <200ms response, O(n) preferred, bounded resources |
-| V | Architecture & Structure | `src/components`, `src/hooks`, `src/utils`, `src/data` |
+| V | Architecture & Structure | `src/components`, `src/hooks`, `src/utils`, `src/data`, `src/design-system` |
 | VI | Execution Discipline | Run `npm run test`, `npm run lint`, `npm run build` after every task |
 | VII | Cross-Platform & Browser Compatibility | Chrome, Safari, Firefox, Edge; desktop & mobile |
 | VIII | Theme Support Planning | CSS custom properties, prefers-color-scheme, localStorage persistence |
