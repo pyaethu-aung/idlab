@@ -1,118 +1,16 @@
-import { optionDescriptors, versionChoices } from "../utils/uuid";
+const VERSIONS = [
+  { id: "v4", label: "v4", title: "Random",      desc: "Web Crypto entropy, the everyday workhorse." },
+  { id: "v1", label: "v1", title: "Time + Node", desc: "Timestamp-first, sortable for logs and traces." },
+  { id: "v7", label: "v7", title: "Unix Time",   desc: "Time-prefixed hybrid for distributed systems." },
+];
 
-function BatchSlider({ value, onChange, onCommit, visibleBatchSize }) {
-  const commitKeys = [
-    "Enter",
-    " ",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowUp",
-    "ArrowDown",
-    "Home",
-    "End",
-  ];
+const FORMAT_OPTS = [
+  { key: "uppercase",   label: "uppercase()",   hint: "All hex chars uppercased" },
+  { key: "trimHyphens", label: "stripHyphens()", hint: "Compact 32-char string, no dashes" },
+  { key: "wrapBraces",  label: "wrapBraces()",  hint: "Wrap as {uuid} for config files" },
+];
 
-  return (
-    <div className="mt-8 space-y-3">
-      <label
-        htmlFor="batch-size"
-        className="flex items-center justify-between text-sm font-medium theme-text-secondary"
-      >
-        <span>Batch size</span>
-        <span className="text-base font-semibold theme-text-primary">
-          {value}
-        </span>
-      </label>
-      <input
-        id="batch-size"
-        type="range"
-        min={1}
-        max={200}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-        onPointerUp={onCommit}
-        onTouchEnd={onCommit}
-        onMouseUp={onCommit}
-        onKeyUp={(event) => {
-          if (commitKeys.includes(event.key)) {
-            onCommit();
-          }
-        }}
-        className="w-full"
-        style={{ accentColor: "var(--accent-primary)" }}
-      />
-      <p className="text-xs uppercase tracking-[0.3em] theme-text-muted">
-        Showing {visibleBatchSize} · downloading up to {Math.min(value, 200)}
-      </p>
-    </div>
-  );
-}
-
-function VersionSelector({ selectedVersion, onVersionChange }) {
-  return (
-    <div className="mt-8 space-y-3">
-      <p className="text-xs uppercase tracking-[0.3em] theme-text-accent">
-        UUID version
-      </p>
-      <div className="flex flex-col gap-3">
-        {versionChoices.map((choice) => {
-          const isActive = choice.id === selectedVersion;
-          return (
-            <button
-              key={choice.id}
-              type="button"
-              onClick={() => onVersionChange(choice.id)}
-              className={`w-full rounded-2xl border px-4 py-4 text-left transition theme-option ${isActive ? "theme-option--active" : ""
-                }`}
-            >
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-base font-semibold theme-text-primary">
-                  {choice.title}
-                </p>
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] theme-badge ${isActive ? "theme-badge--active" : ""
-                    }`}
-                >
-                  {choice.badge}
-                </span>
-              </div>
-              <p className="mt-2 text-sm theme-text-secondary">
-                {choice.detail}
-              </p>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function OptionToggles({ options, onToggleOption }) {
-  return (
-    <div className="mt-8 space-y-3">
-      {optionDescriptors.map((option) => (
-        <label
-          key={option.key}
-          className="flex items-center justify-between gap-4 rounded-2xl border theme-border-subtle theme-glass px-4 py-3"
-        >
-          <div>
-            <p className="text-base font-semibold theme-text-primary">
-              {option.title}
-            </p>
-            <p className="text-sm theme-text-secondary">{option.detail}</p>
-          </div>
-          <input
-            type="checkbox"
-            checked={options[option.key]}
-            onChange={() => onToggleOption(option.key)}
-            className="h-5 w-5"
-            style={{ accentColor: "var(--accent-primary)" }}
-          />
-        </label>
-      ))}
-    </div>
-  );
-}
+const BATCH_PRESETS = [1, 8, 25, 100, 200];
 
 function ControlPanel({
   batchSize,
@@ -123,52 +21,109 @@ function ControlPanel({
   onBatchCommit,
   onVersionChange,
   onToggleOption,
-  onGenerate,
-  clipboardSupported,
 }) {
   return (
-    <aside className="rounded-[32px] border theme-border-subtle theme-panel theme-shadow-panel p-6">
-      <div className="space-y-2">
-        <p className="text-sm uppercase tracking-[0.3em] theme-text-accent">
-          Batch controls
-        </p>
-        <h2 className="text-2xl font-semibold theme-text-primary">
-          Fine-tune your output
-        </h2>
-        <p className="text-sm theme-text-secondary">
-          Choose how many UUIDs to mint and the format you want before pressing
-          generate.
-        </p>
+    <aside className="rail">
+      {/* Version */}
+      <div className="rail-section">
+        <div className="rail-head">
+          <span className="rail-key mono">version</span>
+          <span className="rail-hint mono">⌥1 · ⌥2 · ⌥3</span>
+        </div>
+        <div className="version-stack">
+          {VERSIONS.map((v) => {
+            const active = v.id === selectedVersion;
+            return (
+              <button
+                key={v.id}
+                type="button"
+                className={`version-row${active ? " is-active" : ""}`}
+                onClick={() => onVersionChange(v.id)}
+              >
+                <span className="version-tag mono">{v.label}</span>
+                <span className="version-meta">
+                  <span className="version-title">{v.title}</span>
+                  <span className="version-desc">{v.desc}</span>
+                </span>
+                <span className="version-pip" aria-hidden="true">{active ? "●" : ""}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <BatchSlider
-        value={batchSize}
-        onChange={onBatchChange}
-        onCommit={onBatchCommit}
-        visibleBatchSize={visibleBatchSize}
-      />
+      {/* Batch */}
+      <div className="rail-section">
+        <div className="rail-head">
+          <span className="rail-key mono">batch</span>
+          <span className="rail-hint mono">⌥↑/↓</span>
+        </div>
+        <div className="batch-display">
+          <span className="batch-num mono">{String(batchSize).padStart(3, "0")}</span>
+          <span className="batch-of mono">/ 200</span>
+        </div>
+        <input
+          id="batch-size"
+          type="range"
+          min={1}
+          max={200}
+          value={batchSize}
+          onChange={(e) => onBatchChange(Number(e.target.value))}
+          onPointerUp={onBatchCommit}
+          onMouseUp={onBatchCommit}
+          onTouchEnd={onBatchCommit}
+          onKeyUp={(e) => {
+            const commitKeys = ["Enter", " ", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+            if (commitKeys.includes(e.key)) onBatchCommit();
+          }}
+          className="rail-range"
+        />
+        <div className="batch-foot mono">
+          showing {visibleBatchSize} · download up to {batchSize}
+        </div>
+        <div className="batch-presets">
+          {BATCH_PRESETS.map((n) => (
+            <button
+              key={n}
+              type="button"
+              className={`preset-chip mono${batchSize === n ? " is-active" : ""}`}
+              onClick={() => { onBatchChange(n); onBatchCommit?.(n); }}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      <VersionSelector
-        selectedVersion={selectedVersion}
-        onVersionChange={onVersionChange}
-      />
-
-      <OptionToggles options={options} onToggleOption={onToggleOption} />
-
-      <button
-        type="button"
-        onClick={onGenerate}
-        className="theme-cta mt-10 w-full rounded-2xl px-6 py-4 text-base font-semibold shadow-lg transition hover:scale-105 hover:bg-[var(--btn-hover)]"
-      >
-        Generate {visibleBatchSize > 1 ? `${visibleBatchSize} UUIDs` : "a UUID"}
-      </button>
-
-      {!clipboardSupported && (
-        <p className="mt-4 text-xs text-amber-200">
-          Clipboard API is disabled, so copying will fall back to manual
-          selection.
-        </p>
-      )}
+      {/* Format */}
+      <div className="rail-section">
+        <div className="rail-head">
+          <span className="rail-key mono">format</span>
+          <span className="rail-hint mono">⌥U · ⌥H · ⌥B</span>
+        </div>
+        <div className="opt-stack">
+          {FORMAT_OPTS.map((o) => (
+            <label
+              key={o.key}
+              className={`opt-row${options[o.key] ? " is-on" : ""}`}
+            >
+              <span className="opt-check" aria-hidden="true">
+                {options[o.key] ? "▣" : "□"}
+              </span>
+              <span className="opt-text">
+                <span className="opt-label mono">{o.label}</span>
+                <span className="opt-hint">{o.hint}</span>
+              </span>
+              <input
+                type="checkbox"
+                checked={options[o.key]}
+                onChange={() => onToggleOption(o.key)}
+                style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
     </aside>
   );
 }

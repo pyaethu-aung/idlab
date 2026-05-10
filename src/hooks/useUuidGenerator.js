@@ -149,6 +149,19 @@ function useUuidGenerator() {
     }
   }, [batchSize, generatorForVersion, isDownloading, options, stageFeedback]);
 
+  const copyAll = useCallback(async () => {
+    if (!clipboardSupported) {
+      stageFeedback("Clipboard not available in this browser");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(formattedUuids.join("\n"));
+      stageFeedback(`Copied ${formattedUuids.length} UUIDs`);
+    } catch {
+      stageFeedback("Copy failed — please try again");
+    }
+  }, [clipboardSupported, formattedUuids, stageFeedback]);
+
   const toggleOption = useCallback((key) => {
     setOptions((prev) => ({
       ...prev,
@@ -156,9 +169,9 @@ function useUuidGenerator() {
     }));
   }, []);
 
-  const commitBatchSize = useCallback(() => {
-    syncVisibleBatch();
-  }, [syncVisibleBatch]);
+  const commitBatchSize = useCallback((explicitCount) => {
+    syncVisibleBatch(explicitCount ?? batchSize);
+  }, [syncVisibleBatch, batchSize]);
 
   const setBatchSizeAndCommit = useCallback(
     (nextCount) => {
@@ -184,6 +197,7 @@ function useUuidGenerator() {
     isDownloading,
     regenerate,
     handleCopy,
+    copyAll,
     handleVersionChange,
     toggleOption,
     downloadList,
