@@ -15,10 +15,10 @@ const defaultOptions = {
 };
 
 describe("Hero", () => {
-  it("renders the headline and optional feedback", () => {
-    render(<Hero feedback="Copied!" />);
-    expect(screen.getByText(/Instant UUID generator built for flow/i)).toBeInTheDocument();
-    expect(screen.getByText("Copied!")).toBeInTheDocument();
+  it("renders the headline", () => {
+    render(<Hero />);
+    expect(screen.getByText(/Mint/i)).toBeInTheDocument();
+    expect(screen.getByText(/RFC 4122/i)).toBeInTheDocument();
   });
 });
 
@@ -42,25 +42,79 @@ describe("ThemeToggle", () => {
     expect(onToggle).toHaveBeenCalledTimes(1);
   });
 
-  it("renders sun icon and label in light mode", () => {
-    const { container } = render(
-      <ThemeToggle theme="light" onToggle={() => { }} />
+  it("renders sun icon in dark mode and moon icon in light mode", () => {
+    const { rerender, container } = render(
+      <ThemeToggle theme="dark" onToggle={() => {}} />
     );
+    expect(
+      screen.getByRole("button", { name: /switch to light mode/i })
+    ).toBeInTheDocument();
+    expect(container.querySelectorAll("svg")).toHaveLength(1);
+
+    rerender(<ThemeToggle theme="light" onToggle={() => {}} />);
     expect(
       screen.getByRole("button", { name: /switch to dark mode/i })
     ).toBeInTheDocument();
-    const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(1);
-    expect(screen.getByText(/light mode/i)).toBeInTheDocument();
   });
 });
 
 describe("UuidList", () => {
-  it("renders UUID entries with copy buttons", () => {
+  const baseProps = {
+    uuids: ["uuid-1"],
+    version: "v4",
+    batch: 1,
+    opts: defaultOptions,
+    copiedUuid: "",
+    onCopy: vi.fn(),
+    onCopyAll: vi.fn(),
+    onRegen: vi.fn(),
+    onDownload: vi.fn(),
+    refreshing: false,
+  };
+
+  it("renders UUID rows with copy buttons", () => {
     const onCopy = vi.fn();
-    render(<UuidList uuids={["uuid-1"]} copiedUuid="uuid-1" onCopy={onCopy} />);
-    fireEvent.click(screen.getByRole("button", { name: /copied/i }));
-    expect(onCopy).toHaveBeenCalledWith("uuid-1");
+    render(<UuidList {...baseProps} onCopy={onCopy} />);
+    expect(screen.getAllByText(/uuid/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: /copy uuid/i })).toBeInTheDocument();
+  });
+
+  it("shows copied state on matching UUID", () => {
+    render(<UuidList {...baseProps} copiedUuid="uuid-1" />);
+    expect(screen.getByRole("button", { name: /copied/i })).toBeInTheDocument();
+  });
+
+  it("wires regenerate, copy all, and download buttons", async () => {
+    const onRegen = vi.fn();
+    const onCopyAll = vi.fn();
+    const onDownload = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <UuidList
+        {...baseProps}
+        onRegen={onRegen}
+        onCopyAll={onCopyAll}
+        onDownload={onDownload}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: /regenerate/i }));
+    expect(onRegen).toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: /copy all/i }));
+    expect(onCopyAll).toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: /download/i }));
+    expect(onDownload).toHaveBeenCalled();
+  });
+
+  it("sets aria-busy on regenerate button when refreshing", () => {
+    render(<UuidList {...baseProps} refreshing={true} />);
+    expect(screen.getByRole("button", { name: /regenerate/i })).toHaveAttribute(
+      "aria-busy",
+      "true"
+    );
   });
 });
 
@@ -70,7 +124,6 @@ describe("ControlPanel", () => {
     const onBatchCommit = vi.fn();
     const onVersionChange = vi.fn();
     const onToggleOption = vi.fn();
-    const onGenerate = vi.fn();
     const user = userEvent.setup();
 
     render(
@@ -83,8 +136,6 @@ describe("ControlPanel", () => {
         onBatchCommit={onBatchCommit}
         onVersionChange={onVersionChange}
         onToggleOption={onToggleOption}
-        onGenerate={onGenerate}
-        clipboardSupported={false}
       />
     );
 
@@ -95,17 +146,12 @@ describe("ControlPanel", () => {
     fireEvent.pointerUp(slider);
     expect(onBatchCommit).toHaveBeenCalled();
 
-    await user.click(screen.getByRole("button", { name: /Version 4/i }));
+    await user.click(screen.getByRole("button", { name: /Random/i }));
     expect(onVersionChange).toHaveBeenCalledWith("v4");
 
     const toggle = screen.getAllByRole("checkbox")[0];
-    await user.click(toggle);
+    fireEvent.click(toggle);
     expect(onToggleOption).toHaveBeenCalled();
-
-    await user.click(screen.getByRole("button", { name: /Generate/i }));
-    expect(onGenerate).toHaveBeenCalled();
-
-    expect(screen.getByText(/Clipboard API is disabled/i)).toBeInTheDocument();
   });
 });
 
@@ -164,7 +210,7 @@ describe("ShortcutReference", () => {
         onClose={vi.fn()}
       />
     );
-    expect(screen.getByText("Keyboard shortcuts")).toBeInTheDocument();
+    expect(screen.getByText("keyboard shortcuts")).toBeInTheDocument();
     expect(screen.getByText("⌘ + K")).toBeInTheDocument();
     expect(screen.getByText("Open command palette")).toBeInTheDocument();
     expect(screen.getByText("⌘ + S")).toBeInTheDocument();
