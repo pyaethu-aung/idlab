@@ -29,7 +29,7 @@ This is a single-page React app with all state managed in custom hooks. `App.jsx
 - `useBrowserThemeSync` — a side-effect-only hook that listens for OS-level `prefers-color-scheme` changes and syncs them while the app is open. Kept separate from `useTheme` so the media query listener lifecycle is isolated.
 - `useKeyboardShortcuts` — attaches a single `keydown` listener on `window` and maps all keyboard shortcuts. Skips events when the target is a text input or when the shortcut overlay is open.
 
-**Theming:** Tailwind is loaded via the `@tailwindcss/vite` plugin (no `tailwind.config.js`). All theme-sensitive colours are CSS custom properties defined in `index.css` under `:root` (dark, the default) and `:root[data-theme="light"]`. Components reference these via utility class names like `theme-text-primary`; no Tailwind `dark:` variant is used.
+**Theming:** All theme-sensitive colours are CSS custom properties defined in `index.css` under `:root` (dark, the default) and `[data-theme="light"]`. The design token system is documented in `DESIGN.md`. Tailwind is present via `@tailwindcss/vite` but all custom styling uses the token-based CSS classes defined in `index.css`.
 
 **UUID utilities (`src/utils/uuid.js`):** All generation and formatting logic is here. `buildBatch` produces arrays, `formatUuid` applies the three output options (uppercase, trimHyphens, wrapBraces) in order. `uuidGenerators` wraps the `uuid` npm package with a `crypto.randomUUID` fallback for environments where the package functions are unavailable.
 
@@ -38,3 +38,66 @@ This is a single-page React app with all state managed in custom hooks. `App.jsx
 ## Testing
 
 Tests live alongside their source files. `src/setupTests.js` imports `@testing-library/jest-dom/vitest` for DOM matchers. Vitest runs in a jsdom environment with globals enabled — no explicit imports of `describe`, `it`, or `expect` needed in test files.
+
+- Every file in `src/utils/` MUST have a corresponding test file (Vitest)
+- Tests must be deterministic, fast, and independent
+- Regression tests are required for all bug fixes
+- Maintain coverage at or above 85%
+
+## Governance
+
+Refer to `.specify/memory/constitution.md` (v2.3.1) for the authoritative governance document.
+
+### Core Principles Summary
+
+| # | Principle | Key Rule |
+|---|-----------|----------|
+| I | Code Quality & Craftsmanship | No dead code, lint-clean, readable, modular |
+| II | Testing & Execution Discipline | 85% coverage, every utility has tests, TDD encouraged |
+| III | User Experience Consistency | Consistent interfaces, docs match implementation |
+| IV | Performance Requirements | <200ms response, O(n) preferred, bounded resources |
+| V | Architecture & Structure | `src/components`, `src/hooks`, `src/utils`, `src/data` |
+| VI | Execution Discipline | Run `npm run test`, `npm run lint`, `npm run build` after every task |
+| VII | Cross-Platform & Browser Compatibility | Chrome, Safari, Firefox, Edge; desktop & mobile |
+| VIII | Theme Support Planning | CSS custom properties, prefers-color-scheme, localStorage persistence |
+| IX | Skill-Driven Development | Consult any skill under `.agents/skills/` as primary source truth |
+
+### Required Skills
+
+Consult any skill present under `.agents/skills/` (invocable via `/<skill-name>`) as Primary Source Truth during planning and implementation. Where a skill governs a domain touched by the current task, consult it before generating code or artifacts.
+
+### Validation Checklist
+
+Before marking any task complete, verify:
+
+```bash
+npm run test    # All tests pass, coverage ≥85%
+npm run lint    # No linting errors
+npm run build   # Build succeeds
+```
+
+### Commit Discipline
+
+- **Subject line**: ≤50 characters, imperative mood, no period
+- **Body lines**: ≤72 characters
+- **Prefix**: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`
+- **Rule**: One commit per completed task/phase
+
+## Active Features Context
+
+### 002-auto-vuln-updates
+
+**Automated Dependency Vulnerability Updates**
+
+- **Configuration**: Managed via `.github/dependabot.yml` (npm ecosystem, daily schedule).
+- **Auto-Merge Policy**: **STRICTLY FORBIDDEN**. All security PRs must be manually reviewed.
+- **Key Files**: `.github/dependabot.yml`.
+
+### 003-docker-containerization
+
+**Docker Integration**
+
+- **Build**: Multi-stage `Dockerfile` (Node 20 -> Nginx Alpine).
+- **Security**: Non-root user, read-only FS, Trivy scanning (blocking fixable HIGH/CRITICAL).
+- **Target**: Linux/AMD64 only (<5min build time).
+- **Registry**: GHCR.
