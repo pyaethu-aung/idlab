@@ -6,6 +6,7 @@ A Tailwind-styled UUID generator built with React 19 and Vite. The app lets you 
 - Core implementation produced by GitHub Copilot running the GPT-5.1-Codex model.
 - Copilot authored UI layout, React state logic, clipboard/download utilities, and Tailwind styling inside VS Code.
 - Human input focused on high-level requirements, reviewing each iteration, and applying the prompts listed below.
+- Spec-driven development workflow managed with [spec-kit](https://github.com/speckit-ai/speckit) **v0.8.7**.
 
 ## Feature Highlights
 - Unified slider that drives both the on-screen preview count (capped at 20) and the downloadable batch size (1–200).
