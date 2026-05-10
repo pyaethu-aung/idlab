@@ -1,120 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
+@import "./design-system/tokens.css";
 @import "tailwindcss";
-
-/* ─── Design tokens (from design-system/tokens.css) ─────────────────────── */
-:root {
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, "JetBrains Mono", "Menlo", monospace;
-  --fw-regular: 400;
-  --fw-medium: 500;
-  --fw-semibold: 600;
-  --fw-bold: 700;
-  --fs-xxs: 10px;
-  --fs-xs: 11px;
-  --fs-sm: 12px;
-  --fs-base: 13px;
-  --fs-md: 14px;
-  --fs-lg: 16px;
-  --fs-xl: 36px;
-  --fs-hero: clamp(48px, 6.5vw, 88px);
-  --tracking-tight: -0.035em;
-  --tracking-snug: -0.01em;
-  --tracking-normal: 0;
-  --tracking-wide: 0.04em;
-  --lh-display: 0.96;
-  --lh-snug: 1.0;
-  --lh-body: 1.55;
-  --sp-0: 0;
-  --sp-1: 2px;
-  --sp-2: 4px;
-  --sp-3: 6px;
-  --sp-4: 8px;
-  --sp-5: 10px;
-  --sp-6: 12px;
-  --sp-7: 14px;
-  --sp-8: 16px;
-  --sp-9: 18px;
-  --sp-10: 22px;
-  --sp-11: 24px;
-  --sp-12: 28px;
-  --sp-13: 36px;
-  --sp-14: 40px;
-  --sp-15: 80px;
-  --r-xs: 4px;
-  --r-sm: 5px;
-  --r-md: 6px;
-  --r-lg: 10px;
-  --r-pill: 999px;
-  --container-max: 1440px;
-  --gutter: 28px;
-  --rail-w: 320px;
-  --modal-max: 560px;
-  --d-tap: 80ms;
-  --d-swap: 120ms;
-  --d-settle: 140ms;
-  --d-scrim: 160ms;
-  --d-modal: 220ms;
-  --d-panel: 280ms;
-  --d-regen: 380ms;
-  --d-spin: 700ms;
-  --d-pulse: 2000ms;
-  --ease-standard: cubic-bezier(0.2, 0.7, 0.3, 1);
-  --blur-scrim: blur(6px);
-  --blur-topbar: blur(10px);
-  /* accent — default lime */
-  --accent: oklch(0.86 0.20 130);
-  --on-accent: oklch(0.18 0.01 130);
-}
-
-/* Dark theme (default) */
-:root,
-[data-theme="dark"] {
-  --bg:     oklch(0.16 0.005 60);
-  --bg-2:   oklch(0.18 0.005 60);
-  --bg-3:   oklch(0.21 0.006 60);
-  --seam:   oklch(0.28 0.006 60);
-  --seam-2: oklch(0.36 0.008 60);
-  --ink:    oklch(0.97 0.004 60);
-  --ink-2:  oklch(0.78 0.005 60);
-  --ink-3:  oklch(0.55 0.005 60);
-  --ink-4:  oklch(0.40 0.006 60);
-  --scrim:  color-mix(in oklch, var(--bg), transparent 30%);
-  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-/* Light theme */
-[data-theme="light"] {
-  --bg:     oklch(0.985 0.003 60);
-  --bg-2:   oklch(0.965 0.004 60);
-  --bg-3:   oklch(0.945 0.005 60);
-  --seam:   oklch(0.88 0.005 60);
-  --seam-2: oklch(0.74 0.006 60);
-  --ink:    oklch(0.18 0.006 60);
-  --ink-2:  oklch(0.34 0.006 60);
-  --ink-3:  oklch(0.50 0.006 60);
-  --ink-4:  oklch(0.65 0.006 60);
-  --scrim:  color-mix(in oklch, var(--bg), transparent 30%);
-  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.15);
-}
-
-/* Accent palettes — set data-accent on :root or any ancestor */
-[data-accent="lime"]    { --accent: oklch(0.86 0.20 130); --on-accent: oklch(0.18 0.01 130); }
-[data-accent="amber"]   { --accent: oklch(0.82 0.18 65);  --on-accent: oklch(0.18 0.01 65);  }
-[data-accent="cobalt"]  { --accent: oklch(0.74 0.18 250); --on-accent: oklch(0.16 0.01 250); }
-[data-accent="magenta"] { --accent: oklch(0.78 0.20 340); --on-accent: oklch(0.18 0.01 340); }
 
 /* ─── Global base ────────────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
 body {
   font-family: var(--font-sans);
-  font-feature-settings: "ss01", "ss02", "cv11";
+  font-feature-settings: var(--font-feat-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 .mono {
   font-family: var(--font-mono);
-  font-feature-settings: "zero", "ss01";
+  font-feature-settings: var(--font-feat-mono);
 }
 button { font-family: inherit; cursor: pointer; }
 
@@ -151,7 +50,7 @@ kbd {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(10px);
+  backdrop-filter: var(--blur-topbar);
 }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 180px; }
 .brand-mark { color: var(--accent); display: inline-flex; }
@@ -587,7 +486,7 @@ kbd {
   position: absolute;
   inset: 0;
   background: color-mix(in oklch, var(--bg), transparent 30%);
-  backdrop-filter: blur(6px);
+  backdrop-filter: var(--blur-scrim);
 }
 @keyframes scrimIn { from { opacity: 0; } to { opacity: 1; } }
 .modal {

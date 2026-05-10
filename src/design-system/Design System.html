@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-accent="lime">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>uuidlab · design system</title>
+<link rel="stylesheet" href="tokens.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings: var(--font-feat-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .mono { font-family: var(--font-mono); font-feature-settings: var(--font-feat-mono); }
+
+  /* Top bar ─────────────────────────── */
+  .topbar {
+    display: flex; align-items: center; gap: var(--sp-11);
+    padding: var(--sp-7) var(--sp-12);
+    border-bottom: 1px solid var(--seam);
+    position: sticky; top: 0; z-index: 10;
+    background: var(--bg);
+    backdrop-filter: var(--blur-topbar);
+  }
+  .brand { display: flex; align-items: center; gap: var(--sp-5); min-width: 220px; }
+  .brand-mark { color: var(--accent); display: inline-flex; }
+  .brand-mark::after {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 12px var(--accent);
+    margin-left: 6px;
+  }
+  .brand-name { font-weight: 700; letter-spacing: var(--tracking-snug); font-size: var(--fs-lg); }
+  .brand-tag { color: var(--ink-3); font-size: var(--fs-base); }
+
+  .topbar-spacer { flex: 1; }
+  .topbar-meta {
+    display: flex; gap: var(--sp-5); color: var(--ink-3);
+    font-size: var(--fs-xs); letter-spacing: var(--tracking-wide);
+  }
+  .topbar-meta b { color: var(--ink); font-weight: 600; }
+
+  .seg {
+    display: inline-flex; gap: 0;
+    border: 1px solid var(--seam); border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .seg button {
+    background: transparent; border: 0; cursor: pointer;
+    padding: 6px 10px; color: var(--ink-3);
+    font-family: var(--font-mono); font-feature-settings: var(--font-feat-mono);
+    font-size: var(--fs-xs); letter-spacing: var(--tracking-wide);
+    border-right: 1px solid var(--seam);
+    transition: background var(--d-swap), color var(--d-swap);
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button:hover { color: var(--ink); background: var(--bg-2); }
+  .seg button.is-on { color: var(--on-accent); background: var(--accent); }
+
+  /* Page ─────────────────────────── */
+  .page {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: var(--sp-14) var(--gutter) var(--sp-15);
+  }
+
+  /* Hero ─────────────────────────── */
+  .hero { margin-bottom: var(--sp-13); }
+  .hero-line {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: var(--fs-xs); letter-spacing: var(--tracking-wide);
+    color: var(--ink-3);
+    border-bottom: 1px dashed var(--seam);
+    padding-bottom: var(--sp-6); margin-bottom: var(--sp-11);
+  }
+  .hero-line .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); display: inline-block; margin-right: 6px; }
+  .hero-title {
+    font-size: var(--fs-hero);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--lh-display);
+    margin: 0 0 var(--sp-9);
+    text-wrap: balance;
+  }
+  .hero-title-2 { color: var(--ink-3); font-weight: 500; }
+  .accent-mark { color: var(--accent); }
+  .hero-sub {
+    max-width: 620px; font-size: var(--fs-lg); line-height: var(--lh-body);
+    color: var(--ink-2); margin: 0;
+  }
+
+  /* Section ─────────────────────────── */
+  section.block { margin-top: var(--sp-15); }
+  .block-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1px dashed var(--seam);
+    padding-bottom: var(--sp-6); margin-bottom: var(--sp-11);
+  }
+  .block-eyebrow {
+    display: inline-flex; align-items: center; gap: var(--sp-4);
+    font-family: var(--font-mono); font-feature-settings: var(--font-feat-mono);
+    font-size: var(--fs-xs); letter-spacing: var(--tracking-wide); color: var(--ink-3);
+  }
+  .block-eyebrow b { color: var(--ink); font-weight: 600; }
+  .block-title { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; margin: var(--sp-3) 0 0; }
+  .block-meta { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-4); letter-spacing: var(--tracking-wide); }
+
+  /* Color cards ─────────────────────────── */
+  .grid-color {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--sp-4);
+  }
+  .swatch {
+    border: 1px solid var(--seam); border-radius: var(--r-md);
+    overflow: hidden; background: var(--bg-2);
+  }
+  .swatch-tile {
+    height: 96px; border-bottom: 1px solid var(--seam);
+    display: flex; align-items: flex-end; justify-content: flex-end;
+    padding: var(--sp-4);
+  }
+  .swatch-tile .pin {
+    font-family: var(--font-mono); font-size: var(--fs-xxs);
+    color: var(--ink-4); letter-spacing: var(--tracking-wide);
+  }
+  .swatch-meta { padding: var(--sp-5) var(--sp-7); }
+  .swatch-name {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--font-mono); font-size: var(--fs-base); font-weight: 600;
+  }
+  .swatch-name .role { color: var(--ink-3); font-weight: 500; font-size: var(--fs-xs); }
+  .swatch-val {
+    font-family: var(--font-mono); font-feature-settings: var(--font-feat-mono);
+    font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px;
+  }
+  .swatch-desc { font-size: var(--fs-xs); color: var(--ink-4); margin-top: var(--sp-3); line-height: 1.45; }
+
+  /* Accent palette row */
+  .palette-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4);
+  }
+  .palette {
+    border: 1px solid var(--seam); border-radius: var(--r-md);
+    background: var(--bg-2); overflow: hidden;
+    display: flex; flex-direction: column;
+    cursor: pointer; transition: border-color var(--d-swap);
+  }
+  .palette:hover { border-color: var(--seam-2); }
+  .palette.is-on { border-color: var(--accent); box-shadow: inset 2px 0 0 var(--accent); }
+  .palette-tile {
+    height: 80px; border-bottom: 1px solid var(--seam);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: 600; font-size: var(--fs-base);
+    letter-spacing: var(--tracking-wide);
+  }
+  .palette-meta { padding: var(--sp-5) var(--sp-7); }
+  .palette-name { font-family: var(--font-mono); font-size: var(--fs-base); font-weight: 600; }
+  .palette-val { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px; }
+
+  /* Type ─────────────────────────── */
+  .type-stack { display: flex; flex-direction: column; gap: var(--sp-9); }
+  .type-row {
+    display: grid; grid-template-columns: 200px 1fr 160px;
+    gap: var(--sp-11); align-items: baseline;
+    border-bottom: 1px solid var(--seam);
+    padding-bottom: var(--sp-9);
+  }
+  .type-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .type-key {
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+    color: var(--ink-3); letter-spacing: var(--tracking-wide);
+  }
+  .type-key b { display: block; color: var(--ink); font-size: var(--fs-base); margin-bottom: 2px; font-weight: 600; }
+  .type-spec {
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+    color: var(--ink-4); text-align: right; letter-spacing: var(--tracking-wide);
+  }
+  .type-display .demo-hero {
+    font-size: 56px; font-weight: 600; letter-spacing: var(--tracking-tight); line-height: var(--lh-display);
+  }
+  .type-display .demo-brand { font-size: var(--fs-lg); font-weight: 700; letter-spacing: var(--tracking-snug); }
+  .type-display .demo-body { font-size: var(--fs-lg); color: var(--ink-2); line-height: var(--lh-body); max-width: 520px; }
+  .type-display .demo-mono { font-family: var(--font-mono); font-feature-settings: var(--font-feat-mono); font-size: var(--fs-md); }
+  .type-display .demo-flag { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--ink-3); }
+  .type-display .demo-key { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: var(--tracking-wide); font-weight: 600; }
+  .type-display .demo-tag {
+    display: inline-block; font-family: var(--font-mono); font-size: var(--fs-base);
+    background: var(--bg-3); border: 1px solid var(--seam); border-radius: var(--r-xs);
+    padding: 2px 8px; font-weight: 600;
+  }
+
+  /* Space ─────────────────────────── */
+  .space-stack { display: flex; flex-direction: column; gap: var(--sp-2); }
+  .space-row {
+    display: grid; grid-template-columns: 80px 80px 1fr;
+    gap: var(--sp-7); align-items: center;
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--seam);
+  }
+  .space-row:last-child { border-bottom: 0; }
+  .space-key { font-family: var(--font-mono); font-size: var(--fs-base); font-weight: 600; }
+  .space-val { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); }
+  .space-bar { height: 12px; background: var(--accent); border-radius: 2px; }
+
+  /* Radius ─────────────────────────── */
+  .radius-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-4); }
+  .radius-card {
+    border: 1px solid var(--seam); background: var(--bg-2); padding: var(--sp-9);
+    display: flex; flex-direction: column; gap: var(--sp-7); align-items: flex-start;
+  }
+  .radius-card:nth-child(1) { border-radius: var(--r-xs); }
+  .radius-card:nth-child(2) { border-radius: var(--r-sm); }
+  .radius-card:nth-child(3) { border-radius: var(--r-md); }
+  .radius-card:nth-child(4) { border-radius: var(--r-lg); }
+  .radius-card:nth-child(5) { border-radius: var(--r-pill); padding-left: 32px; padding-right: 32px;}
+  .radius-card .demo {
+    width: 56px; height: 32px; background: var(--bg-3); border: 1px solid var(--seam-2);
+  }
+  .radius-card:nth-child(1) .demo { border-radius: var(--r-xs); }
+  .radius-card:nth-child(2) .demo { border-radius: var(--r-sm); }
+  .radius-card:nth-child(3) .demo { border-radius: var(--r-md); }
+  .radius-card:nth-child(4) .demo { border-radius: var(--r-lg); }
+  .radius-card:nth-child(5) .demo { border-radius: var(--r-pill); }
+  .radius-key { font-family: var(--font-mono); font-size: var(--fs-base); font-weight: 600; }
+  .radius-val { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); }
+
+  /* Motion ─────────────────────────── */
+  .motion-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4);
+  }
+  .motion-card {
+    border: 1px solid var(--seam); border-radius: var(--r-md);
+    background: var(--bg-2); padding: var(--sp-9);
+  }
+  .motion-key { font-family: var(--font-mono); font-size: var(--fs-base); font-weight: 600; }
+  .motion-val { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px; }
+  .motion-desc { font-size: var(--fs-xs); color: var(--ink-3); margin-top: var(--sp-5); line-height: 1.45; }
+  .motion-track {
+    margin-top: var(--sp-7); height: 4px; background: var(--seam); border-radius: 2px;
+    position: relative; overflow: hidden;
+  }
+  .motion-bead {
+    position: absolute; top: -3px; left: 0; width: 10px; height: 10px;
+    background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: travel var(--dur, 1s) var(--ease-standard) infinite;
+  }
+  @keyframes travel {
+    0%   { left: 0; }
+    50%  { left: calc(100% - 10px); }
+    100% { left: 0; }
+  }
+
+  /* Components preview ─────────────── */
+  .demo-frame {
+    border: 1px solid var(--seam); border-radius: var(--r-lg);
+    background: var(--bg-2); overflow: hidden;
+  }
+  .demo-bench { display: grid; grid-template-columns: var(--rail-w) 1fr; }
+  .demo-rail { border-right: 1px solid var(--seam); background: var(--bg); }
+  .rail-section {
+    padding: var(--sp-10); border-bottom: 1px solid var(--seam);
+  }
+  .rail-section:last-child { border-bottom: 0; }
+  .rail-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: var(--sp-7);
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+  }
+  .rail-key { font-weight: 600; letter-spacing: var(--tracking-wide); }
+  .rail-hint { color: var(--ink-4); font-size: var(--fs-xxs); }
+  .version-stack { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .v-row {
+    display: grid; grid-template-columns: 32px 1fr 14px;
+    gap: var(--sp-6); align-items: center;
+    padding: var(--sp-6);
+    background: transparent;
+    border: 1px solid var(--seam); border-radius: var(--r-md);
+    color: var(--ink-2); cursor: pointer;
+    transition: all var(--d-swap);
+  }
+  .v-row:hover { background: var(--bg-2); border-color: var(--seam-2); color: var(--ink); }
+  .v-row.is-active {
+    border-color: var(--accent);
+    background: color-mix(in oklch, var(--accent) 10%, var(--bg));
+    color: var(--ink);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+  .v-tag {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 22px;
+    font-family: var(--font-mono); font-size: var(--fs-xs); font-weight: 600;
+    background: var(--bg-3); border: 1px solid var(--seam); border-radius: var(--r-xs);
+  }
+  .v-row.is-active .v-tag { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .v-meta { display: flex; flex-direction: column; min-width: 0; }
+  .v-title { font-size: var(--fs-base); font-weight: 600; color: var(--ink); }
+  .v-desc { font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px; line-height: 1.4; }
+  .v-pip { color: var(--accent); font-size: 8px; }
+
+  /* Panel */
+  .demo-panel { background: var(--bg-2); display: flex; flex-direction: column; }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: var(--sp-8); padding: var(--sp-7) var(--sp-10);
+    border-bottom: 1px solid var(--seam); background: var(--bg);
+  }
+  .panel-meta { display: flex; align-items: center; gap: var(--sp-6); }
+  .panel-bar { width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .panel-title { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600; }
+  .panel-sep { color: var(--ink-4); }
+  .panel-flag { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
+  .panel-actions { display: flex; gap: var(--sp-3); }
+
+  .ghost-btn {
+    display: inline-flex; align-items: center; gap: var(--sp-4);
+    padding: 7px 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--seam);
+    color: var(--ink-2);
+    border-radius: var(--r-md);
+    font-family: var(--font-mono); font-size: var(--fs-sm);
+    cursor: pointer;
+    transition: all var(--d-swap);
+  }
+  .ghost-btn:hover { background: var(--bg-3); border-color: var(--seam-2); color: var(--ink); }
+
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: var(--sp-4);
+    padding: 8px 14px 8px 12px;
+    background: var(--accent); color: var(--on-accent);
+    border: 1px solid var(--accent); border-radius: var(--r-md);
+    font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600;
+    cursor: pointer;
+    transition: filter var(--d-swap), transform var(--d-tap);
+  }
+  .cta-btn:hover { filter: brightness(1.05); }
+  .cta-btn:active { transform: translateY(1px); }
+  .cta-kbd {
+    margin-left: 6px;
+    background: color-mix(in oklch, var(--accent), black 20%);
+    color: var(--on-accent);
+    border-color: color-mix(in oklch, var(--accent), black 30%);
+    border-bottom-width: 1px;
+  }
+
+  kbd {
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+    padding: 2px 6px;
+    background: var(--bg);
+    border: 1px solid var(--seam);
+    border-bottom-width: 2px;
+    border-radius: var(--r-xs);
+    color: var(--ink-2);
+    line-height: 1;
+    display: inline-block;
+  }
+
+  .panel-grid { display: flex; flex-direction: column; }
+  .row {
+    display: grid; grid-template-columns: 50px 1fr 50px 90px;
+    gap: var(--sp-9); align-items: center;
+    padding: var(--sp-8) var(--sp-9);
+    border-bottom: 1px solid var(--seam); cursor: pointer;
+    transition: background var(--d-swap);
+  }
+  .row:last-child { border-bottom: 0; }
+  .row:hover { background: var(--bg-3); }
+  .row.is-copied { background: color-mix(in oklch, var(--accent) 12%, var(--bg-2)); }
+  .row-idx { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-4); letter-spacing: var(--tracking-wide); }
+  .row-uuid { font-family: var(--font-mono); font-feature-settings: var(--font-feat-mono); font-size: var(--fs-md); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .uuid-dash { color: var(--ink-4); margin: 0 1px; }
+  .row:hover .seg-2 { color: var(--accent); }
+  .row-len { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-4); text-align: right; }
+  .row-copy {
+    padding: 6px 12px; background: transparent;
+    border: 1px solid var(--seam); border-radius: var(--r-sm);
+    color: var(--ink-2); font-family: var(--font-mono); font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide); opacity: 0.4;
+    cursor: pointer; transition: all var(--d-settle); justify-self: end; min-width: 80px;
+  }
+  .row:hover .row-copy { opacity: 1; border-color: var(--seam-2); color: var(--ink); }
+  .row-copy.is-copied { background: var(--accent); color: var(--on-accent); border-color: var(--accent); opacity: 1; }
+
+  /* Status bar */
+  .status {
+    display: flex; align-items: center;
+    border-top: 1px solid var(--seam);
+    background: var(--bg);
+    font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3);
+  }
+  .status-cell {
+    padding: 8px 14px; border-right: 1px solid var(--seam);
+    display: inline-flex; align-items: center; gap: var(--sp-3);
+    white-space: nowrap;
+  }
+  .status-cell:last-child { border-right: 0; flex: 1; justify-content: flex-end; }
+  .status-dot {
+    width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.5; } }
+
+  /* Misc grid block */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-13); }
+  .principle {
+    border: 1px solid var(--seam); border-radius: var(--r-md);
+    padding: var(--sp-11); background: var(--bg-2);
+  }
+  .principle-num {
+    font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-4);
+    letter-spacing: var(--tracking-wide); margin-bottom: var(--sp-4);
+  }
+  .principle-title { font-size: var(--fs-lg); font-weight: 600; margin-bottom: var(--sp-4); letter-spacing: var(--tracking-snug); }
+  .principle-body { font-size: var(--fs-base); color: var(--ink-2); line-height: var(--lh-body); }
+
+  /* Token list */
+  .token-list {
+    border: 1px solid var(--seam); border-radius: var(--r-md);
+    background: var(--bg-2); overflow: hidden;
+  }
+  .token-row {
+    display: grid; grid-template-columns: 220px 1fr 200px;
+    gap: var(--sp-9); align-items: center;
+    padding: var(--sp-6) var(--sp-9);
+    border-bottom: 1px solid var(--seam);
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+  }
+  .token-row:last-child { border-bottom: 0; }
+  .token-row .name { color: var(--ink); font-weight: 600; }
+  .token-row .val { color: var(--ink-3); }
+  .token-row .desc { color: var(--ink-4); text-align: right; font-family: var(--font-sans); }
+
+  /* Footer */
+  .foot {
+    margin-top: var(--sp-15);
+    padding-top: var(--sp-11);
+    border-top: 1px dashed var(--seam);
+    font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-4);
+    display: flex; justify-content: space-between; letter-spacing: var(--tracking-wide);
+  }
+
+  @media (max-width: 920px) {
+    .demo-bench { grid-template-columns: 1fr; }
+    .demo-rail { border-right: 0; border-bottom: 1px solid var(--seam); }
+    .row { grid-template-columns: 38px 1fr 80px; }
+    .row-len { display: none; }
+    .palette-row { grid-template-columns: repeat(2, 1fr); }
+    .radius-row { grid-template-columns: repeat(2, 1fr); }
+    .motion-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .type-row { grid-template-columns: 1fr; }
+    .type-spec { text-align: left; }
+  }
+</style>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark mono" aria-hidden>
+        <svg viewBox="0 0 16 16" width="16" height="16">
+          <rect x="1" y="1" width="6" height="6" fill="currentColor"></rect>
+          <rect x="9" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+          <rect x="1" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+          <rect x="9" y="9" width="6" height="6" fill="currentColor"></rect>
+        </svg>
+      </span>
+      <span class="brand-name">uuidlab</span>
+      <span class="brand-tag mono">/ design system</span>
+    </div>
+
+    <div class="topbar-spacer"></div>
+
+    <div class="topbar-meta mono">
+      <span>v <b>1.0.0</b></span>
+      <span>tokens <b id="token-count">--</b></span>
+    </div>
+
+    <div class="seg" role="tablist" aria-label="Theme">
+      <button class="is-on" data-theme="dark">dark</button>
+      <button data-theme="light">light</button>
+    </div>
+
+    <div class="seg" role="tablist" aria-label="Accent">
+      <button class="is-on" data-accent="lime">lime</button>
+      <button data-accent="amber">amber</button>
+      <button data-accent="cobalt">cobalt</button>
+      <button data-accent="magenta">magenta</button>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- HERO ─────────────────────── -->
+    <section class="hero">
+      <div class="hero-line">
+        <span><span class="dot"></span><span class="mono">design system / 01</span></span>
+        <span class="mono">distilled from <b style="color:var(--ink-2)">UUID Generator.html</b></span>
+      </div>
+      <h1 class="hero-title">
+        Hairlines, mono, and one <span class="accent-mark">accent</span> at a time.
+        <br /><span class="hero-title-2">A terminal-luxury system for developer tools.</span>
+      </h1>
+      <p class="hero-sub">
+        Three families of token — color in OKLCH, type in Geist + Geist Mono, space on a 4px scale —
+        plus a small library of components that earn every pixel: the workbench, the rail row, the
+        UUID row, the kbd, the status bar.
+      </p>
+    </section>
+
+    <!-- PRINCIPLES ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 01</span> · <b>principles</b></div>
+          <h2 class="block-title">Six rules that earn the rest.</h2>
+        </div>
+        <div class="block-meta mono">non-negotiables</div>
+      </header>
+      <div class="two-col">
+        <div class="principle">
+          <div class="principle-num mono">01</div>
+          <div class="principle-title">Earn every pixel.</div>
+          <div class="principle-body">Real estate is leased to content, not ornament. Borders are 1px hairlines, never decorative frames.</div>
+        </div>
+        <div class="principle">
+          <div class="principle-num mono">02</div>
+          <div class="principle-title">One accent at a time.</div>
+          <div class="principle-body">A single hue carries focus, active state, glow, and CTA. Switch by hue — never stack accents.</div>
+        </div>
+        <div class="principle">
+          <div class="principle-num mono">03</div>
+          <div class="principle-title">Mono is the body.</div>
+          <div class="principle-body">UUIDs, keys, status, kbd — Geist Mono with a slashed zero. Sans (Geist) is reserved for display and prose.</div>
+        </div>
+        <div class="principle">
+          <div class="principle-num mono">04</div>
+          <div class="principle-title">Lowercase keys, UPPERCASE flags.</div>
+          <div class="principle-body">Rail keys (<span class="mono">version</span>, <span class="mono">batch</span>) are tracked lowercase. State flags (<span class="mono">UPPER</span>, <span class="mono">STRIP</span>) are uppercase.</div>
+        </div>
+        <div class="principle">
+          <div class="principle-num mono">05</div>
+          <div class="principle-title">Motion as feedback.</div>
+          <div class="principle-body">Hover swaps in 120ms, modals settle in 220ms, regenerate spins for ~380ms. No springs, no parallax.</div>
+        </div>
+        <div class="principle">
+          <div class="principle-num mono">06</div>
+          <div class="principle-title">Keyboard is the primary input.</div>
+          <div class="principle-body">Every action has a shortcut. The status bar advertises <kbd>?</kbd> for the full list. Hover is a hint, not a requirement.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLOR ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 02</span> · <b>color</b></div>
+          <h2 class="block-title">Authored in OKLCH. Neutrals at hue 60°.</h2>
+        </div>
+        <div class="block-meta mono">3 bg / 2 seam / 4 ink / 4 accent</div>
+      </header>
+
+      <div class="block-meta mono" style="margin: var(--sp-7) 0 var(--sp-5);">— surfaces —</div>
+      <div class="grid-color">
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--bg);"><span class="pin">canvas</span></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--bg <span class="role">/0</span></div>
+            <div class="swatch-val">oklch(0.16 0.005 60)</div>
+            <div class="swatch-desc">App canvas, top bar, rail surface.</div>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--bg-2);"><span class="pin">shell</span></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--bg-2 <span class="role">/1</span></div>
+            <div class="swatch-val">oklch(0.18 0.005 60)</div>
+            <div class="swatch-desc">Workbench shell, panel surface.</div>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--bg-3);"><span class="pin">hover</span></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--bg-3 <span class="role">/2</span></div>
+            <div class="swatch-val">oklch(0.21 0.006 60)</div>
+            <div class="swatch-desc">Row hover, controls inset, kbd surface.</div>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--seam);"><span class="pin">hairline</span></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--seam <span class="role">/1</span></div>
+            <div class="swatch-val">oklch(0.28 0.006 60)</div>
+            <div class="swatch-desc">Hairline borders, dashed dividers.</div>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--seam-2);"><span class="pin">elevated</span></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--seam-2 <span class="role">/2</span></div>
+            <div class="swatch-val">oklch(0.36 0.008 60)</div>
+            <div class="swatch-desc">Hover/elevated border step.</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="block-meta mono" style="margin: var(--sp-12) 0 var(--sp-5);">— ink ramp —</div>
+      <div class="grid-color">
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--bg-2); color: var(--ink); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:600;">Aa</div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--ink <span class="role">/1</span></div>
+            <div class="swatch-val">oklch(0.97 0.004 60)</div>
+            <div class="swatch-desc">Primary content, headings, active labels.</div>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--bg-2); color: var(--ink-2); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:500;">Aa</div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--ink-2 <span class="role">/2</span></div>
+            <div class="swatch-val">oklch(0.78 0.005 60)</div>
+            <div class="swatch-desc">Body text, ghost button labels.</div>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--bg-2); color: var(--ink-3); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:400;">Aa</div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--ink-3 <span class="role">/3</span></div>
+            <div class="swatch-val">oklch(0.55 0.005 60)</div>
+            <div class="swatch-desc">Meta, hints, dashed divider copy.</div>
+          </div>
+        </article>
+        <article class="swatch">
+          <div class="swatch-tile" style="background: var(--bg-2); color: var(--ink-4); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:400;">Aa</div>
+          <div class="swatch-meta">
+            <div class="swatch-name">--ink-4 <span class="role">/4</span></div>
+            <div class="swatch-val">oklch(0.40 0.006 60)</div>
+            <div class="swatch-desc">Tertiary — index numbers, dashes, ellipses.</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="block-meta mono" style="margin: var(--sp-12) 0 var(--sp-5);">— accent palettes — same L &amp; C, vary hue —</div>
+      <div class="palette-row">
+        <article class="palette is-on" data-palette="lime">
+          <div class="palette-tile" style="background: oklch(0.86 0.20 130); color: oklch(0.18 0.01 130);">lime</div>
+          <div class="palette-meta">
+            <div class="palette-name">lime</div>
+            <div class="palette-val">oklch(0.86 0.20 130)</div>
+          </div>
+        </article>
+        <article class="palette" data-palette="amber">
+          <div class="palette-tile" style="background: oklch(0.82 0.18 65); color: oklch(0.18 0.01 65);">amber</div>
+          <div class="palette-meta">
+            <div class="palette-name">amber</div>
+            <div class="palette-val">oklch(0.82 0.18 65)</div>
+          </div>
+        </article>
+        <article class="palette" data-palette="cobalt">
+          <div class="palette-tile" style="background: oklch(0.74 0.18 250); color: oklch(0.16 0.01 250);">cobalt</div>
+          <div class="palette-meta">
+            <div class="palette-name">cobalt</div>
+            <div class="palette-val">oklch(0.74 0.18 250)</div>
+          </div>
+        </article>
+        <article class="palette" data-palette="magenta">
+          <div class="palette-tile" style="background: oklch(0.78 0.20 340); color: oklch(0.18 0.01 340);">magenta</div>
+          <div class="palette-meta">
+            <div class="palette-name">magenta</div>
+            <div class="palette-val">oklch(0.78 0.20 340)</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TYPE ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 03</span> · <b>type</b></div>
+          <h2 class="block-title">Geist for display, Geist Mono for everything else.</h2>
+        </div>
+        <div class="block-meta mono">8 sizes · 4 weights</div>
+      </header>
+
+      <div class="type-stack">
+        <div class="type-row">
+          <div class="type-key mono"><b>hero</b>display</div>
+          <div class="type-display"><span class="demo-hero">Mint <span class="accent-mark">RFC 4122</span> identifiers</span></div>
+          <div class="type-spec">clamp(48,6.5vw,88) · 600 · -0.035em</div>
+        </div>
+        <div class="type-row">
+          <div class="type-key mono"><b>lg</b>brand &amp; subhead</div>
+          <div class="type-display"><span class="demo-brand">uuidlab</span></div>
+          <div class="type-spec">16 · 700 · -0.01em</div>
+        </div>
+        <div class="type-row">
+          <div class="type-key mono"><b>lg</b>body</div>
+          <div class="type-display"><p class="demo-body" style="margin:0;">High-entropy UUIDs across v4 random, v1 timestamped, and v7 sortable. Formatted, batched, copied or downloaded without leaving the keyboard.</p></div>
+          <div class="type-spec">16 · 400 · 1.55</div>
+        </div>
+        <div class="type-row">
+          <div class="type-key mono"><b>md</b>uuid row · mono</div>
+          <div class="type-display"><span class="demo-mono">a3f9c2d1-7b4e-4c8a-9f1d-3e8b2c6a7d04</span></div>
+          <div class="type-spec">14 · mono · zero ss01</div>
+        </div>
+        <div class="type-row">
+          <div class="type-key mono"><b>base</b>version title</div>
+          <div class="type-display"><span style="font-size:var(--fs-base); font-weight:600;">Time + Node</span></div>
+          <div class="type-spec">13 · 600</div>
+        </div>
+        <div class="type-row">
+          <div class="type-key mono"><b>sm</b>panel title · mono</div>
+          <div class="type-display"><span class="demo-key">/ output · 008 rows</span></div>
+          <div class="type-spec">12 · 600 · 0.04em</div>
+        </div>
+        <div class="type-row">
+          <div class="type-key mono"><b>xs</b>flag · UPPERCASE</div>
+          <div class="type-display"><span class="demo-flag">v4 · UPPER STRIP BRACE</span></div>
+          <div class="type-spec">11 · 0.04em · uppercase</div>
+        </div>
+        <div class="type-row">
+          <div class="type-key mono"><b>xs</b>kbd</div>
+          <div class="type-display" style="display:flex; gap:6px;"><kbd>⌘</kbd><kbd>↵</kbd><kbd>?</kbd><kbd>Esc</kbd></div>
+          <div class="type-spec">11 · mono · 2px bottom</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPACE ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 04</span> · <b>space</b></div>
+          <h2 class="block-title">A 4px scale. Composed, never custom.</h2>
+        </div>
+        <div class="block-meta mono">16 steps · 0 → 80px</div>
+      </header>
+
+      <div class="space-stack" id="space-stack"></div>
+    </section>
+
+    <!-- RADIUS ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 05</span> · <b>radius</b></div>
+          <h2 class="block-title">Five steps. Most chrome lives at 6px.</h2>
+        </div>
+        <div class="block-meta mono">don't mix within a composite</div>
+      </header>
+      <div class="radius-row">
+        <div class="radius-card">
+          <div class="demo"></div>
+          <div><div class="radius-key">--r-xs</div><div class="radius-val">4px</div></div>
+        </div>
+        <div class="radius-card">
+          <div class="demo"></div>
+          <div><div class="radius-key">--r-sm</div><div class="radius-val">5px</div></div>
+        </div>
+        <div class="radius-card">
+          <div class="demo"></div>
+          <div><div class="radius-key">--r-md</div><div class="radius-val">6px</div></div>
+        </div>
+        <div class="radius-card">
+          <div class="demo"></div>
+          <div><div class="radius-key">--r-lg</div><div class="radius-val">10px</div></div>
+        </div>
+        <div class="radius-card">
+          <div class="demo"></div>
+          <div><div class="radius-key">--r-pill</div><div class="radius-val">999px</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOTION ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 06</span> · <b>motion</b></div>
+          <h2 class="block-title">Short. Purposeful. No bounces.</h2>
+        </div>
+        <div class="block-meta mono">cubic-bezier(0.2, 0.7, 0.3, 1)</div>
+      </header>
+      <div class="motion-grid">
+        <div class="motion-card" style="--dur: 120ms;">
+          <div class="motion-key">--d-swap</div><div class="motion-val">120ms</div>
+          <div class="motion-desc">Hover and active state swaps. The default UI feedback duration.</div>
+          <div class="motion-track"><div class="motion-bead"></div></div>
+        </div>
+        <div class="motion-card" style="--dur: 220ms;">
+          <div class="motion-key">--d-modal</div><div class="motion-val">220ms</div>
+          <div class="motion-desc">Modal slide-and-scale entry on the standard easing.</div>
+          <div class="motion-track"><div class="motion-bead"></div></div>
+        </div>
+        <div class="motion-card" style="--dur: 380ms;">
+          <div class="motion-key">--d-regen</div><div class="motion-val">380ms</div>
+          <div class="motion-desc">Regenerate spin window. Just long enough to register a refresh.</div>
+          <div class="motion-track"><div class="motion-bead"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPONENTS ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 07</span> · <b>components</b></div>
+          <h2 class="block-title">The workbench, end-to-end.</h2>
+        </div>
+        <div class="block-meta mono">live · responds to theme &amp; accent</div>
+      </header>
+
+      <div class="demo-frame">
+        <div class="demo-bench">
+          <aside class="demo-rail">
+            <div class="rail-section">
+              <div class="rail-head">
+                <span class="rail-key mono">version</span>
+                <span class="rail-hint mono">⌥1 · ⌥2 · ⌥3</span>
+              </div>
+              <div class="version-stack">
+                <div class="v-row">
+                  <span class="v-tag">v4</span>
+                  <span class="v-meta"><span class="v-title">Random</span><span class="v-desc">Web Crypto entropy, the everyday workhorse.</span></span>
+                  <span class="v-pip"></span>
+                </div>
+                <div class="v-row is-active">
+                  <span class="v-tag">v1</span>
+                  <span class="v-meta"><span class="v-title">Time + Node</span><span class="v-desc">Timestamp-first, sortable for logs and traces.</span></span>
+                  <span class="v-pip">●</span>
+                </div>
+                <div class="v-row">
+                  <span class="v-tag">v7</span>
+                  <span class="v-meta"><span class="v-title">Unix Time</span><span class="v-desc">Time-prefixed hybrid for distributed systems.</span></span>
+                  <span class="v-pip"></span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <section class="demo-panel">
+            <header class="panel-head">
+              <div class="panel-meta">
+                <span class="panel-bar"></span>
+                <span class="panel-title mono">/ output · 005 rows</span>
+                <span class="panel-sep">|</span>
+                <span class="panel-flag mono">v1 · UPPER</span>
+              </div>
+              <div class="panel-actions">
+                <button class="ghost-btn mono">copy all</button>
+                <button class="ghost-btn mono">download .txt</button>
+                <button class="cta-btn mono">regenerate <kbd class="cta-kbd">⌘↵</kbd></button>
+              </div>
+            </header>
+            <div class="panel-grid" id="demo-rows"></div>
+            <footer class="status mono">
+              <span class="status-cell"><span class="status-dot"></span> live</span>
+              <span class="status-cell">ver v1</span>
+              <span class="status-cell">batch 008</span>
+              <span class="status-cell">flags [UPPER]</span>
+              <span class="status-cell"><span style="color:var(--accent)">→</span><span style="color:var(--ink); margin-left:6px;">copied to clipboard</span></span>
+            </footer>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOKEN INDEX ─────────────────────── -->
+    <section class="block">
+      <header class="block-head">
+        <div>
+          <div class="block-eyebrow mono"><span>§ 08</span> · <b>token index</b></div>
+          <h2 class="block-title">Every CSS variable, in one place.</h2>
+        </div>
+        <div class="block-meta mono">tokens.json → tokens.css</div>
+      </header>
+      <div class="token-list" id="token-list"></div>
+    </section>
+
+    <footer class="foot mono">
+      <span>uuidlab/design-system — tokens.json · tokens.css · DESIGN.md</span>
+      <span>v 1.0.0</span>
+    </footer>
+
+  </main>
+
+<script>
+/* ── Render space scale ───────────────────── */
+(function () {
+  const stack = document.getElementById("space-stack");
+  const tokens = [
+    ["--sp-0", 0], ["--sp-1", 2], ["--sp-2", 4], ["--sp-3", 6],
+    ["--sp-4", 8], ["--sp-5", 10], ["--sp-6", 12], ["--sp-7", 14],
+    ["--sp-8", 16], ["--sp-9", 18], ["--sp-10", 22], ["--sp-11", 24],
+    ["--sp-12", 28], ["--sp-13", 36], ["--sp-14", 40], ["--sp-15", 80],
+  ];
+  const max = 80;
+  for (const [k, v] of tokens) {
+    const row = document.createElement("div");
+    row.className = "space-row";
+    row.innerHTML = `
+      <span class="space-key">${k}</span>
+      <span class="space-val">${v}px</span>
+      <span class="space-bar" style="width: ${(v / max) * 100}%; min-width: ${v ? 2 : 0}px;"></span>
+    `;
+    stack.appendChild(row);
+  }
+})();
+
+/* ── Render demo UUID rows ────────────────── */
+(function () {
+  const grid = document.getElementById("demo-rows");
+  const sample = [
+    "01939E0F-8C3E-1F3C-A001-B5D7E9C0F2A1",
+    "01939E0F-8C3E-1F3C-A002-B5D7E9C0F2A2",
+    "01939E0F-8C3E-1F3C-A003-B5D7E9C0F2A3",
+    "01939E0F-8C3E-1F3C-A004-B5D7E9C0F2A4",
+    "01939E0F-8C3E-1F3C-A005-B5D7E9C0F2A5",
+  ];
+  sample.forEach((u, i) => {
+    const parts = u.split("-");
+    const isCopied = i === 1;
+    const r = document.createElement("div");
+    r.className = "row" + (isCopied ? " is-copied" : "");
+    r.innerHTML = `
+      <span class="row-idx mono">${String(i + 1).padStart(3, "0")}</span>
+      <code class="row-uuid mono">${parts.map((p, j) => `<span class="seg-${j}">${p}</span>`).join('<span class="uuid-dash">-</span>')}</code>
+      <span class="row-len mono">${u.length}</span>
+      <button class="row-copy mono ${isCopied ? "is-copied" : ""}">${isCopied ? "✓ copied" : "copy"}</button>
+    `;
+    grid.appendChild(r);
+  });
+})();
+
+/* ── Render token index ───────────────────── */
+(function () {
+  const list = document.getElementById("token-list");
+  const groups = [
+    ["color · surface", [
+      ["--bg",      "oklch(0.16 0.005 60)", "App canvas"],
+      ["--bg-2",    "oklch(0.18 0.005 60)", "Workbench shell"],
+      ["--bg-3",    "oklch(0.21 0.006 60)", "Row hover, kbd"],
+      ["--seam",    "oklch(0.28 0.006 60)", "Hairline border"],
+      ["--seam-2",  "oklch(0.36 0.008 60)", "Elevated border"],
+    ]],
+    ["color · ink", [
+      ["--ink",     "oklch(0.97 0.004 60)", "Primary content"],
+      ["--ink-2",   "oklch(0.78 0.005 60)", "Body text"],
+      ["--ink-3",   "oklch(0.55 0.005 60)", "Meta, hints"],
+      ["--ink-4",   "oklch(0.40 0.006 60)", "Tertiary"],
+    ]],
+    ["color · accent", [
+      ["--accent",     "oklch(0.86 0.20 130)", "Active palette (lime default)"],
+      ["--on-accent",  "oklch(0.18 0.01 130)", "Foreground on accent fills"],
+    ]],
+    ["type", [
+      ["--font-sans",     "Geist", "Display, prose"],
+      ["--font-mono",     "Geist Mono", "UI chrome, code, kbd"],
+      ["--fs-hero",       "clamp(48px, 6.5vw, 88px)", "Hero display"],
+      ["--fs-xl",         "36px", "Batch counter"],
+      ["--fs-lg",         "16px", "Brand, subhead"],
+      ["--fs-md",         "14px", "UUID rows"],
+      ["--fs-base",       "13px", "Dense controls"],
+      ["--fs-sm",         "12px", "Top bar, ghost btn"],
+      ["--fs-xs",         "11px", "kbd, status, eyebrow"],
+      ["--fs-xxs",        "10px", "Hint text"],
+      ["--tracking-tight","-0.035em", "Hero display"],
+      ["--tracking-wide", "0.04em", "Mono labels"],
+      ["--lh-display",    "0.96", "Hero line-height"],
+      ["--lh-body",       "1.55", "Prose"],
+    ]],
+    ["space (4px scale)", [
+      ["--sp-2","4px","gap step"], ["--sp-4","8px","row gap"],
+      ["--sp-6","12px","control gap"], ["--sp-8","16px","row pad"],
+      ["--sp-10","22px","rail section pad"], ["--sp-12","28px","top bar pad"],
+      ["--sp-13","36px","section gap"], ["--sp-15","80px","page bottom"]
+    ]],
+    ["radius", [
+      ["--r-xs",   "4px",   "kbd, version-tag"],
+      ["--r-sm",   "5px",   "row copy button"],
+      ["--r-md",   "6px",   "Buttons, options"],
+      ["--r-lg",   "10px",  "Workbench, modal"],
+      ["--r-pill", "999px", "Pills"],
+    ]],
+    ["motion", [
+      ["--d-tap",    "80ms",  "Tap depress"],
+      ["--d-swap",   "120ms", "Hover/active swap"],
+      ["--d-scrim",  "160ms", "Modal scrim"],
+      ["--d-modal",  "220ms", "Modal entry"],
+      ["--d-panel",  "280ms", "Panel fade"],
+      ["--d-regen",  "380ms", "Regenerate spin"],
+      ["--d-pulse",  "2000ms","Status live dot"],
+      ["--ease-standard", "cubic-bezier(0.2, 0.7, 0.3, 1)", "Modal entry curve"],
+    ]],
+  ];
+
+  let total = 0;
+  for (const [groupName, items] of groups) {
+    const head = document.createElement("div");
+    head.className = "token-row";
+    head.innerHTML = `<span class="name" style="color:var(--accent)">— ${groupName}</span><span></span><span class="desc mono" style="color:var(--ink-4)">${items.length} tokens</span>`;
+    list.appendChild(head);
+    for (const [name, val, desc] of items) {
+      const r = document.createElement("div");
+      r.className = "token-row";
+      r.innerHTML = `<span class="name">${name}</span><span class="val">${val}</span><span class="desc">${desc}</span>`;
+      list.appendChild(r);
+      total++;
+    }
+  }
+  document.getElementById("token-count").textContent = total;
+})();
+
+/* ── Theme + accent toggles ───────────────── */
+(function () {
+  const root = document.documentElement;
+  document.querySelectorAll("[data-theme]").forEach((b) => {
+    b.addEventListener("click", () => {
+      root.setAttribute("data-theme", b.dataset.theme);
+      document.querySelectorAll("[data-theme]").forEach((x) => x.classList.toggle("is-on", x === b));
+    });
+  });
+  document.querySelectorAll("[data-accent]").forEach((b) => {
+    b.addEventListener("click", () => {
+      root.setAttribute("data-accent", b.dataset.accent);
+      document.querySelectorAll("[data-accent]").forEach((x) => x.classList.toggle("is-on", x === b));
+      document.querySelectorAll(".palette").forEach((p) => p.classList.toggle("is-on", p.dataset.palette === b.dataset.accent));
+    });
+  });
+  document.querySelectorAll(".palette").forEach((p) => {
+    p.addEventListener("click", () => {
+      const v = p.dataset.palette;
+      root.setAttribute("data-accent", v);
+      document.querySelectorAll(".palette").forEach((x) => x.classList.toggle("is-on", x === p));
+      document.querySelectorAll("[data-accent]").forEach((x) => x.classList.toggle("is-on", x.dataset.accent === v));
+    });
+  });
+})();
+</script>
+</body>
+</html>
