@@ -1,23 +1,17 @@
-# Dependabot configuration file.
-# See https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
-    # Limit open PRs to 10 to align with GitHub's internal limit for security updates.
-    # See: https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates
+    # Enable version updates to keep deps healthy, which reduces security delta
     open-pull-requests-limit: 10
-    # Security updates must be manually reviewed before merging.
-    # We explicitly do NOT configure `allow-auto-merge` here or in workflows.
     groups:
-      # Optional: group dev dependencies to reduce noise while keeping security tight
-      dev-dependencies:
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-        dependency-type: "development"
+       # Optional: group dev dependencies to reduce noise
+       dev-dependencies:
+          patterns:
+            - "*"
+          update-types:
+            - "minor"
+            - "patch"
+          dependency-type: "development"
