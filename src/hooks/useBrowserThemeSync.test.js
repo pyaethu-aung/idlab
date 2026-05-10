@@ -12,21 +12,23 @@ describe("useBrowserThemeSync", () => {
 
     vi.spyOn(window, "getComputedStyle").mockImplementation(() => ({
       getPropertyValue: (prop) => {
-        if (prop === "--page-bg") return "#030712";
+        if (prop === "--bg") return "#1a1a1a";
         return "";
       },
     }));
   });
 
   afterEach(() => {
-    document.head.removeChild(metaTag);
+    if (document.head.contains(metaTag)) {
+      document.head.removeChild(metaTag);
+    }
     vi.restoreAllMocks();
   });
 
-  it("sets theme-color to the static --page-bg value", () => {
+  it("sets theme-color to the --bg value", () => {
     renderHook(() => useBrowserThemeSync("dark"));
 
-    expect(metaTag.getAttribute("content")).toBe("#030712");
+    expect(metaTag.getAttribute("content")).toBe("#1a1a1a");
   });
 
   it("creates meta tag if none exists", () => {
@@ -36,9 +38,8 @@ describe("useBrowserThemeSync", () => {
 
     const created = document.querySelector('meta[name="theme-color"]');
     expect(created).not.toBeNull();
-    expect(created.getAttribute("content")).toBe("#030712");
+    expect(created.getAttribute("content")).toBe("#1a1a1a");
 
-    // Clean up the created tag for afterEach
     metaTag = created;
   });
 
@@ -48,17 +49,17 @@ describe("useBrowserThemeSync", () => {
       { initialProps: { theme: "dark" } }
     );
 
-    expect(metaTag.getAttribute("content")).toBe("#030712");
+    expect(metaTag.getAttribute("content")).toBe("#1a1a1a");
 
     vi.spyOn(window, "getComputedStyle").mockImplementation(() => ({
       getPropertyValue: (prop) => {
-        if (prop === "--page-bg") return "#f8fafc";
+        if (prop === "--bg") return "#fafafa";
         return "";
       },
     }));
 
     rerender({ theme: "light" });
 
-    expect(metaTag.getAttribute("content")).toBe("#f8fafc");
+    expect(metaTag.getAttribute("content")).toBe("#fafafa");
   });
 });

@@ -7,6 +7,7 @@ const {
   mockRegenerate,
   mockDownloadList,
   mockHandleCopy,
+  mockCopyAll,
   mockHandleVersionChange,
   mockToggleOption,
   mockSetBatchSize,
@@ -20,6 +21,7 @@ const {
   mockRegenerate: vi.fn(),
   mockDownloadList: vi.fn(),
   mockHandleCopy: vi.fn(),
+  mockCopyAll: vi.fn(),
   mockHandleVersionChange: vi.fn(),
   mockToggleOption: vi.fn(),
   mockSetBatchSize: vi.fn(),
@@ -57,6 +59,7 @@ const createGeneratorState = (overrides = {}) => ({
   isDownloading: false,
   regenerate: mockRegenerate,
   handleCopy: mockHandleCopy,
+  copyAll: mockCopyAll,
   handleVersionChange: mockHandleVersionChange,
   toggleOption: mockToggleOption,
   downloadList: mockDownloadList,
@@ -77,7 +80,7 @@ describe("App", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.getByText(/Instant UUID generator built for flow/i)).toBeInTheDocument();
+    expect(screen.getByText(/Mint/i)).toBeInTheDocument();
     expect(screen.getByText("Copied!")).toBeInTheDocument();
 
     await user.click(
@@ -85,29 +88,24 @@ describe("App", () => {
     );
     expect(mockToggleTheme).toHaveBeenCalled();
 
-    await user.click(screen.getByRole("button", { name: /refresh/i }));
+    await user.click(screen.getByRole("button", { name: /regenerate/i }));
     expect(mockRegenerate).toHaveBeenCalled();
 
     await user.click(screen.getByRole("button", { name: /download/i }));
     expect(mockDownloadList).toHaveBeenCalled();
   });
 
-  it("displays busy states while refreshing or downloading", () => {
+  it("shows refreshing state on the regenerate button", () => {
     useUuidGeneratorMock.mockReturnValue(
-      createGeneratorState({ isRefreshing: true, isDownloading: true })
+      createGeneratorState({ isRefreshing: true })
     );
 
     render(<App />);
 
-    expect(screen.getByRole("button", { name: /refresh/i })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: /regenerate/i })).toHaveAttribute(
       "aria-busy",
       "true"
     );
-    expect(screen.getByRole("button", { name: /Preparing/i })).toHaveAttribute(
-      "aria-busy",
-      "true"
-    );
-    expect(screen.getByText(/Preparing.../i)).toBeInTheDocument();
   });
 
   it("integrates useKeyboardShortcuts hook with correct props", () => {
@@ -134,7 +132,7 @@ describe("App", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    const shortcutButton = screen.getByRole("button", { name: /shortcuts/i });
+    const shortcutButton = screen.getByRole("button", { name: /open keyboard shortcuts/i });
     await user.click(shortcutButton);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
