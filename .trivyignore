@@ -1,3 +1,9 @@
 # Trivy vulnerability ignore list.
 # Add CVE IDs here to suppress known false positives or accepted risks.
 # Format: one CVE per line, e.g. CVE-2023-12345
+
+# nghttp2 reachable assertion / DoS — fixed in nghttp2 v1.68.1.
+# Suppressed because Alpine has not yet packaged the fix; the Dockerfile
+# already runs `apk upgrade --no-cache` so this will clear automatically
+# once the Alpine repo ships nghttp2 >=1.68.1.
+CVE-2026-27135
