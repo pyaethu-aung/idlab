@@ -90,7 +90,7 @@ A developer with a v1 or v7 UUID wants to know the exact creation time embedded 
 - **FR-004**: System MUST accept a UUID string via a text input field on the validator screen.
 - **FR-005**: System MUST treat UUID input as case-insensitive and strip surrounding whitespace and curly braces before validation.
 - **FR-006**: System MUST validate the input string against RFC 4122 UUID format rules in real-time as the user types or pastes.
-- **FR-007**: System MUST display a clear valid or invalid status indicator after each input change.
+- **FR-007**: System MUST display a clear valid or invalid status indicator after each input change; invalid input shows a single "Invalid UUID" label with no breakdown of the failure reason.
 - **FR-008**: System MUST detect and display the UUID version (v1, v4, v7, and other versions by number) for valid inputs.
 - **FR-009**: System MUST display the RFC 4122 variant for any valid UUID.
 - **FR-010**: System MUST display the 5 standard UUID fields as a color-coded visual breakdown for any valid UUID.
@@ -114,7 +114,7 @@ A developer with a v1 or v7 UUID wants to know the exact creation time embedded 
 - **SC-002**: 100% of valid RFC 4122 v1, v4, and v7 UUIDs are correctly classified and decoded.
 - **SC-003**: Users can switch between the generator and validator without losing their work in either panel, completing the action in a single click.
 - **SC-004**: The relative timestamp for v1 and v7 UUIDs is accurate to within 1 second of the actual embedded time.
-- **SC-005**: The validator screen is fully usable on both desktop and mobile viewport sizes, consistent with the generator screen.
+- **SC-005**: The validator screen is fully usable on both desktop and mobile viewport sizes, consistent with the generator screen. On narrow screens, the color-coded breakdown segments and decoded properties panel stack vertically; no information is hidden.
 
 ## Assumptions
 
@@ -124,3 +124,14 @@ A developer with a v1 or v7 UUID wants to know the exact creation time embedded 
 - Timestamps are displayed using the user's browser local time zone.
 - The validator screen uses the same design tokens, theme, and accent palette system as the existing generator screen.
 - Copying the decoded result to the clipboard is out of scope for this initial implementation.
+- There is no direct hand-off from the generator to the validator; users copy a UUID from the generator and paste it into the validator manually.
+- No new keyboard shortcuts are introduced for the validator; the existing shortcut system remains unchanged.
+
+## Clarifications
+
+### Session 2026-05-13
+
+- Q: Should the generator provide a direct hand-off to pre-fill the validator? → A: No; users copy the UUID manually and paste it into the validator.
+- Q: Should keyboard shortcuts be added for the validator or tab navigation? → A: No new shortcuts; existing shortcut system remains unchanged.
+- Q: How should the component breakdown adapt on mobile? → A: Stack segments and decoded properties vertically; no information hidden.
+- Q: How descriptive should the invalid UUID error message be? → A: Single "Invalid UUID" label; no breakdown of why it failed.
