@@ -102,11 +102,11 @@
 
 **Purpose**: Final verification and visual consistency across themes and viewports
 
-- [ ] T025 [P] Verify dark/light theme rendering on validator panel — toggle theme via ThemeToggle and confirm all CSS custom properties (`var(--bg)`, `var(--seam)`, `var(--ink)`, `var(--accent)`) resolve correctly on `.validator-panel`, `.uuid-input-field`, `.validation-badge`, and `.decoded-fields`
-- [ ] T026 [P] Verify mobile responsive layout — inspect validator at ≤920px viewport: `.uuid-input-field` fills full width, `.uuid-breakdown` segments stack vertically (no horizontal overflow), `.decoded-fields` rows wrap correctly
-- [ ] T027 Run `npm run test` — verify all tests pass and coverage ≥85%
-- [ ] T028 Run `npm run lint` — fix any linting errors before marking done
-- [ ] T029 Run `npm run build` — verify production build succeeds with no warnings
+- [x] T025 [P] Verify dark/light theme rendering on validator panel — toggle theme via ThemeToggle and confirm all CSS custom properties (`var(--bg)`, `var(--seam)`, `var(--ink)`, `var(--accent)`) resolve correctly on `.validator-panel`, `.uuid-input-field`, `.validation-badge`, and `.decoded-fields`
+- [x] T026 [P] Verify mobile responsive layout — inspect validator at ≤920px viewport: `.uuid-input-field` fills full width, `.uuid-breakdown` segments stack vertically (no horizontal overflow), `.decoded-fields` rows wrap correctly
+- [x] T027 Run `npm run test` — verify all tests pass and coverage ≥85%
+- [x] T028 Run `npm run lint` — fix any linting errors before marking done
+- [x] T029 Run `npm run build` — verify production build succeeds with no warnings
 
 ---
 
