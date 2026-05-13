@@ -6,6 +6,7 @@ import Hero from "./Hero";
 import InsightCards from "./InsightCards";
 import ShortcutReference from "./ShortcutReference";
 import ThemeToggle from "./ThemeToggle";
+import ToolbarNav from "./ToolbarNav";
 import UuidInput from "./UuidInput";
 import UuidList from "./UuidList";
 import ValidationBadge from "./ValidationBadge";
@@ -310,5 +311,35 @@ describe("ShortcutReference", () => {
     const backdrop = container.querySelector('[aria-hidden="true"]');
     fireEvent.click(backdrop);
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("ToolbarNav", () => {
+  it("renders Generator and Validator buttons", () => {
+    render(<ToolbarNav activeTab="generator" onTabChange={() => {}} />);
+    expect(screen.getByRole("button", { name: "Generator" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Validator" })).toBeInTheDocument();
+  });
+
+  it("marks the active tab with aria-current", () => {
+    render(<ToolbarNav activeTab="generator" onTabChange={() => {}} />);
+    expect(screen.getByRole("button", { name: "Generator" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("button", { name: "Validator" })).not.toHaveAttribute("aria-current");
+  });
+
+  it("calls onTabChange when clicking the inactive tab", async () => {
+    const onTabChange = vi.fn();
+    const user = userEvent.setup();
+    render(<ToolbarNav activeTab="generator" onTabChange={onTabChange} />);
+    await user.click(screen.getByRole("button", { name: "Validator" }));
+    expect(onTabChange).toHaveBeenCalledWith("validator");
+  });
+
+  it("does not call onTabChange when clicking the active tab", async () => {
+    const onTabChange = vi.fn();
+    const user = userEvent.setup();
+    render(<ToolbarNav activeTab="generator" onTabChange={onTabChange} />);
+    await user.click(screen.getByRole("button", { name: "Generator" }));
+    expect(onTabChange).not.toHaveBeenCalled();
   });
 });

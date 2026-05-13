@@ -4,8 +4,11 @@ import Hero from "./components/Hero";
 import ShortcutReference from "./components/ShortcutReference";
 import StatusBar from "./components/StatusBar";
 import ThemeToggle from "./components/ThemeToggle";
+import ToolbarNav from "./components/ToolbarNav";
 import UuidList from "./components/UuidList";
+import ValidatorPanel from "./components/ValidatorPanel";
 import SHORTCUTS from "./data/shortcuts";
+import useActiveTab from "./hooks/useActiveTab";
 import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
 import useTheme from "./hooks/useTheme";
 import useBrowserThemeSync from "./hooks/useBrowserThemeSync";
@@ -23,6 +26,7 @@ function BrandIcon() {
 }
 
 function App() {
+  const { activeTab, setActiveTab } = useActiveTab();
   const { theme, toggleTheme } = useTheme();
   useBrowserThemeSync(theme);
   const [isShortcutHelpOpen, setShortcutHelpOpen] = useState(false);
@@ -67,9 +71,11 @@ function App() {
             <BrandIcon />
           </span>
           <span className="brand-name">uuidlab</span>
-          <span className="brand-tag mono">/ generator</span>
+          <span className="brand-tag mono">/ {activeTab}</span>
         </div>
-        <nav className="topbar-nav mono" aria-hidden="true" />
+        <nav className="topbar-nav mono">
+          <ToolbarNav activeTab={activeTab} onTabChange={setActiveTab} />
+        </nav>
         <div className="topbar-right">
           <button
             type="button"
@@ -84,33 +90,39 @@ function App() {
       </header>
 
       <main className="main">
-        <Hero />
+        <div style={{ display: activeTab === "generator" ? "" : "none" }}>
+          <Hero />
 
-        <section className="bench">
-          <ControlPanel
-            batchSize={batchSize}
-            visibleBatchSize={visibleBatchSize}
-            selectedVersion={selectedVersion}
-            options={options}
-            onBatchChange={setBatchSize}
-            onBatchCommit={commitBatchSize}
-            onVersionChange={handleVersionChange}
-            onToggleOption={toggleOption}
-          />
+          <section className="bench">
+            <ControlPanel
+              batchSize={batchSize}
+              visibleBatchSize={visibleBatchSize}
+              selectedVersion={selectedVersion}
+              options={options}
+              onBatchChange={setBatchSize}
+              onBatchCommit={commitBatchSize}
+              onVersionChange={handleVersionChange}
+              onToggleOption={toggleOption}
+            />
 
-          <UuidList
-            uuids={formattedUuids}
-            version={selectedVersion}
-            batch={batchSize}
-            opts={options}
-            copiedUuid={copiedUuid}
-            onCopy={handleCopy}
-            onCopyAll={copyAll}
-            onRegen={regenerate}
-            onDownload={downloadList}
-            refreshing={isRefreshing}
-          />
-        </section>
+            <UuidList
+              uuids={formattedUuids}
+              version={selectedVersion}
+              batch={batchSize}
+              opts={options}
+              copiedUuid={copiedUuid}
+              onCopy={handleCopy}
+              onCopyAll={copyAll}
+              onRegen={regenerate}
+              onDownload={downloadList}
+              refreshing={isRefreshing}
+            />
+          </section>
+        </div>
+
+        <div style={{ display: activeTab === "validator" ? "" : "none" }}>
+          <ValidatorPanel />
+        </div>
       </main>
 
       <StatusBar
