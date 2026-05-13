@@ -6,6 +6,7 @@ import Hero from "./Hero";
 import InsightCards from "./InsightCards";
 import ShortcutReference from "./ShortcutReference";
 import ThemeToggle from "./ThemeToggle";
+import DecodedFields from "./DecodedFields";
 import ToolbarNav from "./ToolbarNav";
 import UuidBreakdown from "./UuidBreakdown";
 import UuidInput from "./UuidInput";
@@ -312,6 +313,47 @@ describe("ShortcutReference", () => {
     const backdrop = container.querySelector('[aria-hidden="true"]');
     fireEvent.click(backdrop);
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("DecodedFields", () => {
+  const V7_DECODED = {
+    timestampRelative: "2 minutes ago",
+    timestampIso: "2024-01-01T00:00:00.001Z",
+    sequence: 123,
+    node: null,
+  };
+  const V1_DECODED = {
+    timestampRelative: "3 days ago",
+    timestampIso: "2024-01-01T00:00:00.000Z",
+    sequence: null,
+    node: "00c04fd430c8",
+  };
+
+  it("renders nothing when both decoded and variant are null", () => {
+    const { container } = render(<DecodedFields decoded={null} variant={null} />);
+    expect(container.firstChild).toBeNull();
+  });
+
+  it("renders only variant row when decoded is null", () => {
+    render(<DecodedFields decoded={null} variant="RFC 4122" />);
+    expect(screen.getByText("RFC 4122")).toBeInTheDocument();
+    expect(screen.queryByText(/ISO 8601/i)).toBeNull();
+  });
+
+  it("renders relative timestamp, ISO string, and sequence for v7 decoded", () => {
+    render(<DecodedFields decoded={V7_DECODED} variant="RFC 4122" />);
+    expect(screen.getByText("2 minutes ago")).toBeInTheDocument();
+    expect(screen.getByText("2024-01-01T00:00:00.001Z")).toBeInTheDocument();
+    expect(screen.getByText("123")).toBeInTheDocument();
+    expect(screen.queryByText("00c04fd430c8")).toBeNull();
+  });
+
+  it("renders timestamp and node for v1 decoded, no sequence", () => {
+    render(<DecodedFields decoded={V1_DECODED} variant="RFC 4122" />);
+    expect(screen.getByText("3 days ago")).toBeInTheDocument();
+    expect(screen.getByText("00c04fd430c8")).toBeInTheDocument();
+    expect(screen.queryByText("sequence")).toBeNull();
   });
 });
 

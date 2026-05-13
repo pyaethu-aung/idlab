@@ -1,4 +1,5 @@
 import useUuidValidator from "../hooks/useUuidValidator";
+import DecodedFields from "./DecodedFields";
 import UuidBreakdown from "./UuidBreakdown";
 import UuidInput from "./UuidInput";
 import ValidationBadge from "./ValidationBadge";
@@ -25,6 +26,10 @@ function ValidatorPanel() {
         <UuidInput value={rawInput} onChange={setRawInput} />
         <ValidationBadge result={result} />
         <UuidBreakdown fields={result?.valid ? result.fields : null} />
+        <DecodedFields
+          decoded={result?.decoded ?? null}
+          variant={result?.valid ? result.variant : null}
+        />
       </div>
     </section>
   );

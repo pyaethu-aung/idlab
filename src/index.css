@@ -680,6 +680,38 @@ kbd {
 .seg-d { border-top: 3px solid oklch(0.72 0.15 65); }
 .seg-e { border-top: 3px solid oklch(0.72 0.15 340); }
 
+/* ─── Decoded fields ─────────────────────────────────────────────────────── */
+.decoded-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-top: var(--sp-8);
+}
+.decoded-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--sp-8);
+  flex-wrap: wrap;
+}
+.decoded-label {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-feature-settings: var(--font-feat-mono);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+.decoded-value {
+  font-size: var(--fs-base);
+  color: var(--ink);
+}
+.decoded-timestamp-rel {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--ink);
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .bench { grid-template-columns: 1fr; }
