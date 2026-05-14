@@ -9,7 +9,6 @@ import ThemeToggle from "./ThemeToggle";
 import ToolbarNav from "./ToolbarNav";
 import UuidList from "./UuidList";
 import ValidationBanner from "./ValidationBanner";
-import ValidatorPanelHead from "./ValidatorPanelHead";
 import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorSegCard from "./ValidatorSegCard";
 
@@ -322,27 +321,6 @@ describe("ValidatorSegCard", () => {
   it("labels version segment with version + rand caption", () => {
     render(<ValidatorSegCard fields={V4_FIELDS} />);
     expect(screen.getByText("version + rand")).toBeInTheDocument();
-  });
-});
-
-describe("ValidatorPanelHead", () => {
-  it("shows placeholder title when result is null", () => {
-    render(<ValidatorPanelHead result={null} />);
-    expect(screen.getByText("/ —")).toBeInTheDocument();
-  });
-
-  it("shows valid v4 title when result is valid", () => {
-    render(
-      <ValidatorPanelHead
-        result={{ valid: true, version: 4, variantBits: "RFC 4122 · 10x · b00…b01" }}
-      />
-    );
-    expect(screen.getByText("/ valid · v4 UUID")).toBeInTheDocument();
-  });
-
-  it("shows invalid title when result is invalid", () => {
-    render(<ValidatorPanelHead result={{ valid: false }} />);
-    expect(screen.getByText("/ invalid UUID")).toBeInTheDocument();
   });
 });
 

@@ -760,36 +760,6 @@ kbd {
   min-width: 0;
 }
 
-/* ─── Panel head ─────────────────────────────────────────────────────────── */
-.v-panel-head {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-8);
-  height: 52px;
-  padding: 0 var(--sp-10);
-  border-bottom: 1px solid var(--seam);
-  background: var(--bg);
-  flex-shrink: 0;
-}
-.v-panel-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-}
-.v-panel-bar {
-  width: 3px;
-  height: 14px;
-  border-radius: 2px;
-  background: var(--accent);
-  flex-shrink: 0;
-}
-.v-panel-title { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--ink); white-space: nowrap; }
-.v-panel-sep   { color: var(--ink-4); font-size: var(--fs-sm); }
-.v-panel-flag  { font-size: var(--fs-xs); color: var(--ink-3); letter-spacing: var(--tracking-wide); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
 /* ─── Panel body sections ────────────────────────────────────────────────── */
 .v-panel-body { display: flex; flex-direction: column; }
 .v-result-section {

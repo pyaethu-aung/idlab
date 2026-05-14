@@ -1,5 +1,4 @@
 import ValidationBanner from "./ValidationBanner";
-import ValidatorPanelHead from "./ValidatorPanelHead";
 import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorRail from "./ValidatorRail";
 import ValidatorSegCard from "./ValidatorSegCard";
@@ -41,7 +40,6 @@ function ValidatorPanel({ validator }) {
         />
 
         <div className="v-panel-view">
-          <ValidatorPanelHead result={result} />
           <div className="v-panel-body">
             {result && (
               <>
