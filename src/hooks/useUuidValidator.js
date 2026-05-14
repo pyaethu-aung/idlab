@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { parseUuid } from "../utils/uuidDecoder";
+import { uuidGenerators } from "../utils/uuid";
 
 const SAMPLES = {
   nil: "00000000-0000-0000-0000-000000000000",
@@ -13,10 +14,10 @@ const SAMPLES = {
 const DEFAULT_OPTIONS = { strictRfc: false, allowBraces: true, allowNoHyphens: false };
 
 function useUuidValidator() {
-  const [rawInput, setRawInput] = useState(SAMPLES.v7);
+  const [rawInput, setRawInput] = useState(() => uuidGenerators.v7());
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
   const [copied, setCopied] = useState(false);
-  const [activeSample, setActiveSample] = useState("v7");
+  const [activeSample, setActiveSample] = useState(null);
   const [checkCount, setCheckCount] = useState(0);
   const prevValidRef = useRef(false);
 
