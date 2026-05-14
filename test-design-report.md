@@ -242,7 +242,7 @@ Scope to `:focus-visible` (not `:focus`) so mouse clicks don't show the ring.
 | 3 | P2 🟡 | Add `:focus-visible` outline rule | `src/index.css` |
 | 4 | P3 🟢 | Reconcile topbar height (CSS 63px ↔ design 44px) | `src/index.css` or `design.pen` |
 | 5 | P3 🟢 | ~~Expand checkbox hit areas~~ ✅ | `src/index.css` |
-| 6 | P3 🟢 | Install `pixelmatch` + `pngjs` to enable pixel-diff | `package.json` |
+| 6 | P3 🟢 | ~~Install `pixelmatch` + `pngjs` to enable pixel-diff~~ ✅ | `package.json` |
 
 ---
 
