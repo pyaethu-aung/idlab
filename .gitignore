@@ -15,6 +15,7 @@ settings.local.json
 coverage
 .eslintcache
 .playwright-mcp
+.test-design
 
 # Editor directories and files
 .vscode/*
