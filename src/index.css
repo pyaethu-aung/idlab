@@ -284,6 +284,15 @@ kbd {
   cursor: grab;
   box-shadow: 0 0 0 1px var(--accent);
 }
+.rail-range:focus-visible {
+  outline: none;
+}
+.rail-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+}
+.rail-range:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+}
 .batch-foot { font-size: var(--fs-xxs); color: var(--ink-4); margin-bottom: 14px; }
 .batch-presets { display: flex; gap: 4px; }
 .preset-chip {
