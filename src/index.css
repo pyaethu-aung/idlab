@@ -82,6 +82,7 @@ kbd {
   align-items: center;
   gap: 8px;
   padding: 7px 12px;
+  min-height: 44px;
   background: var(--bg-2);
   border: 1px solid var(--seam);
   color: var(--ink-2);
@@ -99,6 +100,7 @@ kbd {
   align-items: center;
   gap: 8px;
   padding: 8px 14px 8px 12px;
+  min-height: 44px;
   background: var(--accent);
   color: var(--on-accent);
   border: 1px solid var(--accent);
@@ -259,11 +261,21 @@ kbd {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
+  height: 44px;
+  background: transparent;
+  outline: none;
+  margin: 0 0 4px;
+  cursor: pointer;
+}
+.rail-range::-webkit-slider-runnable-track {
   height: 4px;
   background: var(--seam);
   border-radius: 2px;
-  outline: none;
-  margin: 8px 0 12px;
+}
+.rail-range::-moz-range-track {
+  height: 4px;
+  background: var(--seam);
+  border-radius: 2px;
 }
 .rail-range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -298,6 +310,7 @@ kbd {
 .preset-chip {
   flex: 1;
   padding: 6px 0;
+  min-height: 44px;
   background: var(--bg-2);
   border: 1px solid var(--seam);
   border-radius: var(--r-xs);
@@ -429,6 +442,7 @@ kbd {
 }
 .row-copy {
   padding: 6px 12px;
+  min-height: 44px;
   background: transparent;
   border: 1px solid var(--seam);
   border-radius: var(--r-sm);
@@ -566,6 +580,7 @@ kbd {
   display: inline-flex;
   align-items: center;
   padding: 5px 10px;
+  min-height: 44px;
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--r-md);
@@ -703,6 +718,7 @@ kbd {
   justify-content: center;
   gap: var(--sp-3);
   padding: 10px 12px;
+  min-height: 44px;
   border-radius: var(--r-md);
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
@@ -725,6 +741,7 @@ kbd {
   align-items: center;
   justify-content: center;
   padding: 8px 10px;
+  min-height: 44px;
   border-radius: var(--r-md);
   background: var(--bg-2);
   border: 1px solid var(--seam);
@@ -748,6 +765,7 @@ kbd {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
+  min-height: 44px;
   border-radius: var(--r-md);
   border: 1px solid var(--seam);
   background: transparent;
