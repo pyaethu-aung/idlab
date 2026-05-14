@@ -13,9 +13,6 @@ function ValidatorPanel({ validator }) {
     toggleOption,
     loadSample,
     activeSample,
-    handleCopy,
-    copied,
-    recheck,
   } = validator;
 
   return (

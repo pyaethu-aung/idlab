@@ -327,7 +327,7 @@ describe("ValidatorSegCard", () => {
 
 describe("ValidatorPanelHead", () => {
   it("shows placeholder title when result is null", () => {
-    render(<ValidatorPanelHead result={null} onCopy={vi.fn()} copied={false} onRecheck={vi.fn()} />);
+    render(<ValidatorPanelHead result={null} />);
     expect(screen.getByText("/ —")).toBeInTheDocument();
   });
 
@@ -335,25 +335,14 @@ describe("ValidatorPanelHead", () => {
     render(
       <ValidatorPanelHead
         result={{ valid: true, version: 4, variantBits: "RFC 4122 · 10x · b00…b01" }}
-        onCopy={vi.fn()} copied={false} onRecheck={vi.fn()}
       />
     );
     expect(screen.getByText("/ valid · v4 UUID")).toBeInTheDocument();
   });
 
   it("shows invalid title when result is invalid", () => {
-    render(<ValidatorPanelHead result={{ valid: false }} onCopy={vi.fn()} copied={false} onRecheck={vi.fn()} />);
+    render(<ValidatorPanelHead result={{ valid: false }} />);
     expect(screen.getByText("/ invalid UUID")).toBeInTheDocument();
-  });
-
-  it("shows copied! label when copied is true", () => {
-    render(
-      <ValidatorPanelHead
-        result={{ valid: true, version: 4, variantBits: "RFC 4122 · 10x · b00…b01" }}
-        onCopy={vi.fn()} copied={true} onRecheck={vi.fn()}
-      />
-    );
-    expect(screen.getByText("copied!")).toBeInTheDocument();
   });
 });
 
