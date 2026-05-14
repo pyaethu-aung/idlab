@@ -62,6 +62,7 @@ function ControlPanel({
           <span className="batch-num mono">{String(batchSize).padStart(3, "0")}</span>
           <span className="batch-of mono">/ 200</span>
         </div>
+        <label htmlFor="batch-size" className="sr-only">Batch size</label>
         <input
           id="batch-size"
           type="range"
