@@ -8,10 +8,11 @@ const V1 = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
 const NIL = "00000000-0000-0000-0000-000000000000";
 
 describe("useUuidValidator", () => {
-  it("starts with empty input and null result", () => {
+  it("starts with v7 sample input and a valid result", () => {
     const { result } = renderHook(() => useUuidValidator());
-    expect(result.current.rawInput).toBe("");
-    expect(result.current.result).toBeNull();
+    expect(result.current.rawInput).toBe("018e3f4a-9c2b-7d8e-9f7a-9b3c2e5f6a7d");
+    expect(result.current.activeSample).toBe("v7");
+    expect(result.current.result?.version).toBe(7);
   });
 
   it("returns valid result for a v4 UUID", () => {

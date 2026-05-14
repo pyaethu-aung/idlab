@@ -13,10 +13,10 @@ const SAMPLES = {
 const DEFAULT_OPTIONS = { strictRfc: false, allowBraces: true, allowNoHyphens: false };
 
 function useUuidValidator() {
-  const [rawInput, setRawInput] = useState("");
+  const [rawInput, setRawInput] = useState(SAMPLES.v7);
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
   const [copied, setCopied] = useState(false);
-  const [activeSample, setActiveSample] = useState(null);
+  const [activeSample, setActiveSample] = useState("v7");
   const [checkCount, setCheckCount] = useState(0);
   const prevValidRef = useRef(false);
 
