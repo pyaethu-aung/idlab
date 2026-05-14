@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildVariantBits,
+  computeProperties,
   decodeUuidV1,
   decodeUuidV7,
   detectVariant,
@@ -14,6 +16,7 @@ const V7 = "00000000-0001-7abc-8000-000000000001";
 const V1 = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
 const NIL = "00000000-0000-0000-0000-000000000000";
 const MAX = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+const V4_COMPACT = "550e8400e29b41d4a716446655440000";
 
 describe("normalizeInput", () => {
   it("trims leading and trailing whitespace", () => {
@@ -64,6 +67,66 @@ describe("detectVariant", () => {
   });
 });
 
+describe("buildVariantBits", () => {
+  it("returns RFC 4122 label for nibble 8", () => {
+    const hex = V4.replace(/-/g, "");
+    expect(buildVariantBits(hex)).toBe("RFC 4122 · 10x · b00…b01");
+  });
+  it("returns NCS label for nibble 0-7", () => {
+    const hex = "00000000000000000000000000000000";
+    expect(buildVariantBits(hex)).toMatch(/NCS/);
+  });
+  it("returns Microsoft label for nibble c", () => {
+    const hex = "0000000000000000c000000000000000";
+    expect(buildVariantBits(hex)).toMatch(/Microsoft/);
+  });
+  it("returns Reserved label for nibble e", () => {
+    const hex = "0000000000000000e000000000000000";
+    expect(buildVariantBits(hex)).toMatch(/Reserved/);
+  });
+});
+
+describe("computeProperties", () => {
+  it("detects lowercase canonical input", () => {
+    const fields = extractFields(V4);
+    const props = computeProperties(V4, V4, 4, "RFC 4122", fields);
+    expect(props.isLowercase).toBe(true);
+    expect(props.hasHyphens).toBe(true);
+    expect(props.hasBraces).toBe(false);
+    expect(props.isNil).toBe(false);
+    expect(props.format).toBe("canonical");
+    expect(props.charCount).toBe(36);
+  });
+
+  it("detects uppercase input", () => {
+    const upper = V4.toUpperCase();
+    const fields = extractFields(V4);
+    const props = computeProperties(upper, upper, 4, "RFC 4122", fields);
+    expect(props.isLowercase).toBe(false);
+  });
+
+  it("detects braces format", () => {
+    const raw = `{${V4}}`;
+    const fields = extractFields(V4);
+    const props = computeProperties(raw, V4, 4, "RFC 4122", fields);
+    expect(props.hasBraces).toBe(true);
+    expect(props.format).toBe("braces");
+  });
+
+  it("detects no-hyphens format", () => {
+    const fields = extractFields(V4);
+    const props = computeProperties(V4_COMPACT, V4, 4, "RFC 4122", fields);
+    expect(props.hasHyphens).toBe(true); // normalized has hyphens
+    expect(props.format).toBe("canonical"); // canonical after normalization
+  });
+
+  it("detects nil UUID", () => {
+    const fields = extractFields(NIL);
+    const props = computeProperties(NIL, NIL, 0, "NCS", fields);
+    expect(props.isNil).toBe(true);
+  });
+});
+
 describe("parseUuid", () => {
   it("validates a v4 UUID and returns correct metadata", () => {
     const r = parseUuid(V4);
@@ -80,8 +143,32 @@ describe("parseUuid", () => {
     expect(parseUuid("gggggggg-gggg-4ggg-aggg-gggggggggggg").valid).toBe(false);
   });
 
-  it("strips curly braces before validating", () => {
+  it("accepts braced input by default", () => {
     expect(parseUuid(`{${V4}}`).valid).toBe(true);
+  });
+
+  it("rejects braced input when allowBraces is false", () => {
+    expect(parseUuid(`{${V4}}`, { allowBraces: false }).valid).toBe(false);
+  });
+
+  it("rejects compact (no-hyphen) input by default", () => {
+    expect(parseUuid(V4_COMPACT).valid).toBe(false);
+  });
+
+  it("accepts compact input when allowNoHyphens is true", () => {
+    const r = parseUuid(V4_COMPACT, { allowNoHyphens: true });
+    expect(r.valid).toBe(true);
+    expect(r.version).toBe(4);
+  });
+
+  it("rejects non-RFC variant when strictRfc is true", () => {
+    const ncs = "00000000-0000-1000-0000-000000000000";
+    expect(parseUuid(ncs, { strictRfc: true }).valid).toBe(false);
+  });
+
+  it("accepts non-RFC variant when strictRfc is false (default)", () => {
+    const ncs = "00000000-0000-1000-0000-000000000000";
+    expect(parseUuid(ncs).valid).toBe(true);
   });
 
   it("handles uppercase input case-insensitively", () => {
@@ -92,6 +179,7 @@ describe("parseUuid", () => {
     const r = parseUuid(NIL);
     expect(r.valid).toBe(true);
     expect(r.version).toBe(0);
+    expect(r.isNil).toBe(true);
   });
 
   it("validates a max UUID", () => {
@@ -110,6 +198,7 @@ describe("parseUuid", () => {
     expect(r.version).toBe(7);
     expect(r.decoded).not.toBeNull();
     expect(r.decoded.timestamp).toBeInstanceOf(Date);
+    expect(typeof r.unixMs).toBe("number");
   });
 
   it("detects v1 and returns decoded data with node", () => {
@@ -118,11 +207,28 @@ describe("parseUuid", () => {
     expect(r.version).toBe(1);
     expect(r.decoded).not.toBeNull();
     expect(r.decoded.node).toBe("00c04fd430c8");
+    expect(typeof r.unixMs).toBe("number");
   });
 
-  it("returns null decoded for non-time-based versions", () => {
+  it("returns null decoded and unixMs for non-time-based versions", () => {
     expect(parseUuid(V4).decoded).toBeNull();
+    expect(parseUuid(V4).unixMs).toBeNull();
     expect(parseUuid(NIL).decoded).toBeNull();
+  });
+
+  it("returns isLowercase, hasHyphens, hasBraces, format, charCount", () => {
+    const r = parseUuid(V4);
+    expect(r.isLowercase).toBe(true);
+    expect(r.hasHyphens).toBe(true);
+    expect(r.hasBraces).toBe(false);
+    expect(r.format).toBe("canonical");
+    expect(r.charCount).toBe(36);
+  });
+
+  it("returns variantBits string", () => {
+    const r = parseUuid(V4);
+    expect(typeof r.variantBits).toBe("string");
+    expect(r.variantBits).toMatch(/RFC 4122/);
   });
 });
 

@@ -33,7 +33,7 @@ describe("useUuidValidator", () => {
     expect(result.current.result.valid).toBe(true);
   });
 
-  it("strips curly braces before validating", () => {
+  it("accepts braced input by default", () => {
     const { result } = renderHook(() => useUuidValidator());
     act(() => result.current.setRawInput(`{${V4}}`));
     expect(result.current.result.valid).toBe(true);
@@ -59,5 +59,60 @@ describe("useUuidValidator", () => {
     act(() => result.current.setRawInput(V1));
     expect(result.current.result.version).toBe(1);
     expect(result.current.result.decoded.node).toBe("00c04fd430c8");
+  });
+
+  it("starts with default options", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    expect(result.current.options.strictRfc).toBe(false);
+    expect(result.current.options.allowBraces).toBe(true);
+    expect(result.current.options.allowNoHyphens).toBe(false);
+  });
+
+  it("toggleOption flips a single option", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.toggleOption("strictRfc"));
+    expect(result.current.options.strictRfc).toBe(true);
+    act(() => result.current.toggleOption("strictRfc"));
+    expect(result.current.options.strictRfc).toBe(false);
+  });
+
+  it("strictRfc option rejects non-RFC variants", () => {
+    const ncs = "00000000-0000-1000-0000-000000000000";
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput(ncs));
+    expect(result.current.result.valid).toBe(true);
+    act(() => result.current.toggleOption("strictRfc"));
+    expect(result.current.result.valid).toBe(false);
+  });
+
+  it("allowNoHyphens option accepts compact form", () => {
+    const compact = V4.replace(/-/g, "");
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput(compact));
+    expect(result.current.result.valid).toBe(false);
+    act(() => result.current.toggleOption("allowNoHyphens"));
+    expect(result.current.result.valid).toBe(true);
+  });
+
+  it("loadSample sets the input and activeSample", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.loadSample("v4"));
+    expect(result.current.rawInput).toBe("550e8400-e29b-41d4-a716-446655440000");
+    expect(result.current.activeSample).toBe("v4");
+  });
+
+  it("clears activeSample when user manually edits input", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.loadSample("v7"));
+    expect(result.current.activeSample).toBe("v7");
+    act(() => result.current.setRawInput("something-else"));
+    expect(result.current.activeSample).toBeNull();
+  });
+
+  it("exposes checkCount, copied, and recheck", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    expect(typeof result.current.checkCount).toBe("number");
+    expect(result.current.copied).toBe(false);
+    expect(typeof result.current.recheck).toBe("function");
   });
 });

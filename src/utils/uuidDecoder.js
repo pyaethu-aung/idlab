@@ -1,6 +1,8 @@
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+const UUID_COMPACT_REGEX = /^[0-9a-f]{32}$/i;
+
 // 100ns ticks from Oct 15, 1582 to Jan 1, 1970
 const GREGORIAN_OFFSET = 122192928000000000n;
 
@@ -9,6 +11,10 @@ export function normalizeInput(raw) {
   let s = raw.trim();
   if (s.startsWith("{") && s.endsWith("}")) s = s.slice(1, -1);
   return s;
+}
+
+function insertHyphens(hex32) {
+  return `${hex32.slice(0, 8)}-${hex32.slice(8, 12)}-${hex32.slice(12, 16)}-${hex32.slice(16, 20)}-${hex32.slice(20)}`;
 }
 
 export function extractFields(uuid) {
@@ -30,20 +36,82 @@ export function detectVariant(hex) {
   return "Reserved";
 }
 
-export function parseUuid(raw) {
-  const normalized = normalizeInput(raw);
-  if (!normalized || !UUID_REGEX.test(normalized)) {
-    return { valid: false, raw: normalized };
+export function buildVariantBits(hex) {
+  const v = parseInt(hex[16], 16);
+  if (v <= 7) return "NCS · 0xx";
+  if (v <= 11) return "RFC 4122 · 10x · b00…b01";
+  if (v <= 13) return "Microsoft · 110";
+  return "Reserved · 111";
+}
+
+export function computeProperties(raw, normalized, version, variant, fields) {
+  const hex = normalized.replace(/-/g, "").toLowerCase();
+  const isLowercase = normalized === normalized.toLowerCase();
+  const hasHyphens = UUID_REGEX.test(normalized);
+  const hasBraces = raw.trim().startsWith("{") && raw.trim().endsWith("}");
+  const isNil = /^0+$/.test(hex);
+  const charCount = normalized.replace(/-/g, "").length === 32 && !hasHyphens ? 32 : 36;
+
+  let format = "canonical";
+  if (hasBraces) format = "braces";
+  else if (!hasHyphens) format = "no-hyphens";
+
+  const variantBits = buildVariantBits(hex);
+
+  return {
+    isLowercase,
+    hasHyphens,
+    hasBraces,
+    isNil,
+    format,
+    charCount,
+    variant,
+    variantBits,
+  };
+}
+
+export function parseUuid(raw, options = {}) {
+  const { strictRfc = false, allowBraces = true, allowNoHyphens = false } = options;
+  const trimmed = typeof raw === "string" ? raw.trim() : "";
+  const hasBraces = trimmed.startsWith("{") && trimmed.endsWith("}");
+  const stripped = hasBraces ? trimmed.slice(1, -1) : trimmed;
+
+  if (!stripped) return { valid: false, raw: stripped };
+
+  // Determine input format and normalize to canonical
+  let normalized;
+  if (UUID_REGEX.test(stripped)) {
+    normalized = stripped;
+  } else if (UUID_COMPACT_REGEX.test(stripped)) {
+    if (!allowNoHyphens) return { valid: false, raw: stripped };
+    normalized = insertHyphens(stripped.toLowerCase());
+  } else {
+    return { valid: false, raw: stripped };
   }
+
+  if (hasBraces && !allowBraces) return { valid: false, raw: stripped };
+
   const lower = normalized.toLowerCase();
   const hex = lower.replace(/-/g, "");
   const version = parseInt(hex[12], 16);
   const variant = detectVariant(hex);
+
+  if (strictRfc && variant !== "RFC 4122") return { valid: false, raw: stripped };
+
   const fields = extractFields(lower);
+  const props = computeProperties(trimmed, normalized, version, variant, fields);
+
   let decoded = null;
-  if (version === 1) decoded = decodeUuidV1(fields);
-  else if (version === 7) decoded = decodeUuidV7(fields);
-  return { valid: true, raw: normalized, version, variant, fields, decoded };
+  let unixMs = null;
+  if (version === 1) {
+    decoded = decodeUuidV1(fields);
+    unixMs = decoded.timestamp.getTime();
+  } else if (version === 7) {
+    decoded = decodeUuidV7(fields);
+    unixMs = decoded.timestamp.getTime();
+  }
+
+  return { valid: true, raw: normalized, version, variant, fields, decoded, unixMs, ...props };
 }
 
 export function decodeUuidV7(fields) {
