@@ -354,21 +354,25 @@ describe("ValidatorPropsGrid", () => {
     expect(screen.getByText("variant")).toBeInTheDocument();
   });
 
-  it("renders timestamp row only for decoded results", () => {
+  it("shows dash for timestamp when version has no decoded data", () => {
     render(<ValidatorPropsGrid result={V4_RESULT} />);
-    expect(screen.queryByText("timestamp")).toBeNull();
+    expect(screen.getByText("timestamp")).toBeInTheDocument();
+    expect(screen.getByText("—")).toBeInTheDocument();
+  });
 
+  it("shows decoded timestamp when available", () => {
     const withDecoded = {
       ...V4_RESULT,
+      version: 7,
       decoded: { timestampRelative: "2 minutes ago", timestampIso: "2024-01-01T00:00:00.001Z" },
     };
     render(<ValidatorPropsGrid result={withDecoded} />);
-    expect(screen.getByText("timestamp")).toBeInTheDocument();
+    expect(screen.getByText(/2024-01-01 00:00:00 UTC/)).toBeInTheDocument();
   });
 
-  it("renders all 8 fixed property labels", () => {
+  it("renders all 9 property labels", () => {
     render(<ValidatorPropsGrid result={V4_RESULT} />);
-    ["version", "variant", "format", "length", "lowercase", "hyphens", "braces", "nil uuid?"].forEach((label) => {
+    ["version", "variant", "timestamp", "format", "length", "lowercase", "hyphens", "braces", "nil uuid?"].forEach((label) => {
       expect(screen.getByText(label)).toBeInTheDocument();
     });
   });

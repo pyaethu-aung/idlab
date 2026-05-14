@@ -71,8 +71,8 @@ function ValidatorPropsGrid({ result }) {
           <span className="mono v-prop-val">{result.variantBits}</span>
         </PropRow>
 
-        {result.decoded && (
-          <PropRow label="timestamp">
+        <PropRow label="timestamp">
+          {result.decoded ? (
             <span className="v-prop-val-row">
               <span className="v-prop-pill mono">v{result.version}</span>
               <span className="mono v-prop-val">
@@ -81,8 +81,10 @@ function ValidatorPropsGrid({ result }) {
                 {result.decoded.timestampRelative}
               </span>
             </span>
-          </PropRow>
-        )}
+          ) : (
+            <span className="mono v-prop-val v-prop-val--muted">—</span>
+          )}
+        </PropRow>
 
         <PropRow label="format">
           <span className="mono v-prop-val">{formatStr}</span>
