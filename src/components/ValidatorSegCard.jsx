@@ -17,10 +17,9 @@ function ValidatorSegCard({ fields }) {
       </div>
       <div className="v-seg-row" aria-label="UUID field breakdown">
         {SEGMENTS.map((seg, i) => (
-          <>
+          <span key={seg.key} className="v-seg-item">
             {i > 0 && <span className="v-seg-dash mono" aria-hidden="true">–</span>}
             <div
-              key={seg.key}
               className={`v-seg v-seg--${seg.type}`}
               title={seg.cap}
             >
@@ -29,7 +28,7 @@ function ValidatorSegCard({ fields }) {
                 {seg.cap}
               </span>
             </div>
-          </>
+          </span>
         ))}
       </div>
     </div>

@@ -903,6 +903,7 @@ kbd {
 .v-seg--version .v-seg-val { color: var(--on-accent); }
 .v-seg-cap { font-size: 9px; color: var(--ink-3); letter-spacing: var(--tracking-wide); text-transform: lowercase; }
 .v-seg-cap--on-accent { color: var(--on-accent); font-weight: var(--fw-semibold); }
+.v-seg-item { display: flex; align-items: center; gap: var(--sp-3); }
 .v-seg-dash { font-size: 18px; color: var(--ink-4); flex-shrink: 0; }
 
 /* ─── Properties grid ────────────────────────────────────────────────────── */
