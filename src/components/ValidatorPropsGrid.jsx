@@ -73,10 +73,13 @@ function ValidatorPropsGrid({ result }) {
 
         {result.decoded && (
           <PropRow label="timestamp">
-            <span className="mono v-prop-val">
-              {result.decoded.timestampRelative}
-              {" · "}
-              {result.decoded.timestampIso}
+            <span className="v-prop-val-row">
+              <span className="v-prop-pill mono">v{result.version}</span>
+              <span className="mono v-prop-val">
+                {result.decoded.timestampIso.slice(0, 19).replace("T", " ")} UTC
+                {" · "}
+                {result.decoded.timestampRelative}
+              </span>
             </span>
           </PropRow>
         )}

@@ -164,5 +164,8 @@ export function formatRelativeTime(date) {
   if (diffMin < 60) return fmt.format(sign * diffMin, "minute");
   if (diffHour < 24) return fmt.format(sign * diffHour, "hour");
   if (diffDay < 30) return fmt.format(sign * diffDay, "day");
-  return date.toLocaleString();
+  const diffMonth = Math.round(Math.abs(diffMs) / (30 * 86400000));
+  if (diffMonth < 24) return fmt.format(sign * diffMonth, "month");
+  const diffYear = Math.round(Math.abs(diffMs) / (365 * 86400000));
+  return fmt.format(sign * diffYear, "year");
 }
