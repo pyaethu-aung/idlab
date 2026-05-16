@@ -143,4 +143,37 @@ describe("App", () => {
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
+
+  it("switches to validator panel when Validator tab is clicked", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Validator" }));
+
+    const panels = container.querySelectorAll(".main > div");
+    expect(panels[0]).toHaveStyle({ display: "none" });
+    expect(panels[1]).not.toHaveStyle({ display: "none" });
+  });
+
+  it("switches back to generator when Generator tab is clicked", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Validator" }));
+    await user.click(screen.getByRole("button", { name: "Generator" }));
+
+    const panels = container.querySelectorAll(".main > div");
+    expect(panels[0]).not.toHaveStyle({ display: "none" });
+    expect(panels[1]).toHaveStyle({ display: "none" });
+  });
+
+  it("keeps both panels in DOM when switching tabs", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Validator" }));
+
+    expect(screen.getByPlaceholderText(/xxxxxxxx-xxxx/i)).toBeInTheDocument();
+    expect(screen.getByText(/Mint/i)).toBeInTheDocument();
+  });
 });

@@ -110,8 +110,8 @@
   --seam-2: oklch(0.74 0.006 60);
   --ink:    oklch(0.18 0.006 60);
   --ink-2:  oklch(0.34 0.006 60);
-  --ink-3:  oklch(0.50 0.006 60);
-  --ink-4:  oklch(0.65 0.006 60);
+  --ink-3:  oklch(0.44 0.006 60);
+  --ink-4:  oklch(0.49 0.006 60);
   --scrim:  color-mix(in oklch, var(--bg), transparent 30%);
   --shadow-modal: 0 20px 60px rgba(0,0,0,0.15);
 }
@@ -121,3 +121,13 @@
 [data-accent="amber"]   { --accent: oklch(0.82 0.18 65);  --on-accent: oklch(0.18 0.01 65);  }
 [data-accent="cobalt"]  { --accent: oklch(0.74 0.18 250); --on-accent: oklch(0.16 0.01 250); }
 [data-accent="magenta"] { --accent: oklch(0.78 0.20 340); --on-accent: oklch(0.18 0.01 340); }
+
+/* Light-mode accent overrides — lower lightness for WCAG AA contrast.
+   --on-accent uses near-black (not near-white) because the lowered accent
+   lightness (0.50–0.62) means white text only achieves ~3.5:1 while dark
+   text achieves >5:1 against all four light-mode accent values. */
+[data-theme="light"]:not([data-accent]),
+[data-theme="light"][data-accent="lime"]    { --accent: oklch(0.62 0.22 130); --on-accent: oklch(0.12 0.005 60); }
+[data-theme="light"][data-accent="amber"]   { --accent: oklch(0.56 0.18 65);  --on-accent: oklch(0.12 0.005 60); }
+[data-theme="light"][data-accent="cobalt"]  { --accent: oklch(0.50 0.18 250); --on-accent: oklch(0.12 0.005 60); }
+[data-theme="light"][data-accent="magenta"] { --accent: oklch(0.55 0.20 340); --on-accent: oklch(0.12 0.005 60); }

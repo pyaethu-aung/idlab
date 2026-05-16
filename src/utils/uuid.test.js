@@ -63,40 +63,21 @@ describe("createUuid", () => {
     expect(stub.randomUUID).toHaveBeenCalledTimes(1);
   });
 
-  it("falls back to an RFC 4122 pattern when crypto.randomUUID is missing", () => {
+  it("falls back to getRandomValues when crypto.randomUUID is missing", () => {
+    const mockBytes = new Uint8Array(16).fill(0xab);
+    const stub = {
+      getRandomValues: vi.fn((arr) => { arr.set(mockBytes); return arr; }),
+    };
     Object.defineProperty(globalThis, "crypto", {
       configurable: true,
       writable: true,
-      value: undefined,
+      value: stub,
     });
     const result = createUuid();
 
     expect(result).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
     );
-  });
-
-  it("exercises the fallback random logic branch coverage", () => {
-    // Force Math.random to return values that cover both branches of the conditional:
-    // const value = char === "x" ? rand : (rand & 0x3) | 0x8;
-
-    // We mock Math.random to return predictable values
-    // First call for 'x' -> we want a specific value
-    // Subsequent calls for 'y' -> we want to verify the (rand & 0x3) | 0x8 logic
-
-    Object.defineProperty(globalThis, "crypto", {
-      configurable: true,
-      writable: true,
-      value: undefined,
-    });
-
-    const mathRandomSpy = vi.spyOn(Math, "random");
-
-    // Generate a UUID
-    const result = createUuid();
-
-    // Just verify it's a valid string, the main point is that the code path was executed
-    expect(result).toHaveLength(36);
-    expect(mathRandomSpy).toHaveBeenCalled();
+    expect(stub.getRandomValues).toHaveBeenCalledTimes(1);
   });
 });

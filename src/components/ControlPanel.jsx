@@ -62,6 +62,7 @@ function ControlPanel({
           <span className="batch-num mono">{String(batchSize).padStart(3, "0")}</span>
           <span className="batch-of mono">/ 200</span>
         </div>
+        <label htmlFor="batch-size" className="sr-only">Batch size</label>
         <input
           id="batch-size"
           type="range"
@@ -69,9 +70,9 @@ function ControlPanel({
           max={200}
           value={batchSize}
           onChange={(e) => onBatchChange(Number(e.target.value))}
-          onPointerUp={onBatchCommit}
-          onMouseUp={onBatchCommit}
-          onTouchEnd={onBatchCommit}
+          onPointerUp={() => onBatchCommit()}
+          onMouseUp={() => onBatchCommit()}
+          onTouchEnd={() => onBatchCommit()}
           onKeyUp={(e) => {
             const commitKeys = ["Enter", " ", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
             if (commitKeys.includes(e.key)) onBatchCommit();

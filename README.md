@@ -78,6 +78,16 @@ Key flows to cover:
 - **Theme switching** — dark ↔ light, persistence across reload
 - **Responsive layout** — workbench collapse at the 920 px breakpoint
 
+### Design Snapshot Testing
+
+[`pixelmatch`](https://github.com/mapbox/pixelmatch) and [`pngjs`](https://github.com/lukeapage/pngjs)
+are installed as dev dependencies to enable pixel-level visual diffing between design
+snapshots and the live app.
+
+Snapshots are captured by the `/test-design` skill and saved to `.test-design/diffs/`.
+On subsequent runs, pixelmatch compares the fresh screenshot against the saved baseline
+and reports any pixel-level divergence.
+
 ## Security & Maintenance
 
 ### Automated Dependency Updates

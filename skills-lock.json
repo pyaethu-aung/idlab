@@ -11,7 +11,13 @@
       "source": "pyaethu-aung/skills",
       "sourceType": "github",
       "skillPath": "skills/create-pr/SKILL.md",
-      "computedHash": "0ed307771dd46708799ff99b690165ef93af3b316b29c304fd613c2e4de59478"
+      "computedHash": "f27c741469058a54c92561fed0bcbd9ffa6053652c65711fc12621a40b3a188d"
+    },
+    "test-design": {
+      "source": "pyaethu-aung/skills",
+      "sourceType": "github",
+      "skillPath": "skills/test-design/SKILL.md",
+      "computedHash": "e75c773a68395ae2bdcc6a5224d82f6510dfc85ef3d5738e31909684b94db051"
     },
     "update-readme": {
       "source": "pyaethu-aung/skills",

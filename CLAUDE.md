@@ -101,3 +101,15 @@ npm run build   # Build succeeds
 - **Security**: Non-root user, read-only FS, Trivy scanning (blocking fixable HIGH/CRITICAL).
 - **Target**: Linux/AMD64 only (<5min build time).
 - **Registry**: GHCR.
+
+<!-- SPECKIT START -->
+### 010-uuid-decode
+
+**UUID Validator & Decoder** — Implementation plan: [`specs/010-uuid-decode/plan.md`](specs/010-uuid-decode/plan.md)
+
+- **New utility**: `src/utils/uuidDecoder.js` — pure parse/decode functions (must have test file).
+- **New hooks**: `useActiveTab` (tab state), `useUuidValidator` (input + decoded result).
+- **New components**: `ToolbarNav`, `ValidatorPanel`, `UuidInput`, `ValidationBadge`, `UuidBreakdown`, `DecodedFields`.
+- **Modified**: `App.jsx` (tab integration), `index.css` (validator + breakdown styles).
+- **Key constraint**: No new runtime dependencies; no client-side routing.
+<!-- SPECKIT END -->
