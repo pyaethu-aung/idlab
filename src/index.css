@@ -424,6 +424,7 @@ kbd {
   -webkit-appearance: none;
   width: 14px;
   height: 14px;
+  margin-top: calc((4px - 14px) / 2);
   background: var(--accent);
   border: 2px solid var(--bg);
   border-radius: 50%;

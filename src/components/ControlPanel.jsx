@@ -70,9 +70,9 @@ function ControlPanel({
           max={200}
           value={batchSize}
           onChange={(e) => onBatchChange(Number(e.target.value))}
-          onPointerUp={onBatchCommit}
-          onMouseUp={onBatchCommit}
-          onTouchEnd={onBatchCommit}
+          onPointerUp={() => onBatchCommit()}
+          onMouseUp={() => onBatchCommit()}
+          onTouchEnd={() => onBatchCommit()}
           onKeyUp={(e) => {
             const commitKeys = ["Enter", " ", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
             if (commitKeys.includes(e.key)) onBatchCommit();
