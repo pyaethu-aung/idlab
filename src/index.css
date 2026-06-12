@@ -83,7 +83,7 @@ kbd {
   background: var(--bg);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--z-sticky);
   backdrop-filter: var(--blur-topbar);
 }
 
@@ -817,19 +817,19 @@ kbd {
 }
 
 .status-cell--invalid {
-  color: oklch(0.72 0.17 25);
+  color: var(--error);
 }
 
 .status-dot--invalid {
-  background: oklch(0.72 0.17 25);
-  box-shadow: 0 0 8px oklch(0.72 0.17 25);
+  background: var(--error);
+  box-shadow: 0 0 8px var(--error);
 }
 
 /* ─── Modal ──────────────────────────────────────────────────────────────── */
 .modal-scrim {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: var(--z-modal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1311,7 +1311,7 @@ kbd {
 
 .v-banner--invalid {
   background: var(--bg-3);
-  border-color: oklch(0.72 0.17 25);
+  border-color: var(--error);
 }
 
 .v-banner-icon {
@@ -1328,8 +1328,8 @@ kbd {
 }
 
 .v-banner-icon--invalid {
-  background: oklch(0.72 0.17 25);
-  color: oklch(0.15 0.02 25);
+  background: var(--error);
+  color: var(--on-error);
 }
 
 .v-banner-text {
