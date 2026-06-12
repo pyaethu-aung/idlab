@@ -46,8 +46,6 @@ Tests live alongside their source files. `src/setupTests.js` imports `@testing-l
 
 ## Governance
 
-Refer to `.specify/memory/constitution.md` (v2.3.1) for the authoritative governance document.
-
 ### Core Principles Summary
 
 | # | Principle | Key Rule |
@@ -60,11 +58,6 @@ Refer to `.specify/memory/constitution.md` (v2.3.1) for the authoritative govern
 | VI | Execution Discipline | Run `npm run test`, `npm run lint`, `npm run build` after every task |
 | VII | Cross-Platform & Browser Compatibility | Chrome, Safari, Firefox, Edge; desktop & mobile |
 | VIII | Theme Support Planning | CSS custom properties, prefers-color-scheme, localStorage persistence |
-| IX | Skill-Driven Development | Consult any skill under `.agents/skills/` as primary source truth |
-
-### Required Skills
-
-Consult any skill present under `.agents/skills/` (invocable via `/<skill-name>`) as Primary Source Truth during planning and implementation. Where a skill governs a domain touched by the current task, consult it before generating code or artifacts.
 
 ### Validation Checklist
 
@@ -102,7 +95,6 @@ npm run build   # Build succeeds
 - **Target**: Linux/AMD64 only (<5min build time).
 - **Registry**: GHCR.
 
-<!-- SPECKIT START -->
 ### 010-uuid-decode
 
 **UUID Validator & Decoder** — Implementation plan: [`specs/010-uuid-decode/plan.md`](specs/010-uuid-decode/plan.md)
@@ -112,4 +104,3 @@ npm run build   # Build succeeds
 - **New components**: `ToolbarNav`, `ValidatorPanel`, `UuidInput`, `ValidationBadge`, `UuidBreakdown`, `DecodedFields`.
 - **Modified**: `App.jsx` (tab integration), `index.css` (validator + breakdown styles).
 - **Key constraint**: No new runtime dependencies; no client-side routing.
-<!-- SPECKIT END -->
