@@ -1,226 +1,337 @@
-# uuidlab — Design System
-
-> **Terminal-luxury.** A dense, monospace-forward developer tool that earns the right to feel calm. Hairline seams, one accent at a time, generous whitespace where it matters, ruthless density where it doesn't.
-
-This document distills the design tokens and patterns implemented in `UUID Generator.html` / `app.jsx` / `styles.css` into a reusable system. Tokens are authored once in `tokens.json` (W3C Design Tokens spec) and surfaced as CSS custom properties in `tokens.css`.
-
+---
+name: uuidlab
+description: "Terminal-luxury — a dense, monospace-forward developer tool that earns the right to feel calm."
+colors:
+  accent-lime: "oklch(0.86 0.20 130)"
+  accent-amber: "oklch(0.82 0.18 65)"
+  accent-cobalt: "oklch(0.74 0.18 250)"
+  accent-magenta: "oklch(0.78 0.20 340)"
+  on-accent: "oklch(0.18 0.01 130)"
+  bg: "oklch(0.16 0.005 60)"
+  bg-2: "oklch(0.18 0.005 60)"
+  bg-3: "oklch(0.21 0.006 60)"
+  seam: "oklch(0.28 0.006 60)"
+  seam-2: "oklch(0.36 0.008 60)"
+  ink: "oklch(0.97 0.004 60)"
+  ink-2: "oklch(0.78 0.005 60)"
+  ink-3: "oklch(0.55 0.005 60)"
+  ink-4: "oklch(0.40 0.006 60)"
+typography:
+  display:
+    fontFamily: '"Geist", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "clamp(48px, 6.5vw, 88px)"
+    fontWeight: 600
+    lineHeight: 0.96
+    letterSpacing: "-0.035em"
+    fontFeature: '"ss01", "ss02", "cv11"'
+  headline:
+    fontFamily: '"Geist", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "36px"
+    fontWeight: 700
+    lineHeight: 1.0
+    letterSpacing: "-0.01em"
+  body:
+    fontFamily: '"Geist Mono", ui-monospace, "JetBrains Mono", monospace'
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.55
+    fontFeature: '"zero", "ss01"'
+  label:
+    fontFamily: '"Geist Mono", ui-monospace, "JetBrains Mono", monospace'
+    fontSize: "11px"
+    fontWeight: 600
+    letterSpacing: "0.04em"
+    fontFeature: '"zero", "ss01"'
+  title:
+    fontFamily: '"Geist Mono", ui-monospace, "JetBrains Mono", monospace'
+    fontSize: "13px"
+    fontWeight: 600
+    letterSpacing: "0.04em"
+    fontFeature: '"zero", "ss01"'
+rounded:
+  xs: "4px"
+  sm: "5px"
+  md: "6px"
+  lg: "10px"
+  pill: "999px"
+spacing:
+  sp-1: "2px"
+  sp-2: "4px"
+  sp-3: "6px"
+  sp-4: "8px"
+  sp-5: "10px"
+  sp-6: "12px"
+  sp-7: "14px"
+  sp-8: "16px"
+  sp-9: "18px"
+  sp-10: "22px"
+  sp-11: "24px"
+  sp-12: "28px"
+  sp-13: "36px"
+  sp-14: "40px"
+  sp-15: "80px"
+components:
+  button-cta:
+    backgroundColor: "{colors.accent-lime}"
+    textColor: "{colors.on-accent}"
+    rounded: "{rounded.md}"
+    padding: "8px 16px"
+  button-cta-hover:
+    backgroundColor: "{colors.accent-lime}"
+    textColor: "{colors.on-accent}"
+    rounded: "{rounded.md}"
+    padding: "8px 16px"
+  button-ghost:
+    backgroundColor: "{colors.bg-2}"
+    textColor: "{colors.ink-2}"
+    rounded: "{rounded.md}"
+    padding: "6px 12px"
+  button-ghost-hover:
+    backgroundColor: "{colors.bg-3}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.md}"
+    padding: "6px 12px"
+  button-row-copy:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-3}"
+    rounded: "{rounded.sm}"
+    padding: "4px 8px"
+  button-row-copy-active:
+    backgroundColor: "{colors.accent-lime}"
+    textColor: "{colors.on-accent}"
+    rounded: "{rounded.sm}"
+    padding: "4px 8px"
 ---
 
-## 1. Design principles
+# Design System: uuidlab
 
-1. **Earn every pixel.** Real estate is leased to content (UUIDs, controls, status), not to ornamentation. Borders are 1px hairlines, never decorative frames.
-2. **One accent at a time.** A single hue carries focus, active state, glow, and CTA. Switch by hue — never stack accents.
-3. **Mono is the body.** Code-like content (UUIDs, keys, status, kbd) lives in Geist Mono with `font-feature-settings: "zero"`. Sans (Geist) carries display and prose.
-4. **Lowercase keys, uppercase flags.** Rail keys (`version`, `batch`, `format`) are lowercase + tracked. Status flags (`UPPER`, `STRIP`) are uppercase to signal state.
-5. **Motion as feedback, not decoration.** Hover swaps in 120ms, modals settle in 220ms, regenerate spins for ~380ms. No springs, no bounces, no parallax.
-6. **The keyboard is the primary input.** Every action has a shortcut; the status bar advertises `?` for the full list. Hover affordances are hints, not requirements.
+## 1. Overview
 
----
+**Creative North Star: "Terminal-Luxury"**
 
-## 2. Color
+uuidlab operates at the intersection of CLI discipline and considered craft. It is dense where
+developers are scanning, spacious where developers are reading, and entirely at rest when not
+responding to input. The default state is a deep near-black — not a styled brand gesture, but
+the literal dark that a terminal earns after years of daily use. Every surface decision asks:
+does this earn its square pixels?
 
-Authored in **OKLCH** for perceptual uniformity. Neutrals share a warm-grey hue (~60°) at chroma ≤ 0.008 — they read as paper and ink, not as blue-grey or sepia.
+This system rejects all three of its closest failure modes by name. It is not SaaS-dashboard grey
+(blue-tinted panels, sidebar chrome, card-grid layouts, feature-overview decoration inside a task
+tool). It is not flashy developer marketing (gradient-heavy dark mode, stacked neon accents,
+glassmorphism as atmosphere). It is not the bare-bones utility that mistakes zero effort for
+minimal design. "Terminal-luxury" names the space between the second and third failure: a tool
+with genuine craft opinions that never asks for attention.
 
-### 2.1 Neutral ramps
+The accent color — lime by default, swappable across four palettes — is used nowhere decoratively.
+It appears only as a consequence of action: the currently selected version row, the regenerate
+button, the status pulse, the active slider thumb, the copied row. Its rarity is structural. The
+whole system holds its breath so the accent can breathe.
 
-| Token       | Dark                       | Light                      | Use                                   |
-| ----------- | -------------------------- | -------------------------- | ------------------------------------- |
-| `--bg`      | `oklch(0.16 0.005 60)`     | `oklch(0.985 0.003 60)`    | App canvas, top bar, rail surface     |
-| `--bg-2`    | `oklch(0.18 0.005 60)`     | `oklch(0.965 0.004 60)`    | Workbench shell, panel surface        |
-| `--bg-3`    | `oklch(0.21 0.006 60)`     | `oklch(0.945 0.005 60)`    | Row hover, kbd surface                |
-| `--seam`    | `oklch(0.28 0.006 60)`     | `oklch(0.88 0.005 60)`     | Hairline borders, dashed dividers     |
-| `--seam-2`  | `oklch(0.36 0.008 60)`     | `oklch(0.74 0.006 60)`     | Hover/elevated border step            |
-| `--ink`     | `oklch(0.97 0.004 60)`     | `oklch(0.18 0.006 60)`     | Primary content, headings             |
-| `--ink-2`   | `oklch(0.78 0.005 60)`     | `oklch(0.34 0.006 60)`     | Body text, ghost button labels        |
-| `--ink-3`   | `oklch(0.55 0.005 60)`     | `oklch(0.50 0.006 60)`     | Meta, hints, dashed copy              |
-| `--ink-4`   | `oklch(0.40 0.006 60)`     | `oklch(0.65 0.006 60)`     | Tertiary — index numbers, dashes      |
+**Key Characteristics:**
+- Dark-native by conviction, with a warm-grey neutral ramp (hue 60°) that reads as ink-and-paper, not blue-shift
+- Monospace-forward: Geist Mono is the body and chrome; Geist Sans is display and prose only
+- Restrained color strategy: one accent, no secondary palette, no semantic color beyond the accent
+- Hairline-border structure: 1px seams define space; no drop shadows except the modal lift
+- Keyboard-first: every action has a shortcut; hover is a hint, not a requirement
+- Theme-switchable: dark by default, light override via `[data-theme="light"]`; accent swappable via `[data-accent]`
 
-> **Rule:** never invent intermediate steps. Step down for less weight; step up only for primary content. `--ink-4` is the floor for legibility — anything lighter is decorative.
+## 2. Colors: The Warm-Void Palette
 
-### 2.2 Accent palettes
+A single warm-grey neutral ramp (OKLCH hue 60°, chroma ≤ 0.008) plus one swappable accent.
+Color values are authored in OKLCH throughout; all four accents share equivalent visual weight
+(L 0.78–0.86, C 0.18–0.20) so switching hue does not require layout changes.
 
-Four palettes are interchangeable. All share **L = 0.78–0.86, C = 0.18–0.20** — they read at the same visual weight, so swapping does not require relayout. Vary hue only.
+### Primary
 
-| Palette   | Accent                       | On-accent (text on accent fills) |
-| --------- | ---------------------------- | -------------------------------- |
-| `lime`    | `oklch(0.86 0.20 130)`       | `oklch(0.18 0.01 130)`           |
-| `amber`   | `oklch(0.82 0.18 65)`        | `oklch(0.18 0.01 65)`            |
-| `cobalt`  | `oklch(0.74 0.18 250)`       | `oklch(0.16 0.01 250)`           |
-| `magenta` | `oklch(0.78 0.20 340)`       | `oklch(0.18 0.01 340)`           |
+- **Terminal Lime** (`oklch(0.86 0.20 130)`, token `--accent` / `[data-accent="lime"]`): The
+  default accent. Used exclusively at interaction points — active selection, the CTA button fill,
+  the slider thumb, the status live-dot, and the copied-row tint. Never decorative. On light
+  theme: adjusted to `oklch(0.62 0.22 130)` for WCAG AA compliance.
 
-**Where the accent shows up** — and only here:
-- Brand mark dot, with `0 0 12px` glow
-- Active version row (border + 10% tint background + 2px inset bar)
-- Active format option (border + 8% tint background)
-- CTA button fill (`regenerate`)
-- Range slider thumb + 1px halo
-- Status bar live dot (pulsing) and feedback arrow `→`
-- Hover-reveal of the version segment in a UUID (`.seg-2`)
-- Copied row tint (12% accent over `--bg-2`)
+### Secondary (accent swaps — same structural role, different hue)
 
-Accent **tints** are computed inline with `color-mix(in oklch, var(--accent) N%, var(--bg))` rather than tokenized, because `N` is context-specific (8/10/12).
+- **Ember Amber** (`oklch(0.82 0.18 65)`, token `[data-accent="amber"]`): Warm ochre. Same role as lime.
+- **Cold Cobalt** (`oklch(0.74 0.18 250)`, token `[data-accent="cobalt"]`): Blue-violet.
+- **Signal Magenta** (`oklch(0.78 0.20 340)`, token `[data-accent="magenta"]`): Fuchsia.
 
----
+### Neutral
 
-## 3. Type
+- **Deep Void** (`oklch(0.16 0.005 60)`, token `--bg`): App canvas, top bar, rail surface.
+- **Warm Recess** (`oklch(0.18 0.005 60)`, token `--bg-2`): Workbench shell, panel surface.
+- **Elevated Surface** (`oklch(0.21 0.006 60)`, token `--bg-3`): Row hover, `<kbd>` fill.
+- **Hairline** (`oklch(0.28 0.006 60)`, token `--seam`): 1px borders, dashed dividers. Full opacity only — never a fill.
+- **Elevated Hairline** (`oklch(0.36 0.008 60)`, token `--seam-2`): Hover/focus border step.
+- **Warm White** (`oklch(0.97 0.004 60)`, token `--ink`): Primary content — headings, UUID values, primary labels.
+- **Body Ink** (`oklch(0.78 0.005 60)`, token `--ink-2`): Secondary content, ghost button labels.
+- **Muted Ink** (`oklch(0.55 0.005 60)`, token `--ink-3`): Metadata, hints, UUID length readout. Never actionable primary.
+- **Ghost Ink** (`oklch(0.40 0.006 60)`, token `--ink-4`): Index numbers, tertiary decoration. Absolute floor for informational text.
 
-Two families, no third. Sans is **Geist** (display, prose). Mono is **Geist Mono** (every piece of UI chrome, every UUID, every kbd, every key label). The system reads as a terminal because almost everything is mono.
+### Named Rules
 
-### 3.1 Scale
+**The One-Accent Rule.** The accent color appears only as a consequence of user action or current
+selection — never for decoration, illustration, or section markers. Its rarity is structural: when
+it appears, it means something.
 
-| Token         | Value                       | Use                                        |
-| ------------- | --------------------------- | ------------------------------------------ |
-| `--fs-xxs`    | 10px                        | Hint text, dashed-divider meta             |
-| `--fs-xs`     | 11px                        | kbd, status cells, eyebrow, row index      |
-| `--fs-sm`     | 12px                        | Top bar links, ghost button, panel title   |
-| `--fs-base`   | 13px                        | Dense controls, version titles             |
-| `--fs-md`     | 14px                        | UUID rows                                  |
-| `--fs-lg`     | 16px                        | Brand name, hero subhead                   |
-| `--fs-xl`     | 36px                        | Batch counter                              |
-| `--fs-hero`   | `clamp(48px, 6.5vw, 88px)`  | Hero display only                          |
+**The Warm-Void Rule.** All neutral surfaces share hue 60° at chroma ≤ 0.008. Never introduce
+blue-grey, cool neutrals, or true-neutral (chroma 0). The warm micro-tint keeps the system from
+reading as generic dark-mode.
 
-### 3.2 Weight + tracking
+**The Floor Rule.** `--ink-4` is the dimmest token used for informational text. Anything lighter
+is decorative. Never use a lighter value for actionable copy.
 
-- Display (`hero-title`): **600**, tracking `-0.035em`, line-height `0.96`. Never bold.
-- Brand name: **700**, tracking `-0.01em`.
-- Body: **400–500**.
-- Mono labels (rail keys, panel flag): **600**, tracking `0.04em`, lowercase or UPPERCASE — never title case.
+## 3. Typography: Terminal Discipline
 
-### 3.3 Mono feature settings
+**Display Font:** Geist (sans) — headings and prose only.
+**Chrome/Body Font:** Geist Mono — UUIDs, labels, keys, status, `<kbd>`, and all UI chrome.
 
-Mono **must** ship with `font-feature-settings: "zero", "ss01"`. The slashed zero is non-negotiable for UUID legibility — a dotted-zero `0` reads as `O` in a 32-char string and breaks the whole proposition.
+**Character:** The system reads as a terminal because almost everything is mono. Geist Sans
+appears only when language, not data, needs to breathe. The pairing is not decorative contrast —
+mono carries the signal, sans carries the context.
 
-### 3.4 Sans feature settings
+### Hierarchy
 
-Sans uses `"ss01", "ss02", "cv11"` to soften default Geist letterforms — the result has slightly less geometric stiffness in headings.
+- **Display** (Geist 600, `clamp(48px, 6.5vw, 88px)`, line-height 0.96, tracking -0.035em): Hero
+  heading only. The one place Geist Sans performs. Never bold — 600 is enough at this scale.
+- **Headline** (Geist 700, 36px, line-height 1.0, tracking -0.01em): Batch counter; the one large
+  number in the workbench chrome.
+- **Title** (Geist Mono 600, 13px, tracking +0.04em): Rail section keys in lowercase (`version`,
+  `batch`); status flags in uppercase (`UPPER`, `STRIP`). Never title case.
+- **Body** (Geist Mono 400, 14px, line-height 1.55): UUID row values — the primary content
+  surface. Feature settings: `"zero"` (slashed zero), `"ss01"`.
+- **Label** (Geist Mono 600, 11px, tracking +0.04em): `<kbd>`, status cells, row index numbers.
+  The smallest legible mono step.
 
----
+### Named Rules
 
-## 4. Spacing
+**The Slashed-Zero Rule.** All monospace text — every UUID, every label, every `<kbd>` — must
+render with `font-feature-settings: "zero", "ss01"`. A dotted zero reads as `O` in a 32-character
+UUID and destroys legibility. Non-negotiable.
 
-A 4px-leaning scale — fine-grained at the bottom (2/4/6/8) for chrome, then jumps (16, 22, 28, 36, 40, 80) for containers. **Component padding is composed from these.** There is no `--component-pad` token; if you need a value that isn't in the scale, you're using the wrong one.
+**The Mono-First Rule.** New UI elements default to Geist Mono unless they are display headings
+or prose paragraphs. When in doubt, mono.
 
-| Token | Value | Token | Value | Token  | Value |
-| ----- | ----- | ----- | ----- | ------ | ----- |
-| `--sp-0` | 0    | `--sp-6`  | 12px | `--sp-12` | 28px |
-| `--sp-1` | 2px  | `--sp-7`  | 14px | `--sp-13` | 36px |
-| `--sp-2` | 4px  | `--sp-8`  | 16px | `--sp-14` | 40px |
-| `--sp-3` | 6px  | `--sp-9`  | 18px | `--sp-15` | 80px |
-| `--sp-4` | 8px  | `--sp-10` | 22px |
-| `--sp-5` | 10px | `--sp-11` | 24px |
+**The Title-Case Ban.** Rail keys are lowercase tracked. Status flags are UPPERCASE. Nothing is
+Title Case. Title case reads as generic app UI; this tool has a voice.
 
----
+## 4. Elevation
 
-## 5. Radius
+This system is flat by structure. Surfaces are differentiated by tonal steps in the neutral ramp
+(`--bg` → `--bg-2` → `--bg-3`), not by shadows. Borders are 1px hairlines at `--seam` or
+`--seam-2`. The word "shadow" is nearly absent from this system.
 
-Five steps. **Most chrome lives at `--r-md` (6px).** Larger surfaces (workbench, modal) get `--r-lg` (10px). Tiny elements (kbd, version-tag) get `--r-xs` (4px).
+The one exception is the modal, which lifts above the page-level chrome and earns a drop shadow
+to signal it is outside the normal flow. Two accent glows (brand mark and status dot) communicate
+active system state, not spatial elevation.
 
-| Token      | Value  |
-| ---------- | ------ |
-| `--r-xs`   | 4px    |
-| `--r-sm`   | 5px    |
-| `--r-md`   | 6px    |
-| `--r-lg`   | 10px   |
-| `--r-pill` | 999px  |
+### Shadow Vocabulary
 
-Avoid mixing radii within a single composite — a 6px button inside a 10px panel is correct; a 10px button inside a 6px panel is not.
+- **Modal lift** (`0 20px 60px rgba(0,0,0,0.4)` dark / `rgba(0,0,0,0.15)` light, token `--shadow-modal`): The shortcut reference modal and any future dialogs. The only drop shadow in the system.
+- **Brand glow** (`0 0 12px var(--accent)`): The brand icon dot. Signals identity, not depth.
+- **Status glow** (`0 0 8px var(--accent)`): The live status indicator pulse. Communicates active system.
+- **Top bar frost** (`backdrop-filter: blur(10px)`, token `--blur-topbar`): Sticky top bar. Separation without shadow.
+- **Modal scrim** (`backdrop-filter: blur(6px)`, token `--blur-scrim`): Behind the modal. Recedes content, not elevation.
 
----
+### Named Rules
 
-## 6. Borders, shadows, glow
+**The Flat-By-Default Rule.** Surfaces are flat at rest. If you are about to add `box-shadow` to
+a card, panel, or button, use `--seam` border + `--bg-3` tonal step instead. The shadow is
+already taken by the modal.
 
-The system uses **borders, not shadows**, to define structure. The only proper drop shadow is on the modal.
+## 5. Components
 
-- `1px solid var(--seam)` — default hairline
-- `1px solid var(--seam-2)` — hover/elevated step
-- `1px dashed var(--seam)` — section dividers (hero strip)
-- `inset 2px 0 0 var(--accent)` — active rail row indicator
-- `0 0 12px var(--accent)` — brand-mark dot glow
-- `0 0 8px var(--accent)` — status pulse glow
-- `0 20px 60px rgba(0,0,0,0.4)` — modal lift (dark) / `0.15` (light)
+### Buttons
 
-`backdrop-filter: blur(10px)` on the sticky top bar; `blur(6px)` on the modal scrim.
+Three roles, no more. Never invent a fourth.
 
----
+- **Shape:** 6px radius (`--r-md`) on CTA and ghost. 5px (`--r-sm`) on the row copy button to stay flush with UUID row height.
+- **CTA (Regenerate):** Accent fill + on-accent text. 8px/16px padding. Attached `<kbd>` at 11px. One per panel. On hover: `translateY(-1px)` over 80ms. No color shift — it is already at full saturation.
+- **Ghost:** `--bg-2` fill, 1px `--seam` border, `--ink-2` text. 6px/12px padding. Secondary actions (Copy All, Download, theme toggle). On hover: `--bg-3` fill, `--seam-2` border, `--ink` text over 120ms.
+- **Row copy (transparent):** No fill or border at rest. `--ink-3` label. 4px/8px padding. Opacity 0.4 until parent row is hovered (→ 1). On button hover: `--bg-3` fill, `--ink` text. On copied state: accent fill, on-accent text, "✓ copied" label. Settles in 140ms.
 
-## 7. Motion
+### UUID Row
 
-| Token         | Value   | Use                                              |
-| ------------- | ------- | ------------------------------------------------ |
-| `--d-tap`     | 80ms    | Tap depress (`translateY(1px)`)                  |
-| `--d-swap`    | 120ms   | Hover/active state swaps                         |
-| `--d-settle`  | 140ms   | Row copy button settle                           |
-| `--d-scrim`   | 160ms   | Modal scrim fade                                 |
-| `--d-modal`   | 220ms   | Modal slide+scale                                |
-| `--d-panel`   | 280ms   | Panel grid fade on regenerate                    |
-| `--d-regen`   | 380ms   | Refresh icon spin window                         |
-| `--d-spin`    | 700ms   | Continuous spinner (loading)                     |
-| `--d-pulse`   | 2000ms  | Status live dot pulse                            |
+The signature component. Four-column grid: index (50px) / UUID code (1fr) / length (50px) / copy button (90px). Separated by 1px `--seam` bottom border.
 
-Single easing for entries: `cubic-bezier(0.2, 0.7, 0.3, 1)` — a flat curve, not a bouncy one. Everything else is `linear` or browser-default `ease`.
+- **Index:** `--ink-4`, 11px Geist Mono, right-aligned. Informational; never actionable.
+- **UUID code:** 14px Geist Mono, `--ink`, `"zero" "ss01"`. Segments individually wrapped — segment 2 (the version nibble, e.g. `4` in v4) gets accent color on row hover to surface the UUID version.
+- **Length:** `--ink-3`, 11px Geist Mono. Hidden below 920px breakpoint.
+- **Row hover:** `--bg-3` background over 80ms. Copy button opacity 0→1. Version nibble accent-colored.
+- **Copied state:** Row background tints to `color-mix(in oklch, var(--accent) 12%, var(--bg-2))`.
 
----
+### Version Row
 
-## 8. Components
+Three-column grid: tag (32px) / meta (1fr) / pip (14px).
 
-### 8.1 Top bar
-Sticky, 14×28 padding, 1px bottom hairline, `backdrop-filter: blur(10px)`. Brand mark + name + mono `/ tag` left; ghost shortcut button + theme toggle right.
+- **Default:** `--bg-2` fill, 1px `--seam` border, `--r-md` radius. Tag: `--bg-3` background, `--ink-3` text. Pip hidden.
+- **Active:** `color-mix(in oklch, var(--accent) 10%, var(--bg-2))` fill, `--accent` border, `inset 2px 0 0 var(--accent)` left bar. Tag: accent fill, on-accent text. Pip visible.
+- **Hover (inactive):** `--bg-3` fill, `--seam-2` border over 120ms.
 
-### 8.2 Workbench shell
-`grid-template-columns: 320px 1fr` on desktop, single column below 920px. 1px outer border, `--r-lg` corner radius, `--bg-2` ground. Rail and panel are separated by a 1px hairline, never a shadow.
+### Format Option (Checkbox)
 
-### 8.3 Rail sections
-22px padding, separated by 1px hairlines (last section grows to fill). Each section has a `rail-head` (lowercase mono key + 10px shortcut hint), then content. **Never add a third section style** — three is the cap.
+Two-column grid: check glyph (18px) / label text. Uses real `<input type="checkbox">` visually
+hidden for full keyboard operability. Visible state is the row.
 
-### 8.4 Version row
-Three-column grid (`32px 1fr 14px`): tag, meta, pip. Active state = accent border + accent-tint background + inset 2px accent bar + accent-filled tag. The pip (`●`) only renders when active.
+- **Unchecked:** `--ink-4` check glyph. `--bg-2` row background.
+- **Checked:** `--accent` check glyph. `color-mix(in oklch, var(--accent) 8%, var(--bg-2))` row background, `--accent` border.
 
-### 8.5 Format option
-Two-column grid (`18px 1fr`): check glyph + text. Uses real `<input type="checkbox">` visually-hidden for a11y; the visible state is the row.
+### `<kbd>`
 
-### 8.6 UUID row
-Four-column grid (`50px 1fr 50px 90px`): index, code, length, copy button. The copy button sits at 0.4 opacity until row hover, then fully visible. UUID segments are individually wrapped (`<span class="uuid-seg seg-N">`) so segment-2 (the version nibble) can highlight on hover.
+11px Geist Mono, `"zero" "ss01"`, 2px/6px padding. `--bg` fill. 1px `--seam` border with
+**2px bottom border** — the cap-style depth cue. Only use `border-bottom: 2px` here; this is the
+only bottom-heavy border in the system. `--r-xs` (4px) radius.
 
-### 8.7 Buttons
-Three roles, no more:
-- **Ghost** — `--bg-2` fill, `--seam` border, `--ink-2` label. Most actions.
-- **CTA** — accent fill, on-accent label, attached `kbd`. One per panel.
-- **Row copy** — transparent, opacity 0.4 → 1 on row hover, ink-fill on direct hover, accent-fill when copied.
+### Top Bar
 
-### 8.8 kbd
-11px mono, 2×6 padding, `--bg` fill, 1px border with **2px bottom border** (the only place a bottom-heavy border is used — it keys-cap the element). `--r-xs`.
+Sticky, `backdrop-filter: blur(10px)`. 14px/28px padding. 1px `--seam` bottom hairline.
+Left: brand mark icon (16×16 SVG) + brand name (Geist Sans 700, 16px, tracking -0.01em) + mono
+`/ tag` label in `--ink-3`. Right: ghost shortcut button + theme toggle button.
 
-### 8.9 Status bar
-Sticky bottom, mono throughout, 1px right-divider per cell. Live dot pulses at 2s. Feedback cell flashes a `→` arrow + lowercase verb message for 2 seconds.
+### Status Bar
 
-### 8.10 Modal
-560px max width, scrim with `blur(6px)`, slide-up entry on `--ease-standard` over 220ms. Two-column body grid (`200px 1fr`): keys + description.
+Sticky bottom. Mono throughout, 11px. 1px `--seam` right-divider between cells. Three cells:
 
----
+- **Live status:** `--accent` dot (6px, border-radius 50%) pulses at 2s (`animation: pulse 2000ms ease-in-out infinite`). Followed by mono text describing current state.
+- **Hint:** Keyboard shortcut reminder. `--ink-3`.
+- **Feedback:** Flashes `→ {verb}` (e.g. "→ copied", "→ downloaded") in `--accent` for 2 seconds on action. Returns to `--ink-3` at rest.
 
-## 9. Layout
+### Shortcut Reference Modal
 
-- Container max width: **1440px**, gutters: **28px**.
-- Workbench rail: **320px** fixed.
-- Workbench fold: **920px** — below this, rail stacks above panel and the row drops its `length` cell.
-- Hero subhead: **620px** max — text-wrap balanced.
+560px max width (`--modal-max`). Scrim: `--scrim` + `blur(6px)`. Entry animation: slide-up
+(`translateY(16px)` → 0) + scale (0.97 → 1) over 220ms on `--ease-standard`. Two-column body
+grid (200px / 1fr): key combinations / descriptions. All text Geist Mono. Closed by Esc.
 
----
+### Validator Input
 
-## 10. Accessibility & a11y notes
+Single-line input for UUID validation. `--bg-2` fill, 1px `--seam` border, `--r-md` radius.
+Geist Mono body, 14px. On focus: `--seam-2` border, no glow (flat system). Inline validation
+badge (valid / invalid) to the right of the input. UUID breakdown panel below renders decoded
+fields (version, variant, timestamp, node) on a valid parse.
 
-- All accents pass WCAG AA against their on-accent companions when used as text on fill.
-- `--ink-4` is the dimmest legible token; do not use it for actionable text.
-- Real `<input type="checkbox">` and `<input type="range">` underpin custom controls — keyboard works without JS.
-- Focus styles are inherited browser defaults; future work should add an explicit `:focus-visible` ring at `0 0 0 2px var(--accent)`.
-- Color is never the sole carrier of state: the active row also gets a left bar and a pip glyph; copied rows get a `✓ copied` label.
+## 6. Do's and Don'ts
 
----
+### Do:
 
-## 11. Files
+- **Do** use `--accent` only at interaction points: active selection, CTA fill, slider thumb, status pulse, copied-row tint. The accent's rarity is what makes it meaningful.
+- **Do** use Geist Mono for all UI chrome, labels, `<kbd>`, and data values. Reserve Geist Sans for display headings and prose paragraphs.
+- **Do** apply `font-feature-settings: "zero", "ss01"` to every monospace element. The slashed zero is non-negotiable in UUID display.
+- **Do** use 1px `--seam` hairlines to define structure. Borders, not shadows.
+- **Do** carry state via shape and position alongside color — active rows have a left bar (`inset 2px 0 0 var(--accent)`) and pip glyph in addition to the accent tint.
+- **Do** provide a keyboard shortcut for every primary action and keep `src/data/shortcuts.js` and the shortcut overlay in sync.
+- **Do** honor `prefers-reduced-motion` by replacing transitions with instant state swaps.
+- **Do** compute accent tints inline: `color-mix(in oklch, var(--accent) N%, var(--bg))` where N is context-specific (8%, 10%, 12%). Do not tokenize these intermediate values.
+- **Do** keep the light-theme accent overrides lower in lightness (0.50–0.62 range) to maintain WCAG AA.
 
-- `tokens.json` — W3C-format source of truth.
-- `tokens.css` — CSS custom properties, dark + light themes, accent overrides via `[data-accent]`.
-- `DESIGN.md` — this document.
+### Don't:
 
-To rotate accents at runtime, set `data-accent="lime|amber|cobalt|magenta"` on `:root` or any ancestor. To switch theme, set `data-theme="dark|light"` on `:root`.
+- **Don't** use blue-tinted surfaces, sidebar navigation chrome, card-grid layouts, or feature-overview patterns inside the tool. This is not SaaS-dashboard grey.
+- **Don't** stack multiple accent colors on a single screen. Switch the active palette via `[data-accent]` — never introduce a second accent hue as decoration.
+- **Don't** use `border-left` or `border-right` greater than 1px as a colored accent stripe on cards, panels, or list items. The 2px left-bar on active version rows is `box-shadow: inset 2px 0 0 var(--accent)` — structural, not a border stripe.
+- **Don't** use gradient text (`background-clip: text` + gradient). Use a single solid `--accent` for emphasis.
+- **Don't** use `backdrop-filter` decoratively. It appears only on the sticky top bar and modal scrim.
+- **Don't** add `box-shadow` to cards, panels, or buttons. The system is flat; `--shadow-modal` is the only drop shadow.
+- **Don't** use Title Case in UI labels. Rail keys are lowercase tracked; status flags are UPPERCASE; everything else is sentence case.
+- **Don't** animate layout properties (width, height, top, left). Animate `transform` and `opacity` only.
+- **Don't** add page-load choreography or staggered entrance sequences. Motion is feedback: state changes, copy confirmation, regenerate spin.
+- **Don't** invent a fourth button variant. Three roles (CTA, ghost, row-copy) are complete.
+- **Don't** use `--ink-4` or lighter for actionable copy. Ghost Ink is the informational floor; anything lighter is decoration.
+- **Don't** add a `border-bottom: 2px` to anything other than `<kbd>`. That bottom-heavy border is the key-cap cue and its uniqueness is the point.

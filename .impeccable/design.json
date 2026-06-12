@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-13T00:00:00+07:00",
+  "title": "Design System: uuidlab",
+  "extensions": {
+    "colorMeta": {
+      "accent-lime": {
+        "role": "primary",
+        "displayName": "Terminal Lime",
+        "canonical": "oklch(0.86 0.20 130)",
+        "tonalRamp": [
+          "oklch(0.10 0.03 130)",
+          "oklch(0.22 0.07 130)",
+          "oklch(0.35 0.12 130)",
+          "oklch(0.48 0.17 130)",
+          "oklch(0.62 0.20 130)",
+          "oklch(0.73 0.20 130)",
+          "oklch(0.86 0.20 130)",
+          "oklch(0.94 0.10 130)"
+        ]
+      },
+      "accent-amber": {
+        "role": "secondary",
+        "displayName": "Ember Amber",
+        "canonical": "oklch(0.82 0.18 65)",
+        "tonalRamp": [
+          "oklch(0.10 0.03 65)",
+          "oklch(0.22 0.07 65)",
+          "oklch(0.35 0.11 65)",
+          "oklch(0.48 0.15 65)",
+          "oklch(0.60 0.18 65)",
+          "oklch(0.72 0.18 65)",
+          "oklch(0.82 0.18 65)",
+          "oklch(0.92 0.08 65)"
+        ]
+      },
+      "accent-cobalt": {
+        "role": "secondary",
+        "displayName": "Cold Cobalt",
+        "canonical": "oklch(0.74 0.18 250)",
+        "tonalRamp": [
+          "oklch(0.10 0.03 250)",
+          "oklch(0.22 0.07 250)",
+          "oklch(0.34 0.11 250)",
+          "oklch(0.46 0.15 250)",
+          "oklch(0.57 0.18 250)",
+          "oklch(0.65 0.18 250)",
+          "oklch(0.74 0.18 250)",
+          "oklch(0.88 0.07 250)"
+        ]
+      },
+      "accent-magenta": {
+        "role": "secondary",
+        "displayName": "Signal Magenta",
+        "canonical": "oklch(0.78 0.20 340)",
+        "tonalRamp": [
+          "oklch(0.10 0.04 340)",
+          "oklch(0.22 0.08 340)",
+          "oklch(0.35 0.13 340)",
+          "oklch(0.48 0.17 340)",
+          "oklch(0.60 0.20 340)",
+          "oklch(0.70 0.20 340)",
+          "oklch(0.78 0.20 340)",
+          "oklch(0.90 0.09 340)"
+        ]
+      },
+      "on-accent": {
+        "role": "on-primary",
+        "displayName": "On-Accent Ink",
+        "canonical": "oklch(0.18 0.01 130)",
+        "tonalRamp": [
+          "oklch(0.08 0.003 130)",
+          "oklch(0.14 0.006 130)",
+          "oklch(0.18 0.01 130)",
+          "oklch(0.25 0.01 130)",
+          "oklch(0.35 0.01 130)",
+          "oklch(0.50 0.01 130)",
+          "oklch(0.70 0.01 130)",
+          "oklch(0.90 0.005 130)"
+        ]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Deep Void",
+        "canonical": "oklch(0.16 0.005 60)",
+        "tonalRamp": [
+          "oklch(0.10 0.003 60)",
+          "oklch(0.16 0.005 60)",
+          "oklch(0.21 0.006 60)",
+          "oklch(0.28 0.006 60)",
+          "oklch(0.36 0.008 60)",
+          "oklch(0.55 0.005 60)",
+          "oklch(0.78 0.005 60)",
+          "oklch(0.97 0.004 60)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Warm White",
+        "canonical": "oklch(0.97 0.004 60)",
+        "tonalRamp": [
+          "oklch(0.10 0.003 60)",
+          "oklch(0.21 0.006 60)",
+          "oklch(0.40 0.006 60)",
+          "oklch(0.55 0.005 60)",
+          "oklch(0.65 0.005 60)",
+          "oklch(0.78 0.005 60)",
+          "oklch(0.88 0.004 60)",
+          "oklch(0.97 0.004 60)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero heading only. The single place Geist Sans performs at full scale. Never bold — 600 weight is enough."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Batch counter; the one large numeral in the workbench chrome."
+      },
+      "body": {
+        "displayName": "Body / UUID",
+        "purpose": "UUID row values — the primary content surface. Slashed zero mandatory."
+      },
+      "title": {
+        "displayName": "Title / Rail Key",
+        "purpose": "Rail section keys (lowercase) and status flags (UPPERCASE). Never title case."
+      },
+      "label": {
+        "displayName": "Label / kbd",
+        "purpose": "Keyboard shortcuts, status cells, row index numbers. Smallest legible mono step."
+      }
+    },
+    "shadows": [
+      {
+        "name": "modal-lift",
+        "value": "0 20px 60px rgba(0,0,0,0.4)",
+        "valueLightTheme": "0 20px 60px rgba(0,0,0,0.15)",
+        "purpose": "The only drop shadow in the system. Applied to the shortcut reference modal and any future dialogs."
+      },
+      {
+        "name": "brand-glow",
+        "value": "0 0 12px var(--accent)",
+        "purpose": "Brand mark icon dot. Signals identity, not spatial depth."
+      },
+      {
+        "name": "status-glow",
+        "value": "0 0 8px var(--accent)",
+        "purpose": "Live status indicator pulse. Communicates active system state."
+      },
+      {
+        "name": "active-left-bar",
+        "value": "inset 2px 0 0 var(--accent)",
+        "purpose": "Active version row indicator. The only inset shadow in the system."
+      }
+    ],
+    "motion": [
+      { "name": "d-tap",    "value": "80ms",   "easing": "cubic-bezier(0.2, 0.7, 0.3, 1)", "purpose": "Button depress translateY(1px). Immediate feedback on pointer down." },
+      { "name": "d-swap",   "value": "120ms",  "easing": "cubic-bezier(0.2, 0.7, 0.3, 1)", "purpose": "Hover/active state swaps — background, border, color." },
+      { "name": "d-settle", "value": "140ms",  "easing": "cubic-bezier(0.2, 0.7, 0.3, 1)", "purpose": "Row copy button settle to copied state." },
+      { "name": "d-scrim",  "value": "160ms",  "easing": "cubic-bezier(0.2, 0.7, 0.3, 1)", "purpose": "Modal scrim fade in/out." },
+      { "name": "d-modal",  "value": "220ms",  "easing": "cubic-bezier(0.2, 0.7, 0.3, 1)", "purpose": "Modal slide-up + scale entry." },
+      { "name": "d-panel",  "value": "280ms",  "easing": "cubic-bezier(0.2, 0.7, 0.3, 1)", "purpose": "Panel grid UUID list fade on regenerate." },
+      { "name": "d-regen",  "value": "380ms",  "easing": "linear",                          "purpose": "Refresh icon spin window during regenerate." },
+      { "name": "d-pulse",  "value": "2000ms", "easing": "ease-in-out",                     "purpose": "Status live-dot pulse. Continuous loop." }
+    ],
+    "breakpoints": [
+      { "name": "workbench-fold", "value": "920px", "purpose": "Below this: rail stacks above panel, UUID row drops its length cell." },
+      { "name": "container-max",  "value": "1440px", "purpose": "Maximum app container width." }
+    ]
+  },
+  "components": [
+    {
+      "name": "CTA Button (Regenerate)",
+      "kind": "button",
+      "refersTo": "button-cta",
+      "description": "Primary call-to-action. One per panel. Accent fill + attached kbd shortcut.",
+      "html": "<button class=\"ds-btn-cta\">Regenerate<kbd class=\"ds-btn-cta-kbd\">⌘↵</kbd></button>",
+      "css": ".ds-btn-cta { display: inline-flex; align-items: center; gap: 8px; background: oklch(0.86 0.20 130); color: oklch(0.18 0.01 130); border: none; border-radius: 6px; padding: 8px 16px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; font-feature-settings: 'zero', 'ss01'; cursor: pointer; transition: transform 80ms cubic-bezier(0.2, 0.7, 0.3, 1); } .ds-btn-cta:hover { transform: translateY(-1px); } .ds-btn-cta:active { transform: translateY(1px); } .ds-btn-cta:focus-visible { outline: 2px solid oklch(0.86 0.20 130); outline-offset: 2px; } .ds-btn-cta-kbd { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600; font-feature-settings: 'zero', 'ss01'; padding: 2px 6px; background: oklch(0.18 0.01 130); color: oklch(0.86 0.20 130); border-radius: 4px; border: 1px solid oklch(0.28 0.006 60); border-bottom-width: 2px; line-height: 1.5; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary actions: Copy All, Download, theme toggle, shortcut overlay trigger.",
+      "html": "<button class=\"ds-btn-ghost\">Copy all</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 6px; background: oklch(0.18 0.005 60); color: oklch(0.78 0.005 60); border: 1px solid oklch(0.28 0.006 60); border-radius: 6px; padding: 6px 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; font-feature-settings: 'zero', 'ss01'; cursor: pointer; transition: background 120ms cubic-bezier(0.2, 0.7, 0.3, 1), border-color 120ms cubic-bezier(0.2, 0.7, 0.3, 1), color 120ms cubic-bezier(0.2, 0.7, 0.3, 1); } .ds-btn-ghost:hover { background: oklch(0.21 0.006 60); border-color: oklch(0.36 0.008 60); color: oklch(0.97 0.004 60); } .ds-btn-ghost:active { transform: translateY(1px); } .ds-btn-ghost:focus-visible { outline: 2px solid oklch(0.86 0.20 130); outline-offset: 2px; }"
+    },
+    {
+      "name": "UUID Row",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The signature component. Four-column grid: index / UUID code / length / copy button.",
+      "html": "<div class=\"ds-uuid-row\"><span class=\"ds-uuid-index\">01</span><code class=\"ds-uuid-code\"><span class=\"ds-seg ds-seg-1\">550e8400</span><span class=\"ds-seg-sep\">-</span><span class=\"ds-seg ds-seg-2\">e29b</span><span class=\"ds-seg-sep\">-</span><span class=\"ds-seg ds-seg-3\">41d4</span><span class=\"ds-seg-sep\">-</span><span class=\"ds-seg ds-seg-4\">a716</span><span class=\"ds-seg-sep\">-</span><span class=\"ds-seg ds-seg-5\">446655440000</span></code><span class=\"ds-uuid-len\">36</span><button class=\"ds-uuid-copy\">Copy</button></div>",
+      "css": ".ds-uuid-row { display: grid; grid-template-columns: 50px 1fr 50px 90px; align-items: center; padding: 8px 22px; background: oklch(0.18 0.005 60); border-bottom: 1px solid oklch(0.28 0.006 60); transition: background 80ms cubic-bezier(0.2, 0.7, 0.3, 1); } .ds-uuid-row:hover { background: oklch(0.21 0.006 60); } .ds-uuid-row:hover .ds-uuid-copy { opacity: 1; } .ds-uuid-row:hover .ds-seg-2 { color: oklch(0.86 0.20 130); } .ds-uuid-index { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 400; color: oklch(0.40 0.006 60); font-feature-settings: 'zero', 'ss01'; text-align: right; padding-right: 16px; } .ds-uuid-code { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 14px; font-weight: 400; color: oklch(0.97 0.004 60); font-feature-settings: 'zero', 'ss01'; } .ds-seg { transition: color 120ms cubic-bezier(0.2, 0.7, 0.3, 1); } .ds-seg-sep { color: oklch(0.40 0.006 60); } .ds-uuid-len { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; color: oklch(0.55 0.005 60); font-feature-settings: 'zero', 'ss01'; text-align: right; padding-right: 16px; } .ds-uuid-copy { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600; font-feature-settings: 'zero', 'ss01'; background: transparent; color: oklch(0.55 0.005 60); border: none; border-radius: 5px; padding: 4px 8px; opacity: 0.4; cursor: pointer; transition: opacity 140ms ease, background 120ms cubic-bezier(0.2, 0.7, 0.3, 1), color 120ms cubic-bezier(0.2, 0.7, 0.3, 1); } .ds-uuid-copy:hover { opacity: 1; background: oklch(0.21 0.006 60); color: oklch(0.97 0.004 60); }"
+    },
+    {
+      "name": "Version Row (active)",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Three-column rail selector. Active state uses accent border, left-bar inset, and tinted fill.",
+      "html": "<div class=\"ds-version-row ds-version-row--active\"><span class=\"ds-version-tag\">v4</span><div class=\"ds-version-meta\"><span class=\"ds-version-title\">Random</span><span class=\"ds-version-desc\">Cryptographically random, no order</span></div><span class=\"ds-version-pip\">●</span></div>",
+      "css": ".ds-version-row { display: grid; grid-template-columns: 32px 1fr 14px; align-items: center; gap: 10px; padding: 10px 14px; background: oklch(0.18 0.005 60); border: 1px solid oklch(0.28 0.006 60); border-radius: 6px; cursor: pointer; margin-bottom: 4px; transition: background 120ms cubic-bezier(0.2, 0.7, 0.3, 1), border-color 120ms cubic-bezier(0.2, 0.7, 0.3, 1); } .ds-version-row:hover { background: oklch(0.21 0.006 60); border-color: oklch(0.36 0.008 60); } .ds-version-row--active { background: color-mix(in oklch, oklch(0.86 0.20 130) 10%, oklch(0.18 0.005 60)); border-color: oklch(0.86 0.20 130); box-shadow: inset 2px 0 0 oklch(0.86 0.20 130); } .ds-version-tag { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600; font-feature-settings: 'zero', 'ss01'; letter-spacing: 0.04em; padding: 2px 5px; border-radius: 4px; background: oklch(0.21 0.006 60); color: oklch(0.78 0.005 60); text-align: center; } .ds-version-row--active .ds-version-tag { background: oklch(0.86 0.20 130); color: oklch(0.18 0.01 130); } .ds-version-title { display: block; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; font-weight: 600; font-feature-settings: 'zero', 'ss01'; color: oklch(0.97 0.004 60); } .ds-version-desc { display: block; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-feature-settings: 'zero', 'ss01'; color: oklch(0.55 0.005 60); } .ds-version-pip { font-size: 8px; color: oklch(0.40 0.006 60); visibility: hidden; } .ds-version-row--active .ds-version-pip { visibility: visible; }"
+    },
+    {
+      "name": "kbd Element",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Inline keyboard shortcut hint. The 2px bottom border is the key-cap cue — unique to this element.",
+      "html": "<kbd class=\"ds-kbd\">⌘</kbd><kbd class=\"ds-kbd\">↵</kbd>",
+      "css": ".ds-kbd { display: inline-block; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600; font-feature-settings: 'zero', 'ss01'; padding: 2px 6px; background: oklch(0.16 0.005 60); color: oklch(0.55 0.005 60); border: 1px solid oklch(0.28 0.006 60); border-bottom-width: 2px; border-radius: 4px; line-height: 1.5; margin-right: 2px; }"
+    },
+    {
+      "name": "Status Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Sticky bottom bar. Live pulse dot, shortcut hint, feedback flash cell.",
+      "html": "<div class=\"ds-status-bar\"><div class=\"ds-status-cell\"><span class=\"ds-status-dot\"></span><span class=\"ds-status-text\">v4 · 10 UUIDs</span></div><div class=\"ds-status-cell\">Shift+? for shortcuts</div><div class=\"ds-status-cell ds-status-feedback\">→ copied</div></div>",
+      "css": ".ds-status-bar { display: flex; align-items: center; background: oklch(0.16 0.005 60); border-top: 1px solid oklch(0.28 0.006 60); font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-feature-settings: 'zero', 'ss01'; color: oklch(0.55 0.005 60); } .ds-status-cell { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-right: 1px solid oklch(0.28 0.006 60); white-space: nowrap; } .ds-status-dot { width: 6px; height: 6px; border-radius: 50%; background: oklch(0.86 0.20 130); box-shadow: 0 0 8px oklch(0.86 0.20 130); animation: ds-status-pulse 2000ms ease-in-out infinite; } @keyframes ds-status-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } } @media (prefers-reduced-motion: reduce) { .ds-status-dot { animation: none; } } .ds-status-feedback { color: oklch(0.86 0.20 130); }"
+    },
+    {
+      "name": "Validator Input",
+      "kind": "input",
+      "refersTo": null,
+      "description": "UUID validation input. Flat style; border shifts to seam-2 on focus.",
+      "html": "<div class=\"ds-validator-wrap\"><input class=\"ds-validator-input\" type=\"text\" placeholder=\"Paste a UUID to validate\" /><span class=\"ds-validator-badge ds-validator-badge--valid\">Valid v4</span></div>",
+      "css": ".ds-validator-wrap { display: flex; align-items: center; gap: 10px; } .ds-validator-input { flex: 1; background: oklch(0.18 0.005 60); color: oklch(0.97 0.004 60); border: 1px solid oklch(0.28 0.006 60); border-radius: 6px; padding: 10px 14px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 14px; font-weight: 400; font-feature-settings: 'zero', 'ss01'; outline: none; transition: border-color 120ms cubic-bezier(0.2, 0.7, 0.3, 1); } .ds-validator-input:focus { border-color: oklch(0.36 0.008 60); } .ds-validator-input::placeholder { color: oklch(0.40 0.006 60); } .ds-validator-badge { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600; font-feature-settings: 'zero', 'ss01'; padding: 3px 8px; border-radius: 999px; white-space: nowrap; } .ds-validator-badge--valid { background: color-mix(in oklch, oklch(0.86 0.20 130) 12%, oklch(0.18 0.005 60)); color: oklch(0.86 0.20 130); border: 1px solid oklch(0.86 0.20 130); } .ds-validator-badge--invalid { background: color-mix(in oklch, oklch(0.62 0.20 25) 12%, oklch(0.18 0.005 60)); color: oklch(0.75 0.18 25); border: 1px solid oklch(0.62 0.20 25); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Terminal-Luxury",
+    "overview": "uuidlab operates at the intersection of CLI discipline and considered craft. It is dense where developers are scanning, spacious where developers are reading, and entirely at rest when not responding to input. The default state is a deep near-black — not a styled brand gesture, but the literal dark that a terminal earns after years of daily use.\n\nThis system rejects all three of its closest failure modes by name. It is not SaaS-dashboard grey (blue-tinted panels, sidebar chrome, card-grid layouts). It is not flashy developer marketing (gradient-heavy dark mode, stacked neon accents, glassmorphism). It is not the bare-bones utility that mistakes zero effort for minimal design. "Terminal-luxury" names the space between: a tool with genuine craft opinions that never asks for attention.\n\nThe accent color — lime by default, swappable across four palettes — appears only as a consequence of action. Its rarity is structural.",
+    "keyCharacteristics": [
+      "Dark-native by conviction, warm-grey neutral ramp (hue 60°) that reads as ink-and-paper, not blue-shift",
+      "Monospace-forward: Geist Mono is body and chrome; Geist Sans is display and prose only",
+      "Restrained color strategy: one accent, no secondary palette, no semantic color beyond the accent",
+      "Hairline-border structure: 1px seams define space; no drop shadows except the modal lift",
+      "Keyboard-first: every action has a shortcut; hover is a hint, not a requirement"
+    ],
+    "rules": [
+      { "name": "The One-Accent Rule", "body": "The accent color appears only as a consequence of user action or current selection — never for decoration, illustration, or section markers. Its rarity is structural: when it appears, it means something.", "section": "colors" },
+      { "name": "The Warm-Void Rule", "body": "All neutral surfaces share hue 60° at chroma ≤ 0.008. Never introduce blue-grey, cool neutrals, or true-neutral. The warm micro-tint keeps the system from reading as generic dark-mode.", "section": "colors" },
+      { "name": "The Floor Rule", "body": "--ink-4 is the dimmest token used for informational text. Anything lighter is decorative. Never use a lighter value for actionable copy.", "section": "colors" },
+      { "name": "The Slashed-Zero Rule", "body": "All monospace text must render with font-feature-settings: 'zero', 'ss01'. A dotted zero reads as O in a 32-character UUID and destroys legibility. Non-negotiable.", "section": "typography" },
+      { "name": "The Mono-First Rule", "body": "New UI elements default to Geist Mono unless they are display headings or prose paragraphs.", "section": "typography" },
+      { "name": "The Title-Case Ban", "body": "Rail keys are lowercase tracked. Status flags are UPPERCASE. Nothing is Title Case. Title case reads as generic app UI; this tool has a voice.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. If you are about to add box-shadow to a card, panel, or button, use --seam border + --bg-3 tonal step instead. The shadow is already taken by the modal.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use --accent only at interaction points: active selection, CTA fill, slider thumb, status pulse, copied-row tint.",
+      "Do use Geist Mono for all UI chrome, labels, kbd, and data values. Reserve Geist Sans for display headings and prose paragraphs.",
+      "Do apply font-feature-settings: 'zero', 'ss01' to every monospace element.",
+      "Do use 1px --seam hairlines to define structure. Borders, not shadows.",
+      "Do carry state via shape and position alongside color — active rows have a left bar and pip glyph in addition to the accent tint.",
+      "Do provide a keyboard shortcut for every primary action.",
+      "Do honor prefers-reduced-motion by replacing transitions with instant state swaps.",
+      "Do compute accent tints inline: color-mix(in oklch, var(--accent) N%, var(--bg)) where N is context-specific (8%, 10%, 12%)."
+    ],
+    "donts": [
+      "Don't use blue-tinted surfaces, sidebar navigation chrome, card-grid layouts, or feature-overview patterns. This is not SaaS-dashboard grey.",
+      "Don't stack multiple accent colors on a single screen. Switch the active palette via [data-accent] only.",
+      "Don't use border-left or border-right greater than 1px as a colored accent stripe. The active left-bar is box-shadow: inset 2px 0 0 var(--accent).",
+      "Don't use gradient text (background-clip: text + gradient). Use a single solid --accent for emphasis.",
+      "Don't use backdrop-filter decoratively. It appears only on the sticky top bar and modal scrim.",
+      "Don't add box-shadow to cards, panels, or buttons. --shadow-modal is the only drop shadow.",
+      "Don't use Title Case in UI labels.",
+      "Don't animate layout properties. Animate transform and opacity only.",
+      "Don't add page-load choreography or staggered entrance sequences.",
+      "Don't invent a fourth button variant. Three roles (CTA, ghost, row-copy) are complete.",
+      "Don't use --ink-4 or lighter for actionable copy.",
+      "Don't add border-bottom: 2px to anything other than <kbd>."
+    ]
+  }
+}
