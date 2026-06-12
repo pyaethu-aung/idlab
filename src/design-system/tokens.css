@@ -58,6 +58,10 @@
   --r-lg: 10px;
   --r-pill: 999px;
 
+  /* Layer (z-index) ─────────────────────────── */
+  --z-sticky: 10;
+  --z-modal:  100;
+
   /* Layout ──────────────────────────────────── */
   --container-max: 1440px;
   --gutter: 28px;
@@ -88,31 +92,35 @@
 /* Dark theme (default) ─────────────────────── */
 :root,
 [data-theme="dark"] {
-  --bg:     oklch(0.16 0.005 60);
-  --bg-2:   oklch(0.18 0.005 60);
-  --bg-3:   oklch(0.21 0.006 60);
-  --seam:   oklch(0.28 0.006 60);
-  --seam-2: oklch(0.36 0.008 60);
-  --ink:    oklch(0.97 0.004 60);
-  --ink-2:  oklch(0.78 0.005 60);
-  --ink-3:  oklch(0.55 0.005 60);
-  --ink-4:  oklch(0.40 0.006 60);
-  --scrim:  color-mix(in oklch, var(--bg), transparent 30%);
+  --bg:       oklch(0.16 0.005 60);
+  --bg-2:     oklch(0.18 0.005 60);
+  --bg-3:     oklch(0.21 0.006 60);
+  --seam:     oklch(0.28 0.006 60);
+  --seam-2:   oklch(0.36 0.008 60);
+  --ink:      oklch(0.97 0.004 60);
+  --ink-2:    oklch(0.78 0.005 60);
+  --ink-3:    oklch(0.55 0.005 60);
+  --ink-4:    oklch(0.40 0.006 60);
+  --error:    oklch(0.72 0.17 25);
+  --on-error: oklch(0.15 0.02 25);
+  --scrim:    color-mix(in oklch, var(--bg), transparent 30%);
   --shadow-modal: 0 20px 60px rgba(0,0,0,0.4);
 }
 
 /* Light theme ─────────────────────────────── */
 [data-theme="light"] {
-  --bg:     oklch(0.985 0.003 60);
-  --bg-2:   oklch(0.965 0.004 60);
-  --bg-3:   oklch(0.945 0.005 60);
-  --seam:   oklch(0.88 0.005 60);
-  --seam-2: oklch(0.74 0.006 60);
-  --ink:    oklch(0.18 0.006 60);
-  --ink-2:  oklch(0.34 0.006 60);
-  --ink-3:  oklch(0.44 0.006 60);
-  --ink-4:  oklch(0.49 0.006 60);
-  --scrim:  color-mix(in oklch, var(--bg), transparent 30%);
+  --bg:       oklch(0.985 0.003 60);
+  --bg-2:     oklch(0.965 0.004 60);
+  --bg-3:     oklch(0.945 0.005 60);
+  --seam:     oklch(0.88 0.005 60);
+  --seam-2:   oklch(0.74 0.006 60);
+  --ink:      oklch(0.18 0.006 60);
+  --ink-2:    oklch(0.34 0.006 60);
+  --ink-3:    oklch(0.44 0.006 60);
+  --ink-4:    oklch(0.49 0.006 60);
+  --error:    oklch(0.50 0.20 25);
+  --on-error: oklch(0.97 0.004 60);
+  --scrim:    color-mix(in oklch, var(--bg), transparent 30%);
   --shadow-modal: 0 20px 60px rgba(0,0,0,0.15);
 }
 
