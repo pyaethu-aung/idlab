@@ -16,6 +16,8 @@ colors:
   ink-2: "oklch(0.78 0.005 60)"
   ink-3: "oklch(0.55 0.005 60)"
   ink-4: "oklch(0.40 0.006 60)"
+  error: "oklch(0.72 0.17 25)"
+  on-error: "oklch(0.15 0.02 25)"
 typography:
   display:
     fontFamily: '"Geist", ui-sans-serif, system-ui, sans-serif'
@@ -165,6 +167,8 @@ Color values are authored in OKLCH throughout; all four accents share equivalent
 - **Body Ink** (`oklch(0.78 0.005 60)`, token `--ink-2`): Secondary content, ghost button labels.
 - **Muted Ink** (`oklch(0.55 0.005 60)`, token `--ink-3`): Metadata, hints, UUID length readout. Never actionable primary.
 - **Ghost Ink** (`oklch(0.40 0.006 60)`, token `--ink-4`): Index numbers, tertiary decoration. Absolute floor for informational text.
+- **Error Red** (`oklch(0.72 0.17 25)` dark / `oklch(0.50 0.20 25)` light, token `--error`): Invalid UUID state — used for text, borders, fills, and the status dot glow. Follows the same contract as `--accent`: one role, never decorative. On light theme, lightness drops to 0.50 for WCAG AA contrast against near-white surfaces.
+- **On-Error** (`oklch(0.15 0.02 25)` dark / `oklch(0.97 0.004 60)` light, token `--on-error`): Text on error-colored fills (validator banner icon). Inverts between themes to stay readable.
 
 ### Named Rules
 
