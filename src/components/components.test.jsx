@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import ControlPanel from "./ControlPanel";
 import Hero from "./Hero";
-import InsightCards from "./InsightCards";
 import ShortcutReference from "./ShortcutReference";
 import ThemeToggle from "./ThemeToggle";
 import ToolbarNav from "./ToolbarNav";
@@ -55,14 +54,6 @@ describe("Hero", () => {
     render(<Hero />);
     expect(screen.getByText(/Mint/i)).toBeInTheDocument();
     expect(screen.getByText(/RFC 4122/i)).toBeInTheDocument();
-  });
-});
-
-describe("InsightCards", () => {
-  it("lists the provided insight stats", () => {
-    render(<InsightCards insights={[{ label: "Batch", value: 3 }]} />);
-    expect(screen.getByText("Batch")).toBeInTheDocument();
-    expect(screen.getByText("3")).toBeInTheDocument();
   });
 });
 
