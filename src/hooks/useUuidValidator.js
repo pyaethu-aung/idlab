@@ -29,7 +29,7 @@ function useUuidValidator() {
   // Increment check count whenever a new valid result is produced
   useEffect(() => {
     if (result?.valid && !prevValidRef.current) {
-      setCheckCount((c) => c + 1); // eslint-disable-line react-hooks/set-state-in-effect
+      setCheckCount((c) => c + 1);
     }
     prevValidRef.current = result?.valid ?? false;
   }, [result]);
