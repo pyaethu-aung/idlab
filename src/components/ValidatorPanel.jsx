@@ -16,19 +16,6 @@ function ValidatorPanel({ validator }) {
 
   return (
     <section className="validator-panel">
-      <div className="validator-hero">
-        <h1 className="validator-hero__headline">
-          Decode any <span className="accent-text">UUID</span>
-          <br />
-          <span className="validator-hero__sub-line">at a glance.</span>
-        </h1>
-        <p className="validator-hero__sub">
-          Paste a UUID and instantly know if it&rsquo;s valid, which RFC 4122
-          version it represents, and what the embedded timestamp means for v1
-          and v7 identifiers.
-        </p>
-      </div>
-
       <div className="v-workbench">
         <ValidatorRail
           value={rawInput}
