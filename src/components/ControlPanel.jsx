@@ -106,9 +106,12 @@ function ControlPanel({
         </div>
         <div className="opt-stack">
           {FORMAT_OPTS.map((o) => (
-            <label
+            <button
               key={o.key}
+              type="button"
               className={`opt-row${options[o.key] ? " is-on" : ""}`}
+              onClick={() => onToggleOption(o.key)}
+              aria-pressed={options[o.key]}
             >
               <span className="opt-check" aria-hidden="true">
                 {options[o.key] ? "▣" : "□"}
@@ -117,13 +120,7 @@ function ControlPanel({
                 <span className="opt-label mono">{o.label}</span>
                 <span className="opt-hint">{o.hint}</span>
               </span>
-              <input
-                type="checkbox"
-                checked={options[o.key]}
-                onChange={() => onToggleOption(o.key)}
-                style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
-              />
-            </label>
+            </button>
           ))}
         </div>
       </div>
