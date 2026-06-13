@@ -28,7 +28,7 @@ function ValidatorPanel({ validator }) {
 
         <div className="v-panel-view">
           <div className="v-panel-body">
-            {result && (
+            {result ? (
               <>
                 <div className="v-result-section">
                   <ValidationBanner result={result} />
@@ -38,6 +38,10 @@ function ValidatorPanel({ validator }) {
                   <ValidatorPropsGrid result={result} />
                 )}
               </>
+            ) : (
+              <div className="v-empty-state">
+                <span className="v-empty-msg mono">paste a UUID to inspect</span>
+              </div>
             )}
           </div>
         </div>
