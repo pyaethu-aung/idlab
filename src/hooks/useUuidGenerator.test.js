@@ -71,11 +71,11 @@ describe("useUuidGenerator", () => {
   it("bootstraps a formatted batch and exposes helpers", () => {
     const { result } = renderHook(() => useUuidGenerator());
 
-    expect(buildBatchMock).toHaveBeenCalledWith(1);
-    expect(result.current.formattedUuids).toEqual([
-      expect.stringContaining("formatted-"),
-    ]);
-    expect(result.current.visibleBatchSize).toBe(1);
+    expect(buildBatchMock).toHaveBeenCalledWith(8);
+    expect(result.current.formattedUuids).toEqual(
+      Array(8).fill(expect.stringContaining("formatted-"))
+    );
+    expect(result.current.visibleBatchSize).toBe(8);
     expect(result.current.clipboardSupported).toBe(true);
   });
 
