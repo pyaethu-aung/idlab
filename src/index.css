@@ -1606,3 +1606,15 @@ kbd {
 @media (hover: none) {
   .row-copy { opacity: 1; }
 }
+
+/* ─── Reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* Restore deliberate opacity crossfades so panels don't hard-cut */
+  .modal-scrim  { transition: opacity var(--d-scrim) ease !important; }
+  .modal        { transition: opacity var(--d-modal) ease !important; }
+}
