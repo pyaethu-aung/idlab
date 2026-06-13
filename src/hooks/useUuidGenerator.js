@@ -7,7 +7,7 @@ import {
 } from "../utils/uuid";
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-const initialBatchSize = 1;
+const initialBatchSize = 8;
 
 function useUuidGenerator() {
   const [batchSize, setBatchSize] = useState(initialBatchSize);
