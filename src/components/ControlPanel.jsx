@@ -39,6 +39,7 @@ function ControlPanel({
                 type="button"
                 className={`version-row${active ? " is-active" : ""}`}
                 onClick={() => onVersionChange(v.id)}
+                aria-pressed={active}
               >
                 <span className="version-tag mono">{v.label}</span>
                 <span className="version-meta">
@@ -89,6 +90,7 @@ function ControlPanel({
               type="button"
               className={`preset-chip mono${batchSize === n ? " is-active" : ""}`}
               onClick={() => { onBatchChange(n); onBatchCommit?.(n); }}
+              aria-pressed={batchSize === n}
             >
               {n}
             </button>

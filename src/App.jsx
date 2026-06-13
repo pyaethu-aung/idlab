@@ -76,7 +76,7 @@ function App() {
           <span className="brand-name">uuidlab</span>
           <span className="brand-tag mono">/ {activeTab}</span>
         </div>
-        <nav className="topbar-nav mono">
+        <nav className="topbar-nav mono" aria-label="Tabs">
           <ToolbarNav activeTab={activeTab} onTabChange={setActiveTab} />
         </nav>
         <div className="topbar-right">
