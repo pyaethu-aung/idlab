@@ -27,7 +27,6 @@ function ValidationBanner({ result }) {
   }
 
   const desc = VERSION_DESC[result.version] ?? `UUID version ${result.version}`;
-  const confidence = result.isNil ? "nil" : "100%";
 
   return (
     <div className="v-banner v-banner--valid" role="status">
@@ -39,10 +38,6 @@ function ValidationBanner({ result }) {
         <span className="v-banner-line2 mono">
           All {result.charCount} characters match RFC 4122; variant {result.variantBits}.
         </span>
-      </div>
-      <div className="v-banner-score">
-        <span className="v-banner-score-num mono">{confidence}</span>
-        <span className="v-banner-score-lbl mono">confidence</span>
       </div>
     </div>
   );

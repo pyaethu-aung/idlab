@@ -1325,25 +1325,6 @@ kbd {
   color: var(--ink-3);
 }
 
-.v-banner-score {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.v-banner-score-num {
-  font-size: 18px;
-  font-weight: var(--fw-semibold);
-  color: var(--ink);
-  letter-spacing: var(--tracking-snug);
-}
-
-.v-banner-score-lbl {
-  font-size: var(--fs-xxs);
-  color: var(--ink-4);
-}
 
 /* ─── Segment card ───────────────────────────────────────────────────────── */
 .v-seg-card {
