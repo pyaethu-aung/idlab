@@ -980,35 +980,6 @@ kbd {
   margin: 0 auto;
 }
 
-.validator-hero {
-  margin-bottom: 36px;
-}
-
-.validator-hero__headline {
-  font-size: var(--fs-hero);
-  font-weight: 600;
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--lh-display);
-  margin: 0 0 20px;
-  text-wrap: balance;
-}
-
-.validator-hero__sub-line {
-  font-weight: var(--fw-medium);
-  color: var(--ink-3);
-}
-
-.validator-hero__sub {
-  max-width: 640px;
-  font-size: var(--fs-lg);
-  line-height: var(--lh-body);
-  color: var(--ink-2);
-  margin: 0;
-}
-
-.accent-text {
-  color: var(--accent);
-}
 
 /* ─── Validator workbench (two-column) ───────────────────────────────────── */
 .v-workbench {
