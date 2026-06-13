@@ -1088,7 +1088,7 @@ kbd {
   color: var(--ink-4);
 }
 
-.v-input-field:focus {
+.v-input-field:focus-visible {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px color-mix(in oklch, var(--accent) 20%, transparent);
 }
