@@ -176,7 +176,7 @@ describe("ControlPanel", () => {
     await user.click(screen.getByRole("button", { name: /Random/i }));
     expect(onVersionChange).toHaveBeenCalledWith("v4");
 
-    const toggle = screen.getAllByRole("checkbox")[0];
+    const toggle = screen.getByRole("button", { name: /uppercase/i });
     fireEvent.click(toggle);
     expect(onToggleOption).toHaveBeenCalled();
   });

@@ -504,6 +504,8 @@ kbd {
   align-items: center;
   min-height: 44px;
   padding: 10px 12px;
+  width: 100%;
+  text-align: left;
   background: transparent;
   border: 1px solid var(--seam);
   border-radius: var(--r-md);
