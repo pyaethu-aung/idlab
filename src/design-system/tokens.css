@@ -131,11 +131,11 @@
 [data-accent="magenta"] { --accent: oklch(0.78 0.20 340); --on-accent: oklch(0.18 0.01 340); }
 
 /* Light-mode accent overrides — lower lightness for WCAG AA contrast.
-   --on-accent uses near-black (not near-white) because the lowered accent
-   lightness (0.50–0.62) means white text only achieves ~3.5:1 while dark
-   text achieves >5:1 against all four light-mode accent values. */
+   Lime uses near-white on-accent: at L=0.52 lime's high perceptual luminance
+   means black text on the accent bg reaches only ~4:1, while near-white
+   achieves 4.7:1. Amber/cobalt/magenta still use near-black on-accent. */
 [data-theme="light"]:not([data-accent]),
-[data-theme="light"][data-accent="lime"]    { --accent: oklch(0.62 0.22 130); --on-accent: oklch(0.12 0.005 60); }
+[data-theme="light"][data-accent="lime"]    { --accent: oklch(0.52 0.22 130); --on-accent: oklch(0.97 0.003 60); }
 [data-theme="light"][data-accent="amber"]   { --accent: oklch(0.56 0.18 65);  --on-accent: oklch(0.12 0.005 60); }
 [data-theme="light"][data-accent="cobalt"]  { --accent: oklch(0.50 0.18 250); --on-accent: oklch(0.12 0.005 60); }
 [data-theme="light"][data-accent="magenta"] { --accent: oklch(0.55 0.20 340); --on-accent: oklch(0.12 0.005 60); }
