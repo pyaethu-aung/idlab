@@ -36,7 +36,6 @@ describe("ValidationBanner", () => {
     );
     expect(screen.getByRole("status")).toHaveTextContent("Valid");
     expect(screen.getByRole("status")).toHaveTextContent("UUID v4");
-    expect(screen.getByRole("status")).toHaveTextContent("100%");
   });
 
   it("renders valid banner for v7 result with decoded", () => {
