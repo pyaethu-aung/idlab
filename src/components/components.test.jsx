@@ -360,11 +360,19 @@ describe("ValidatorPropsGrid", () => {
     expect(screen.getByText(/2024-01-01 00:00:00 UTC/)).toBeInTheDocument();
   });
 
-  it("renders all 9 property labels", () => {
+  it("renders core property labels", () => {
     render(<ValidatorPropsGrid result={V4_RESULT} />);
-    ["version", "variant", "timestamp", "format", "length", "lowercase", "hyphens", "braces", "nil uuid?"].forEach((label) => {
+    ["version", "variant", "timestamp", "input", "nil uuid?"].forEach((label) => {
       expect(screen.getByText(label)).toBeInTheDocument();
     });
+  });
+
+  it("collapses format/length/casing into a single input row", () => {
+    render(<ValidatorPropsGrid result={V4_RESULT} />);
+    expect(screen.getByText(/canonical · 8-4-4-4-12 · 36 chars · lowercase/)).toBeInTheDocument();
+    expect(screen.queryByText("format")).not.toBeInTheDocument();
+    expect(screen.queryByText("length")).not.toBeInTheDocument();
+    expect(screen.queryByText("lowercase")).not.toBeInTheDocument();
   });
 });
 

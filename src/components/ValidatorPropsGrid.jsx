@@ -9,25 +9,8 @@ const VERSION_DETAIL = {
   15: "max — all ones",
 };
 
-function CheckIcon() {
-  return <span className="v-prop-icon v-prop-icon--check" aria-hidden="true">✓</span>;
-}
 function MinusIcon() {
   return <span className="v-prop-icon v-prop-icon--minus" aria-hidden="true">−</span>;
-}
-function CrossIcon() {
-  return <span className="v-prop-icon v-prop-icon--cross" aria-hidden="true">✕</span>;
-}
-
-function BoolValue({ value, trueLabel, falseLabel }) {
-  return (
-    <span className="v-prop-val-row">
-      {value ? <CheckIcon /> : falseLabel === "false" ? <CrossIcon /> : <MinusIcon />}
-      <span className={`mono v-prop-val${value ? "" : " v-prop-val--muted"}`}>
-        {value ? trueLabel : falseLabel}
-      </span>
-    </span>
-  );
 }
 
 function PropRow({ label, children, last }) {
@@ -43,21 +26,19 @@ function PropRow({ label, children, last }) {
 function ValidatorPropsGrid({ result }) {
   if (!result?.valid) return null;
 
-  const hyphenPositions = result.hasHyphens ? "positions 8,13,18,23" : "";
-  const formatStr = result.format === "canonical"
+  const versionDetail = VERSION_DETAIL[result.version] ?? `version ${result.version}`;
+
+  const formatLabel = result.format === "canonical"
     ? "canonical · 8-4-4-4-12"
     : result.format === "no-hyphens"
     ? "compact · 32 chars"
     : "braces · {8-4-4-4-12}";
-
-  const lengthStr = `${result.charCount} chars · 16 bytes`;
-  const versionDetail = VERSION_DETAIL[result.version] ?? `version ${result.version}`;
+  const inputStr = `${formatLabel} · ${result.charCount} chars · ${result.isLowercase ? "lowercase" : "uppercase"}`;
 
   return (
     <div className="v-props-section">
       <div className="v-props-head">
         <span className="v-rail-key mono">properties</span>
-        <span className="v-rail-hint mono">8 checks</span>
       </div>
       <div className="v-props-grid">
         <PropRow label="version">
@@ -82,36 +63,20 @@ function ValidatorPropsGrid({ result }) {
               </span>
             </span>
           ) : (
-            <span className="mono v-prop-val v-prop-val--muted">—</span>
+            <span className="mono v-prop-val v-prop-val--muted"><MinusIcon />—</span>
           )}
         </PropRow>
 
-        <PropRow label="format">
-          <span className="mono v-prop-val">{formatStr}</span>
-        </PropRow>
-
-        <PropRow label="length">
-          <span className="mono v-prop-val">{lengthStr}</span>
-        </PropRow>
-
-        <PropRow label="lowercase">
-          <BoolValue value={result.isLowercase} trueLabel="true" falseLabel="false" />
-        </PropRow>
-
-        <PropRow label="hyphens">
-          <BoolValue
-            value={result.hasHyphens}
-            trueLabel={`true · ${hyphenPositions}`}
-            falseLabel="false"
-          />
-        </PropRow>
-
-        <PropRow label="braces">
-          <BoolValue value={result.hasBraces} trueLabel="true" falseLabel="false" />
+        <PropRow label="input">
+          <span className="mono v-prop-val">{inputStr}</span>
         </PropRow>
 
         <PropRow label="nil uuid?" last>
-          <BoolValue value={result.isNil} trueLabel="true" falseLabel="false" />
+          <span className="v-prop-val-row">
+            <span className={`mono v-prop-val${result.isNil ? "" : " v-prop-val--muted"}`}>
+              {result.isNil ? "true" : "false"}
+            </span>
+          </span>
         </PropRow>
       </div>
     </div>
