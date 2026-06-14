@@ -7,3 +7,9 @@
 # already runs `apk upgrade --no-cache` so this will clear automatically
 # once the Alpine repo ships nghttp2 >=1.68.1.
 CVE-2026-27135
+
+# OpenSSL Heap Use-After-Free in PKCS7_verify() — fixed in libcrypto3/libssl3 3.5.7-r0.
+# Suppressed because Alpine has not yet packaged the fix; the Dockerfile
+# already runs `apk upgrade --no-cache` and explicitly installs libcrypto3/libssl3
+# so this will clear automatically once Alpine ships >=3.5.7-r0.
+CVE-2026-45447
