@@ -1045,7 +1045,7 @@ kbd {
   width: 100%;
   padding: 12px;
   background: var(--bg-2);
-  border: 1px solid var(--accent);
+  border: 1px solid var(--seam);
   border-radius: var(--r-md);
   color: var(--ink);
   font-size: var(--fs-base);
@@ -1062,8 +1062,12 @@ kbd {
   color: var(--ink-4);
 }
 
+.v-input-field:not(:placeholder-shown),
 .v-input-field:focus-visible {
   border-color: var(--accent);
+}
+
+.v-input-field:focus-visible {
   box-shadow: 0 0 0 2px color-mix(in oklch, var(--accent) 20%, transparent);
 }
 
