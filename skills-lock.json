@@ -13,6 +13,11 @@
       "skillPath": "skills/create-pr/SKILL.md",
       "computedHash": "f27c741469058a54c92561fed0bcbd9ffa6053652c65711fc12621a40b3a188d"
     },
+    "develop-web-feature": {
+      "source": "/Users/pyaethuaung/go/src/github.com/pyaethu-aung/skills/skills",
+      "sourceType": "local",
+      "computedHash": "6c64c6a22badb0085aca60f368fe9d201366caa3fc3848e3e27d74c28f100a39"
+    },
     "test-design": {
       "source": "pyaethu-aung/skills",
       "sourceType": "github",
