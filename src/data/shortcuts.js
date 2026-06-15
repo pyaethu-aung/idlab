@@ -16,8 +16,8 @@ const SHORTCUTS = [
     description: "Adjust batch size (hold Shift for ±10)",
   },
   {
-    combo: "⌥/Alt + 1 / 2 / 3 / 4 / 5",
-    description: "Switch between v4, v1, v7, v3, and v5 generators",
+    combo: "⌥/Alt + 1 … 7",
+    description: "Switch generators: v4, v1, v7, v3, v5, nil, max",
   },
   {
     combo: "⌥/Alt + U / H / B",

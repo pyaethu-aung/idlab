@@ -15,6 +15,8 @@ const { buildBatchMock, formatUuidMock, uuidGeneratorsMock, uuidNameBasedMock, m
         v1: vi.fn(() => "uuid-v1"),
         v4: vi.fn(() => "uuid-v4"),
         v7: vi.fn(() => "uuid-v7"),
+        nil: vi.fn(() => "uuid-nil"),
+        max: vi.fn(() => "uuid-max"),
       },
       uuidNameBasedMock,
       makeNameBasedGeneratorMock,
@@ -34,6 +36,7 @@ vi.mock("../utils/uuid", () => ({
   uuidGenerators: uuidGeneratorsMock,
   uuidNameBased: uuidNameBasedMock,
   makeNameBasedGenerator: makeNameBasedGeneratorMock,
+  isConstantVersion: (version) => version === "nil" || version === "max",
 }));
 
 import useUuidGenerator from "./useUuidGenerator";
@@ -230,6 +233,31 @@ describe("useUuidGenerator", () => {
 
     act(() => { result.current.handleVersionChange("v7"); });
     expect(result.current.isNameBased).toBe(false);
+  });
+
+  it("nil/max are fixed but not name-based, and lock the batch to one row", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    act(() => { result.current.handleVersionChange("nil"); });
+    expect(result.current.selectedVersion).toBe("nil");
+    expect(result.current.isNameBased).toBe(false);
+    expect(result.current.isFixed).toBe(true);
+    expect(result.current.visibleBatchSize).toBe(1);
+    expect(uuidGeneratorsMock.nil).toHaveBeenCalled();
+
+    act(() => { result.current.handleVersionChange("max"); });
+    expect(result.current.isFixed).toBe(true);
+    expect(result.current.visibleBatchSize).toBe(1);
+    expect(uuidGeneratorsMock.max).toHaveBeenCalled();
+  });
+
+  it("does not invoke the name-based generator for sentinel versions", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+    makeNameBasedGeneratorMock.mockClear();
+
+    act(() => { result.current.handleVersionChange("max"); });
+
+    expect(makeNameBasedGeneratorMock).not.toHaveBeenCalled();
   });
 
   it("downloads batches and resets busy state", async () => {
