@@ -1,4 +1,14 @@
-import { v1 as uuidV1, v3 as uuidV3, v4 as uuidV4, v5 as uuidV5, v7 as uuidV7 } from "uuid";
+import { MAX, NIL, v1 as uuidV1, v3 as uuidV3, v4 as uuidV4, v5 as uuidV5, v7 as uuidV7 } from "uuid";
+
+// RFC 9562 special-form UUIDs. Fall back to the literal strings on the rare
+// chance the package does not export them, so the generator never goes blank.
+export const NIL_UUID = NIL ?? "00000000-0000-0000-0000-000000000000";
+export const MAX_UUID = MAX ?? "ffffffff-ffff-ffff-ffff-ffffffffffff";
+
+// Versions that produce one fixed, deterministic value: the name-based pair
+// (v3/v5) and the RFC 9562 sentinels (nil/max). Used to lock batch + regen.
+export const constantVersions = ["nil", "max"];
+export const isConstantVersion = (version) => constantVersions.includes(version);
 
 export const defaultOptions = {
   uppercase: false,
@@ -52,6 +62,18 @@ export const versionChoices = [
     badge: "Name · SHA-1",
     detail: "Deterministic UUID from a namespace and name pair using SHA-1.",
   },
+  {
+    id: "nil",
+    title: "Nil",
+    badge: "All zeroes",
+    detail: "The all-zero sentinel UUID for empty or default values.",
+  },
+  {
+    id: "max",
+    title: "Max",
+    badge: "All ones",
+    detail: "The all-ones sentinel UUID (RFC 9562) for upper-bound values.",
+  },
 ];
 
 export const optionDescriptors = [
@@ -82,6 +104,8 @@ export const uuidGenerators = {
 
     return typeof uuidV4 === "function" ? uuidV4() : createUuid();
   },
+  nil: () => NIL_UUID,
+  max: () => MAX_UUID,
 };
 
 export const buildBatch = (count, generator = uuidGenerators.v4) =>

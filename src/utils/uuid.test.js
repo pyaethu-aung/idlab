@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { buildBatch, createUuid, defaultNamespace, formatUuid, makeNameBasedGenerator, namespacePresets, uuidNameBased } from "./uuid";
+import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, createUuid, defaultNamespace, formatUuid, isConstantVersion, makeNameBasedGenerator, namespacePresets, uuidGenerators, uuidNameBased } from "./uuid";
 
 describe("buildBatch", () => {
   it("creates the requested number of UUIDs", () => {
@@ -78,6 +78,49 @@ describe("makeNameBasedGenerator", () => {
     const genV3 = makeNameBasedGenerator(uuidNameBased.v3, defaultNamespace, "hello");
     const genV5 = makeNameBasedGenerator(uuidNameBased.v5, defaultNamespace, "hello");
     expect(genV3()).not.toBe(genV5());
+  });
+});
+
+describe("sentinel UUIDs", () => {
+  it("NIL_UUID is the all-zero RFC 9562 sentinel", () => {
+    expect(NIL_UUID).toBe("00000000-0000-0000-0000-000000000000");
+  });
+
+  it("MAX_UUID is the all-one RFC 9562 sentinel", () => {
+    expect(MAX_UUID).toBe("ffffffff-ffff-ffff-ffff-ffffffffffff");
+  });
+
+  it("uuidGenerators.nil / .max return the constants", () => {
+    expect(uuidGenerators.nil()).toBe(NIL_UUID);
+    expect(uuidGenerators.max()).toBe(MAX_UUID);
+  });
+
+  it("sentinel generators are deterministic across a batch", () => {
+    const batch = buildBatch(5, uuidGenerators.max);
+    expect(batch).toEqual(Array(5).fill(MAX_UUID));
+  });
+
+  it("format options still apply to sentinels", () => {
+    const formatted = formatUuid(MAX_UUID, {
+      uppercase: true,
+      trimHyphens: true,
+      wrapBraces: true,
+    });
+    expect(formatted).toBe("{FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}");
+  });
+});
+
+describe("isConstantVersion", () => {
+  it("is true only for the sentinel versions", () => {
+    expect(constantVersions).toEqual(["nil", "max"]);
+    expect(isConstantVersion("nil")).toBe(true);
+    expect(isConstantVersion("max")).toBe(true);
+  });
+
+  it("is false for generated and name-based versions", () => {
+    ["v1", "v3", "v4", "v5", "v7", "", undefined].forEach((v) => {
+      expect(isConstantVersion(v)).toBe(false);
+    });
   });
 });
 

@@ -4,6 +4,7 @@ import {
   defaultNamespace,
   defaultOptions,
   formatUuid,
+  isConstantVersion,
   makeNameBasedGenerator,
   uuidGenerators,
   uuidNameBased,
@@ -36,6 +37,10 @@ function useUuidGenerator() {
   );
 
   const isNameBased = selectedVersion === "v3" || selectedVersion === "v5";
+  const isConstant = isConstantVersion(selectedVersion);
+  // Both name-based and sentinel versions yield one deterministic value, so
+  // batch sizing and regeneration are locked off for either.
+  const isFixed = isNameBased || isConstant;
 
   const generatorForVersion = useMemo(() => {
     if (isNameBased) {
@@ -44,7 +49,7 @@ function useUuidGenerator() {
     return uuidGenerators[selectedVersion] ?? uuidGenerators.v4;
   }, [selectedVersion, isNameBased, namespace, name]);
 
-  const visibleBatchSize = isNameBased ? 1 : Math.min(batchSize, 20);
+  const visibleBatchSize = isFixed ? 1 : Math.min(batchSize, 20);
 
   useEffect(() => {
     return () => {
@@ -82,18 +87,19 @@ function useUuidGenerator() {
       clearTimeout(refreshTimer.current);
     }
     setIsRefreshing(true);
-    syncVisibleBatch(isNameBased ? 1 : batchSize);
+    syncVisibleBatch(isFixed ? 1 : batchSize);
     refreshTimer.current = setTimeout(() => setIsRefreshing(false), 400);
-  }, [syncVisibleBatch, isNameBased, batchSize]);
+  }, [syncVisibleBatch, isFixed, batchSize]);
 
   const handleVersionChange = useCallback(
     (versionId) => {
       setSelectedVersion(versionId);
       const nextIsNameBased = versionId === "v3" || versionId === "v5";
+      const nextIsFixed = nextIsNameBased || isConstantVersion(versionId);
       const nextGenerator = nextIsNameBased
         ? makeNameBasedGenerator(uuidNameBased[versionId], namespace, name)
         : (uuidGenerators[versionId] ?? uuidGenerators.v4);
-      syncVisibleBatch(nextIsNameBased ? 1 : batchSize, nextGenerator);
+      syncVisibleBatch(nextIsFixed ? 1 : batchSize, nextGenerator);
       stageFeedback(`Switched to UUID ${versionId.toUpperCase()}`);
     },
     [batchSize, namespace, name, syncVisibleBatch, stageFeedback]
@@ -198,16 +204,16 @@ function useUuidGenerator() {
   }, []);
 
   const commitBatchSize = useCallback((explicitCount) => {
-    syncVisibleBatch(isNameBased ? 1 : (explicitCount ?? batchSize));
-  }, [syncVisibleBatch, isNameBased, batchSize]);
+    syncVisibleBatch(isFixed ? 1 : (explicitCount ?? batchSize));
+  }, [syncVisibleBatch, isFixed, batchSize]);
 
   const setBatchSizeAndCommit = useCallback(
     (nextCount) => {
       const limited = clamp(nextCount, 1, 200);
       setBatchSize(limited);
-      syncVisibleBatch(isNameBased ? 1 : limited);
+      syncVisibleBatch(isFixed ? 1 : limited);
     },
-    [syncVisibleBatch, isNameBased]
+    [syncVisibleBatch, isFixed]
   );
 
   return {
@@ -217,6 +223,7 @@ function useUuidGenerator() {
     visibleBatchSize,
     selectedVersion,
     isNameBased,
+    isFixed,
     namespace,
     name,
     options,
