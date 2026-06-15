@@ -66,7 +66,7 @@ function UuidList({
   uuids,
   version,
   opts,
-  isNameBased,
+  isFixed,
   copiedUuid,
   onCopy,
   onCopyAll,
@@ -102,9 +102,9 @@ function UuidList({
             type="button"
             className="cta-btn mono"
             onClick={onRegen}
-            aria-label={isNameBased ? "Regenerate (output is deterministic)" : "Regenerate"}
+            aria-label={isFixed ? "Regenerate (output is deterministic)" : "Regenerate"}
             aria-busy={refreshing}
-            disabled={isNameBased}
+            disabled={isFixed}
           >
             <span className={refreshing ? "spin" : ""} aria-hidden="true">
               <RefreshIcon />

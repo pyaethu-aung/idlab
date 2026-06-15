@@ -38,6 +38,7 @@ function App() {
     visibleBatchSize,
     selectedVersion,
     isNameBased,
+    isFixed,
     namespace,
     name,
     options,
@@ -107,6 +108,7 @@ function App() {
               visibleBatchSize={visibleBatchSize}
               selectedVersion={selectedVersion}
               isNameBased={isNameBased}
+              isFixed={isFixed}
               namespace={namespace}
               name={name}
               options={options}
@@ -123,7 +125,7 @@ function App() {
               version={selectedVersion}
               batch={batchSize}
               opts={options}
-              isNameBased={isNameBased}
+              isFixed={isFixed}
               copiedUuid={copiedUuid}
               onCopy={handleCopy}
               onCopyAll={copyAll}

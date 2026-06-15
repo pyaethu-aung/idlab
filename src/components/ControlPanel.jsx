@@ -12,8 +12,10 @@ const VERSIONS = [
   { id: "v4", label: "v4", title: "Random",       desc: "Web Crypto entropy, the everyday workhorse." },
   { id: "v1", label: "v1", title: "Time + Node",  desc: "Timestamp-first, sortable for logs and traces." },
   { id: "v7", label: "v7", title: "Unix Time",    desc: "Time-prefixed hybrid for distributed systems." },
-  { id: "v3", label: "v3", title: "Name · MD5",   desc: "Deterministic from namespace + name using MD5." },
-  { id: "v5", label: "v5", title: "Name · SHA-1", desc: "Deterministic from namespace + name using SHA-1." },
+  { id: "v3",  label: "v3",  title: "Name · MD5",   desc: "Deterministic from namespace + name using MD5." },
+  { id: "v5",  label: "v5",  title: "Name · SHA-1", desc: "Deterministic from namespace + name using SHA-1." },
+  { id: "nil", label: "nil", title: "All zeroes",   desc: "Sentinel UUID for empty or default values." },
+  { id: "max", label: "max", title: "All ones",     desc: "RFC 9562 sentinel for upper-bound values." },
 ];
 
 const FORMAT_OPTS = [
@@ -29,6 +31,7 @@ function ControlPanel({
   visibleBatchSize,
   selectedVersion,
   isNameBased,
+  isFixed,
   namespace,
   name,
   options,
@@ -45,7 +48,7 @@ function ControlPanel({
       <div className="rail-section">
         <div className="rail-head">
           <span className="rail-key mono">version</span>
-          <span className="rail-hint mono">{KEY_OPT}1·{KEY_OPT}2·{KEY_OPT}3·{KEY_OPT}4·{KEY_OPT}5</span>
+          <span className="rail-hint mono">{KEY_OPT}1–7</span>
         </div>
         <div className="version-stack">
           {VERSIONS.map((v) => {
@@ -112,7 +115,7 @@ function ControlPanel({
       )}
 
       {/* Batch */}
-      <div className={`rail-section${isNameBased ? " is-disabled" : ""}`} aria-disabled={isNameBased || undefined}>
+      <div className={`rail-section${isFixed ? " is-disabled" : ""}`} aria-disabled={isFixed || undefined}>
         <div className="rail-head">
           <span className="rail-key mono">batch</span>
           <span className="rail-hint mono">{KEY_OPT}↑/↓</span>
@@ -137,10 +140,10 @@ function ControlPanel({
             if (commitKeys.includes(e.key)) onBatchCommit();
           }}
           className="rail-range"
-          disabled={isNameBased}
+          disabled={isFixed}
         />
         <div className="batch-foot mono">
-          {isNameBased
+          {isFixed
             ? "fixed output · 1 UUID"
             : `showing ${visibleBatchSize} · download up to ${batchSize}`}
         </div>
@@ -152,7 +155,7 @@ function ControlPanel({
               className={`preset-chip mono${batchSize === n ? " is-active" : ""}`}
               onClick={() => { onBatchChange(n); onBatchCommit?.(n); }}
               aria-pressed={batchSize === n}
-              disabled={isNameBased}
+              disabled={isFixed}
             >
               {n}
             </button>
