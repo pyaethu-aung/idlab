@@ -71,10 +71,10 @@ function useUuidGenerator() {
 
   const syncVisibleBatch = useCallback(
     (count = batchSize, generator = generatorForVersion) => {
-      const effectiveCount = isNameBased ? 1 : clamp(count, 1, 20);
-      setRawUuids(buildBatch(effectiveCount, generator));
+      const limited = clamp(count, 1, 20);
+      setRawUuids(buildBatch(limited, generator));
     },
-    [batchSize, generatorForVersion, isNameBased]
+    [batchSize, generatorForVersion]
   );
 
   const regenerate = useCallback(() => {
@@ -82,9 +82,9 @@ function useUuidGenerator() {
       clearTimeout(refreshTimer.current);
     }
     setIsRefreshing(true);
-    syncVisibleBatch();
+    syncVisibleBatch(isNameBased ? 1 : batchSize);
     refreshTimer.current = setTimeout(() => setIsRefreshing(false), 400);
-  }, [syncVisibleBatch]);
+  }, [syncVisibleBatch, isNameBased, batchSize]);
 
   const handleVersionChange = useCallback(
     (versionId) => {
@@ -198,16 +198,16 @@ function useUuidGenerator() {
   }, []);
 
   const commitBatchSize = useCallback((explicitCount) => {
-    syncVisibleBatch(explicitCount ?? batchSize);
-  }, [syncVisibleBatch, batchSize]);
+    syncVisibleBatch(isNameBased ? 1 : (explicitCount ?? batchSize));
+  }, [syncVisibleBatch, isNameBased, batchSize]);
 
   const setBatchSizeAndCommit = useCallback(
     (nextCount) => {
       const limited = clamp(nextCount, 1, 200);
       setBatchSize(limited);
-      syncVisibleBatch(limited);
+      syncVisibleBatch(isNameBased ? 1 : limited);
     },
-    [syncVisibleBatch]
+    [syncVisibleBatch, isNameBased]
   );
 
   return {
