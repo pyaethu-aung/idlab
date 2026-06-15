@@ -113,6 +113,16 @@ function useKeyboardShortcuts({
           handleVersionChange("v7");
           return;
         }
+        if (code === "Digit4") {
+          event.preventDefault();
+          handleVersionChange("v3");
+          return;
+        }
+        if (code === "Digit5") {
+          event.preventDefault();
+          handleVersionChange("v5");
+          return;
+        }
         if (code === "KeyU") {
           event.preventDefault();
           toggleOption("uppercase");

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { buildBatch, createUuid, formatUuid } from "./uuid";
+import { buildBatch, createUuid, defaultNamespace, formatUuid, makeNameBasedGenerator, namespacePresets, uuidNameBased } from "./uuid";
 
 describe("buildBatch", () => {
   it("creates the requested number of UUIDs", () => {
@@ -32,6 +32,52 @@ describe("formatUuid", () => {
     });
 
     expect(formatted).toBe("{123456789ABCDEF0}");
+  });
+});
+
+describe("namespacePresets", () => {
+  it("has exactly four RFC 4122 namespace entries", () => {
+    expect(namespacePresets).toHaveLength(4);
+    expect(namespacePresets.map((n) => n.id)).toEqual(["dns", "url", "oid", "x500"]);
+  });
+
+  it("defaultNamespace is the DNS entry", () => {
+    expect(defaultNamespace).toBe(namespacePresets[0].value);
+  });
+});
+
+describe("makeNameBasedGenerator", () => {
+  it("returns a zero-arg function that calls the version function with (name, namespace)", () => {
+    const vFn = vi.fn().mockReturnValue("det-uuid");
+    const gen = makeNameBasedGenerator(vFn, "ns-uuid", "my-name");
+
+    expect(typeof gen).toBe("function");
+    const result = gen();
+    expect(vFn).toHaveBeenCalledWith("my-name", "ns-uuid");
+    expect(result).toBe("det-uuid");
+  });
+
+  it("is deterministic for the same inputs", () => {
+    const gen = makeNameBasedGenerator(uuidNameBased.v5, defaultNamespace, "hello");
+    expect(gen()).toBe(gen());
+  });
+
+  it("produces different UUIDs for different names", () => {
+    const genA = makeNameBasedGenerator(uuidNameBased.v5, defaultNamespace, "foo");
+    const genB = makeNameBasedGenerator(uuidNameBased.v5, defaultNamespace, "bar");
+    expect(genA()).not.toBe(genB());
+  });
+
+  it("produces different UUIDs for different namespaces with same name", () => {
+    const genA = makeNameBasedGenerator(uuidNameBased.v5, namespacePresets[0].value, "test");
+    const genB = makeNameBasedGenerator(uuidNameBased.v5, namespacePresets[1].value, "test");
+    expect(genA()).not.toBe(genB());
+  });
+
+  it("v3 and v5 produce different UUIDs for the same inputs", () => {
+    const genV3 = makeNameBasedGenerator(uuidNameBased.v3, defaultNamespace, "hello");
+    const genV5 = makeNameBasedGenerator(uuidNameBased.v5, defaultNamespace, "hello");
+    expect(genV3()).not.toBe(genV5());
   });
 });
 

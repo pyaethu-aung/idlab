@@ -1,16 +1,25 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const { buildBatchMock, formatUuidMock, uuidGeneratorsMock } = vi.hoisted(
-  () => ({
-    buildBatchMock: vi.fn(),
-    formatUuidMock: vi.fn(),
-    uuidGeneratorsMock: {
-      v1: vi.fn(() => "uuid-v1"),
-      v4: vi.fn(() => "uuid-v4"),
-      v7: vi.fn(() => "uuid-v7"),
-    },
-  })
+const DNS_NS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+const URL_NS = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
+
+const { buildBatchMock, formatUuidMock, uuidGeneratorsMock, uuidNameBasedMock, makeNameBasedGeneratorMock } = vi.hoisted(
+  () => {
+    const uuidNameBasedMock = { v3: vi.fn(() => "uuid-v3"), v5: vi.fn(() => "uuid-v5") };
+    const makeNameBasedGeneratorMock = vi.fn((vFn, ns, n) => () => vFn(n, ns));
+    return {
+      buildBatchMock: vi.fn(),
+      formatUuidMock: vi.fn(),
+      uuidGeneratorsMock: {
+        v1: vi.fn(() => "uuid-v1"),
+        v4: vi.fn(() => "uuid-v4"),
+        v7: vi.fn(() => "uuid-v7"),
+      },
+      uuidNameBasedMock,
+      makeNameBasedGeneratorMock,
+    };
+  }
 );
 
 vi.mock("../utils/uuid", () => ({
@@ -19,9 +28,12 @@ vi.mock("../utils/uuid", () => ({
     trimHyphens: false,
     wrapBraces: false,
   },
+  defaultNamespace: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
   buildBatch: buildBatchMock,
   formatUuid: formatUuidMock,
   uuidGenerators: uuidGeneratorsMock,
+  uuidNameBased: uuidNameBasedMock,
+  makeNameBasedGenerator: makeNameBasedGeneratorMock,
 }));
 
 import useUuidGenerator from "./useUuidGenerator";
@@ -45,6 +57,9 @@ describe("useUuidGenerator", () => {
     Object.values(uuidGeneratorsMock).forEach((fn) =>
       fn.mockImplementation(() => `uuid-${nextId++}`)
     );
+    Object.values(uuidNameBasedMock).forEach((fn) =>
+      fn.mockImplementation((n, ns) => `named-${n}-${ns}-${nextId++}`)
+    );
     buildBatchMock.mockImplementation(
       (count, generator = uuidGeneratorsMock.v4) =>
         Array.from({ length: count }, () => generator())
@@ -55,6 +70,7 @@ describe("useUuidGenerator", () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    makeNameBasedGeneratorMock.mockImplementation((vFn, ns, n) => () => vFn(n, ns));
     vi.restoreAllMocks();
     vi.useRealTimers();
     if (originalClipboardDescriptor) {
@@ -130,6 +146,90 @@ describe("useUuidGenerator", () => {
     expect(clipboardSpy).toHaveBeenCalledWith(value);
     expect(result.current.copiedUuid).toBe(value);
     expect(result.current.feedback).toBe("Copied to clipboard");
+  });
+
+  it("switches to v3 and exposes isNameBased", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    act(() => {
+      result.current.handleVersionChange("v3");
+    });
+
+    expect(result.current.selectedVersion).toBe("v3");
+    expect(result.current.isNameBased).toBe(true);
+    expect(makeNameBasedGeneratorMock).toHaveBeenCalledWith(
+      uuidNameBasedMock.v3,
+      DNS_NS,
+      ""
+    );
+  });
+
+  it("switches to v5 and uses makeNameBasedGenerator", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    act(() => {
+      result.current.handleVersionChange("v5");
+    });
+
+    expect(result.current.selectedVersion).toBe("v5");
+    expect(result.current.isNameBased).toBe(true);
+    expect(makeNameBasedGeneratorMock).toHaveBeenCalledWith(
+      uuidNameBasedMock.v5,
+      DNS_NS,
+      ""
+    );
+  });
+
+  it("handleNamespaceChange updates namespace and calls makeNameBasedGenerator", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    act(() => {
+      result.current.handleVersionChange("v5");
+    });
+    makeNameBasedGeneratorMock.mockClear();
+
+    act(() => {
+      result.current.handleNamespaceChange(URL_NS);
+    });
+
+    expect(result.current.namespace).toBe(URL_NS);
+    expect(makeNameBasedGeneratorMock).toHaveBeenCalledWith(
+      uuidNameBasedMock.v5,
+      URL_NS,
+      ""
+    );
+  });
+
+  it("handleNameChange updates name and calls makeNameBasedGenerator", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    act(() => {
+      result.current.handleVersionChange("v3");
+    });
+    makeNameBasedGeneratorMock.mockClear();
+
+    act(() => {
+      result.current.handleNameChange("example.com");
+    });
+
+    expect(result.current.name).toBe("example.com");
+    expect(makeNameBasedGeneratorMock).toHaveBeenCalledWith(
+      uuidNameBasedMock.v3,
+      DNS_NS,
+      "example.com"
+    );
+  });
+
+  it("isNameBased is false for v1, v4, v7", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    expect(result.current.isNameBased).toBe(false);
+
+    act(() => { result.current.handleVersionChange("v1"); });
+    expect(result.current.isNameBased).toBe(false);
+
+    act(() => { result.current.handleVersionChange("v7"); });
+    expect(result.current.isNameBased).toBe(false);
   });
 
   it("downloads batches and resets busy state", async () => {

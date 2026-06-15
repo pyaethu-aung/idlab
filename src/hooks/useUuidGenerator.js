@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   buildBatch,
+  defaultNamespace,
   defaultOptions,
   formatUuid,
+  makeNameBasedGenerator,
   uuidGenerators,
+  uuidNameBased,
 } from "../utils/uuid";
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -12,6 +15,8 @@ const initialBatchSize = 8;
 function useUuidGenerator() {
   const [batchSize, setBatchSize] = useState(initialBatchSize);
   const [selectedVersion, setSelectedVersion] = useState("v4");
+  const [namespace, setNamespace] = useState(defaultNamespace);
+  const [name, setName] = useState("");
   const [options, setOptions] = useState(defaultOptions);
   const [rawUuids, setRawUuids] = useState(() => buildBatch(initialBatchSize));
   const [copiedUuid, setCopiedUuid] = useState("");
@@ -30,12 +35,16 @@ function useUuidGenerator() {
     [rawUuids, options]
   );
 
-  const generatorForVersion = useMemo(
-    () => uuidGenerators[selectedVersion] ?? uuidGenerators.v4,
-    [selectedVersion]
-  );
+  const isNameBased = selectedVersion === "v3" || selectedVersion === "v5";
 
-  const visibleBatchSize = Math.min(batchSize, 20);
+  const generatorForVersion = useMemo(() => {
+    if (isNameBased) {
+      return makeNameBasedGenerator(uuidNameBased[selectedVersion], namespace, name);
+    }
+    return uuidGenerators[selectedVersion] ?? uuidGenerators.v4;
+  }, [selectedVersion, isNameBased, namespace, name]);
+
+  const visibleBatchSize = isNameBased ? 1 : Math.min(batchSize, 20);
 
   useEffect(() => {
     return () => {
@@ -62,10 +71,10 @@ function useUuidGenerator() {
 
   const syncVisibleBatch = useCallback(
     (count = batchSize, generator = generatorForVersion) => {
-      const limited = clamp(count, 1, 20);
-      setRawUuids(buildBatch(limited, generator));
+      const effectiveCount = isNameBased ? 1 : clamp(count, 1, 20);
+      setRawUuids(buildBatch(effectiveCount, generator));
     },
-    [batchSize, generatorForVersion]
+    [batchSize, generatorForVersion, isNameBased]
   );
 
   const regenerate = useCallback(() => {
@@ -80,11 +89,30 @@ function useUuidGenerator() {
   const handleVersionChange = useCallback(
     (versionId) => {
       setSelectedVersion(versionId);
-      const nextGenerator = uuidGenerators[versionId] ?? uuidGenerators.v4;
-      syncVisibleBatch(batchSize, nextGenerator);
+      const nextIsNameBased = versionId === "v3" || versionId === "v5";
+      const nextGenerator = nextIsNameBased
+        ? makeNameBasedGenerator(uuidNameBased[versionId], namespace, name)
+        : (uuidGenerators[versionId] ?? uuidGenerators.v4);
+      syncVisibleBatch(nextIsNameBased ? 1 : batchSize, nextGenerator);
       stageFeedback(`Switched to UUID ${versionId.toUpperCase()}`);
     },
-    [batchSize, syncVisibleBatch, stageFeedback]
+    [batchSize, namespace, name, syncVisibleBatch, stageFeedback]
+  );
+
+  const handleNamespaceChange = useCallback(
+    (nextNamespace) => {
+      setNamespace(nextNamespace);
+      syncVisibleBatch(1, makeNameBasedGenerator(uuidNameBased[selectedVersion], nextNamespace, name));
+    },
+    [name, selectedVersion, syncVisibleBatch]
+  );
+
+  const handleNameChange = useCallback(
+    (nextName) => {
+      setName(nextName);
+      syncVisibleBatch(1, makeNameBasedGenerator(uuidNameBased[selectedVersion], namespace, nextName));
+    },
+    [namespace, selectedVersion, syncVisibleBatch]
   );
 
   const handleCopy = useCallback(
@@ -188,6 +216,9 @@ function useUuidGenerator() {
     setBatchSizeAndCommit,
     visibleBatchSize,
     selectedVersion,
+    isNameBased,
+    namespace,
+    name,
     options,
     formattedUuids,
     copiedUuid,
@@ -199,6 +230,8 @@ function useUuidGenerator() {
     handleCopy,
     copyAll,
     handleVersionChange,
+    handleNamespaceChange,
+    handleNameChange,
     toggleOption,
     downloadList,
     commitBatchSize,

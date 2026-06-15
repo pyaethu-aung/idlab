@@ -37,6 +37,9 @@ function App() {
     setBatchSizeAndCommit,
     visibleBatchSize,
     selectedVersion,
+    isNameBased,
+    namespace,
+    name,
     options,
     formattedUuids,
     copiedUuid,
@@ -46,6 +49,8 @@ function App() {
     handleCopy,
     copyAll,
     handleVersionChange,
+    handleNamespaceChange,
+    handleNameChange,
     toggleOption,
     downloadList,
     commitBatchSize,
@@ -101,10 +106,15 @@ function App() {
               batchSize={batchSize}
               visibleBatchSize={visibleBatchSize}
               selectedVersion={selectedVersion}
+              isNameBased={isNameBased}
+              namespace={namespace}
+              name={name}
               options={options}
               onBatchChange={setBatchSize}
               onBatchCommit={commitBatchSize}
               onVersionChange={handleVersionChange}
+              onNamespaceChange={handleNamespaceChange}
+              onNameChange={handleNameChange}
               onToggleOption={toggleOption}
             />
 
@@ -113,6 +123,7 @@ function App() {
               version={selectedVersion}
               batch={batchSize}
               opts={options}
+              isNameBased={isNameBased}
               copiedUuid={copiedUuid}
               onCopy={handleCopy}
               onCopyAll={copyAll}

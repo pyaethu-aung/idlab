@@ -1,9 +1,19 @@
 import { KEY_OPT } from "../utils/platform";
+import { namespacePresets } from "../utils/uuid";
+
+const NS_PLACEHOLDERS = {
+  [namespacePresets[0].value]: "e.g. example.com",
+  [namespacePresets[1].value]: "e.g. https://example.com",
+  [namespacePresets[2].value]: "e.g. 1.2.840.113549",
+  [namespacePresets[3].value]: "e.g. cn=John,dc=example,dc=com",
+};
 
 const VERSIONS = [
-  { id: "v4", label: "v4", title: "Random",      desc: "Web Crypto entropy, the everyday workhorse." },
-  { id: "v1", label: "v1", title: "Time + Node", desc: "Timestamp-first, sortable for logs and traces." },
-  { id: "v7", label: "v7", title: "Unix Time",   desc: "Time-prefixed hybrid for distributed systems." },
+  { id: "v4", label: "v4", title: "Random",       desc: "Web Crypto entropy, the everyday workhorse." },
+  { id: "v1", label: "v1", title: "Time + Node",  desc: "Timestamp-first, sortable for logs and traces." },
+  { id: "v7", label: "v7", title: "Unix Time",    desc: "Time-prefixed hybrid for distributed systems." },
+  { id: "v3", label: "v3", title: "Name · MD5",   desc: "Deterministic from namespace + name using MD5." },
+  { id: "v5", label: "v5", title: "Name · SHA-1", desc: "Deterministic from namespace + name using SHA-1." },
 ];
 
 const FORMAT_OPTS = [
@@ -18,10 +28,15 @@ function ControlPanel({
   batchSize,
   visibleBatchSize,
   selectedVersion,
+  isNameBased,
+  namespace,
+  name,
   options,
   onBatchChange,
   onBatchCommit,
   onVersionChange,
+  onNamespaceChange,
+  onNameChange,
   onToggleOption,
 }) {
   return (
@@ -30,7 +45,7 @@ function ControlPanel({
       <div className="rail-section">
         <div className="rail-head">
           <span className="rail-key mono">version</span>
-          <span className="rail-hint mono">{KEY_OPT}1 · {KEY_OPT}2 · {KEY_OPT}3</span>
+          <span className="rail-hint mono">{KEY_OPT}1·{KEY_OPT}2·{KEY_OPT}3·{KEY_OPT}4·{KEY_OPT}5</span>
         </div>
         <div className="version-stack">
           {VERSIONS.map((v) => {
@@ -55,8 +70,49 @@ function ControlPanel({
         </div>
       </div>
 
+      {/* Namespace + Name (v3/v5 only) */}
+      {isNameBased && (
+        <div className="rail-section">
+          <div className="rail-head">
+            <span className="rail-key mono">namespace</span>
+          </div>
+          <div className="ns-grid" role="group" aria-label="Namespace preset">
+            {namespacePresets.map((ns) => (
+              <button
+                key={ns.id}
+                type="button"
+                className={`ns-chip mono${namespace === ns.value ? " is-active" : ""}`}
+                onClick={() => onNamespaceChange(ns.value)}
+                aria-pressed={namespace === ns.value}
+              >
+                {ns.label}
+              </button>
+            ))}
+          </div>
+          <div className="rail-head name-section-head">
+            <span className="rail-key mono">name</span>
+          </div>
+          <input
+            type="text"
+            className="name-input mono"
+            placeholder={NS_PLACEHOLDERS[namespace] ?? "e.g. example.com"}
+            value={name}
+            onChange={(e) => onNameChange(e.target.value)}
+            aria-label="Name for deterministic UUID generation"
+            aria-describedby={name.trim() === "" ? "name-empty-hint" : undefined}
+            spellCheck={false}
+            autoComplete="off"
+          />
+          {name.trim() === "" && (
+            <p id="name-empty-hint" className="name-empty-hint mono" aria-live="polite">
+              Empty name — output will repeat until you type a value
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Batch */}
-      <div className="rail-section">
+      <div className={`rail-section${isNameBased ? " is-disabled" : ""}`} aria-disabled={isNameBased || undefined}>
         <div className="rail-head">
           <span className="rail-key mono">batch</span>
           <span className="rail-hint mono">{KEY_OPT}↑/↓</span>
@@ -81,9 +137,12 @@ function ControlPanel({
             if (commitKeys.includes(e.key)) onBatchCommit();
           }}
           className="rail-range"
+          disabled={isNameBased}
         />
         <div className="batch-foot mono">
-          showing {visibleBatchSize} · download up to {batchSize}
+          {isNameBased
+            ? "fixed output · 1 UUID"
+            : `showing ${visibleBatchSize} · download up to ${batchSize}`}
         </div>
         <div className="batch-presets">
           {BATCH_PRESETS.map((n) => (
@@ -93,6 +152,7 @@ function ControlPanel({
               className={`preset-chip mono${batchSize === n ? " is-active" : ""}`}
               onClick={() => { onBatchChange(n); onBatchCommit?.(n); }}
               aria-pressed={batchSize === n}
+              disabled={isNameBased}
             >
               {n}
             </button>

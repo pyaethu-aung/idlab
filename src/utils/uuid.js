@@ -1,10 +1,24 @@
-import { v1 as uuidV1, v4 as uuidV4, v7 as uuidV7 } from "uuid";
+import { v1 as uuidV1, v3 as uuidV3, v4 as uuidV4, v5 as uuidV5, v7 as uuidV7 } from "uuid";
 
 export const defaultOptions = {
   uppercase: false,
   trimHyphens: false,
   wrapBraces: false,
 };
+
+export const namespacePresets = [
+  { id: "dns",  label: "DNS",   value: "6ba7b810-9dad-11d1-80b4-00c04fd430c8" },
+  { id: "url",  label: "URL",   value: "6ba7b811-9dad-11d1-80b4-00c04fd430c8" },
+  { id: "oid",  label: "OID",   value: "6ba7b812-9dad-11d1-80b4-00c04fd430c8" },
+  { id: "x500", label: "X.500", value: "6ba7b814-9dad-11d1-80b4-00c04fd430c8" },
+];
+
+export const defaultNamespace = namespacePresets[0].value;
+
+export const uuidNameBased = { v3: uuidV3, v5: uuidV5 };
+
+export const makeNameBasedGenerator = (versionFn, namespace, name) =>
+  () => versionFn(name, namespace);
 
 export const versionChoices = [
   {
@@ -25,6 +39,18 @@ export const versionChoices = [
     badge: "Unix time",
     detail:
       "Modern hybrid using time bits plus randomness for distributed systems.",
+  },
+  {
+    id: "v3",
+    title: "Version 3",
+    badge: "Name · MD5",
+    detail: "Deterministic UUID from a namespace and name pair using MD5.",
+  },
+  {
+    id: "v5",
+    title: "Version 5",
+    badge: "Name · SHA-1",
+    detail: "Deterministic UUID from a namespace and name pair using SHA-1.",
   },
 ];
 
