@@ -8,6 +8,7 @@ import ThemeToggle from "./ThemeToggle";
 import ToolbarNav from "./ToolbarNav";
 import UuidList from "./UuidList";
 import ValidationBanner from "./ValidationBanner";
+import ValidatorConvert from "./ValidatorConvert";
 import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorSegCard from "./ValidatorSegCard";
 
@@ -403,5 +404,39 @@ describe("ToolbarNav", () => {
     render(<ToolbarNav activeTab="generator" onTabChange={onTabChange} />);
     await user.click(screen.getByRole("button", { name: "Generator" }));
     expect(onTabChange).not.toHaveBeenCalled();
+  });
+});
+
+describe("ValidatorConvert", () => {
+  const CONVERSION = {
+    from: 1,
+    to: 6,
+    value: "1d19dad6-ba7b-6810-80b4-00c04fd430c8",
+  };
+
+  it("renders nothing when there is no conversion", () => {
+    const { container } = render(
+      <ValidatorConvert conversion={null} copied={false} onCopy={() => {}} />
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
+  it("shows the route and converted value", () => {
+    render(<ValidatorConvert conversion={CONVERSION} copied={false} onCopy={() => {}} />);
+    expect(screen.getByText("v1 → v6")).toBeInTheDocument();
+    expect(screen.getByText(CONVERSION.value)).toBeInTheDocument();
+  });
+
+  it("calls onCopy when the copy button is clicked", async () => {
+    const onCopy = vi.fn();
+    const user = userEvent.setup();
+    render(<ValidatorConvert conversion={CONVERSION} copied={false} onCopy={onCopy} />);
+    await user.click(screen.getByRole("button", { name: "Copy version 6 UUID" }));
+    expect(onCopy).toHaveBeenCalledTimes(1);
+  });
+
+  it("reflects the copied state on the button", () => {
+    render(<ValidatorConvert conversion={CONVERSION} copied={true} onCopy={() => {}} />);
+    expect(screen.getByRole("button", { name: "Copied" })).toHaveTextContent("copied");
   });
 });

@@ -7,6 +7,8 @@ import {
   v5 as uuidV5,
   v6 as uuidV6,
   v7 as uuidV7,
+  v1ToV6,
+  v6ToV1,
 } from "uuid";
 
 // RFC 9562 special-form UUIDs. Fall back to the literal strings on the rare
@@ -133,6 +135,24 @@ export const uuidGenerators = {
 
 export const buildBatch = (count, generator = uuidGenerators.v4) =>
   Array.from({ length: count }, () => generator());
+
+// v1 and v6 hold the same time, clock-seq, and node data with their high/low
+// fields swapped. Convert between the two using the uuid package; returns null
+// for any other version or when the package helpers are unavailable, so callers
+// can treat null as "no conversion offered".
+export const convertTimeUuid = (value, version) => {
+  try {
+    if (version === 1 && typeof v1ToV6 === "function") {
+      return v1ToV6(value);
+    }
+    if (version === 6 && typeof v6ToV1 === "function") {
+      return v6ToV1(value);
+    }
+  } catch {
+    return null;
+  }
+  return null;
+};
 
 export const createUuid = () => {
   if (

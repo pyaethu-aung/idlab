@@ -118,4 +118,32 @@ describe("useUuidValidator", () => {
     expect(result.current.copied).toBe(false);
     expect(typeof result.current.recheck).toBe("function");
   });
+
+  it("offers a v6 conversion for a valid v1 UUID", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput(V1));
+    expect(result.current.conversion).toMatchObject({ from: 1, to: 6 });
+    expect(result.current.conversion.value).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-6[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    );
+  });
+
+  it("offers a v1 conversion for a valid v6 UUID", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.loadSample("v6"));
+    expect(result.current.result.version).toBe(6);
+    expect(result.current.conversion).toMatchObject({ from: 6, to: 1 });
+  });
+
+  it("offers no conversion for non-time versions", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput(V4));
+    expect(result.current.conversion).toBeNull();
+  });
+
+  it("offers no conversion when input is invalid", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput("not-a-uuid"));
+    expect(result.current.conversion).toBeNull();
+  });
 });
