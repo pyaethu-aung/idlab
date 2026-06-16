@@ -11,6 +11,7 @@ const NS_PLACEHOLDERS = {
 const VERSIONS = [
   { id: "v4", label: "v4", title: "Random",       desc: "Web Crypto entropy, the everyday workhorse." },
   { id: "v1", label: "v1", title: "Time + Node",  desc: "Timestamp-first, sortable for logs and traces." },
+  { id: "v6", label: "v6", title: "Reordered",    desc: "Field-swapped v1 that sorts in index order." },
   { id: "v7", label: "v7", title: "Unix Time",    desc: "Time-prefixed hybrid for distributed systems." },
   { id: "v3",  label: "v3",  title: "Name · MD5",   desc: "Deterministic from namespace + name using MD5." },
   { id: "v5",  label: "v5",  title: "Name · SHA-1", desc: "Deterministic from namespace + name using SHA-1." },
@@ -48,7 +49,7 @@ function ControlPanel({
       <div className="rail-section">
         <div className="rail-head">
           <span className="rail-key mono">version</span>
-          <span className="rail-hint mono">{KEY_OPT}1–7</span>
+          <span className="rail-hint mono">{KEY_OPT}1–8</span>
         </div>
         <div className="version-stack">
           {VERSIONS.map((v) => {

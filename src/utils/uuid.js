@@ -1,4 +1,13 @@
-import { MAX, NIL, v1 as uuidV1, v3 as uuidV3, v4 as uuidV4, v5 as uuidV5, v7 as uuidV7 } from "uuid";
+import {
+  MAX,
+  NIL,
+  v1 as uuidV1,
+  v3 as uuidV3,
+  v4 as uuidV4,
+  v5 as uuidV5,
+  v6 as uuidV6,
+  v7 as uuidV7,
+} from "uuid";
 
 // RFC 9562 special-form UUIDs. Fall back to the literal strings on the rare
 // chance the package does not export them, so the generator never goes blank.
@@ -42,6 +51,12 @@ export const versionChoices = [
     title: "Version 1",
     badge: "Time-ordered",
     detail: "Timestamp-first IDs that stay sortable for logs and tracing.",
+  },
+  {
+    id: "v6",
+    title: "Version 6",
+    badge: "Reordered time",
+    detail: "Field-reordered rewrite of v1 that sorts in index order.",
   },
   {
     id: "v7",
@@ -97,6 +112,14 @@ export const optionDescriptors = [
 export const uuidGenerators = {
   v1: () => (typeof uuidV1 === "function" ? uuidV1() : createUuid()),
   v4: () => (typeof uuidV4 === "function" ? uuidV4() : createUuid()),
+  v6: () => {
+    if (typeof uuidV6 === "function") {
+      return uuidV6();
+    }
+
+    // v6 is a field reorder of v1; fall back through v1 to keep output valid.
+    return typeof uuidV1 === "function" ? uuidV1() : createUuid();
+  },
   v7: () => {
     if (typeof uuidV7 === "function") {
       return uuidV7();
