@@ -275,7 +275,7 @@ describe("useKeyboardShortcuts", () => {
       expect(mockProps.handleVersionChange).toHaveBeenCalledWith("v1");
     });
 
-    it("should select UUID v7 with Alt + 3", () => {
+    it("should select UUID v6 with Alt + 3", () => {
       renderHook(() => useKeyboardShortcuts(mockProps));
       const event = createKeyboardEvent({
         key: "3",
@@ -284,7 +284,31 @@ describe("useKeyboardShortcuts", () => {
       });
       window.dispatchEvent(event);
 
+      expect(mockProps.handleVersionChange).toHaveBeenCalledWith("v6");
+    });
+
+    it("should select UUID v7 with Alt + 4", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "4",
+        code: "Digit4",
+        altKey: true,
+      });
+      window.dispatchEvent(event);
+
       expect(mockProps.handleVersionChange).toHaveBeenCalledWith("v7");
+    });
+
+    it("should select max sentinel with Alt + 8", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "8",
+        code: "Digit8",
+        altKey: true,
+      });
+      window.dispatchEvent(event);
+
+      expect(mockProps.handleVersionChange).toHaveBeenCalledWith("max");
     });
 
     it("should not trigger version change when Cmd/Ctrl is also pressed", () => {

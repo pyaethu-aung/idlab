@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { validate as validateUuid, version as uuidVersion } from "uuid";
 import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, createUuid, defaultNamespace, formatUuid, isConstantVersion, makeNameBasedGenerator, namespacePresets, uuidGenerators, uuidNameBased } from "./uuid";
 
 describe("buildBatch", () => {
@@ -110,6 +111,18 @@ describe("sentinel UUIDs", () => {
   });
 });
 
+describe("uuidGenerators.v6", () => {
+  it("produces a valid version 6 UUID", () => {
+    const value = uuidGenerators.v6();
+    expect(validateUuid(value)).toBe(true);
+    expect(uuidVersion(value)).toBe(6);
+  });
+
+  it("produces a fresh value on each call", () => {
+    expect(uuidGenerators.v6()).not.toBe(uuidGenerators.v6());
+  });
+});
+
 describe("isConstantVersion", () => {
   it("is true only for the sentinel versions", () => {
     expect(constantVersions).toEqual(["nil", "max"]);
@@ -118,7 +131,7 @@ describe("isConstantVersion", () => {
   });
 
   it("is false for generated and name-based versions", () => {
-    ["v1", "v3", "v4", "v5", "v7", "", undefined].forEach((v) => {
+    ["v1", "v3", "v4", "v5", "v6", "v7", "", undefined].forEach((v) => {
       expect(isConstantVersion(v)).toBe(false);
     });
   });

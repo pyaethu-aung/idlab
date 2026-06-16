@@ -110,25 +110,30 @@ function useKeyboardShortcuts({
         }
         if (code === "Digit3") {
           event.preventDefault();
-          handleVersionChange("v7");
+          handleVersionChange("v6");
           return;
         }
         if (code === "Digit4") {
           event.preventDefault();
-          handleVersionChange("v3");
+          handleVersionChange("v7");
           return;
         }
         if (code === "Digit5") {
           event.preventDefault();
-          handleVersionChange("v5");
+          handleVersionChange("v3");
           return;
         }
         if (code === "Digit6") {
           event.preventDefault();
-          handleVersionChange("nil");
+          handleVersionChange("v5");
           return;
         }
         if (code === "Digit7") {
+          event.preventDefault();
+          handleVersionChange("nil");
+          return;
+        }
+        if (code === "Digit8") {
           event.preventDefault();
           handleVersionChange("max");
           return;
