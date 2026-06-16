@@ -1,6 +1,6 @@
 # UUID Generator (AI Built)
 
-A Tailwind-styled UUID generator built with React 19 and Vite. The app lets you preview up to 20 freshly generated UUIDs, switch between v1/v4/v7 versions, copy individual values with feedback, and download batches (up to 200) as newline-delimited text files.
+A Tailwind-styled UUID generator and validator built with React 19 and Vite. Generate and batch-export UUIDs (v1, v3, v4, v5, v6, v7, nil, max), validate and decode any UUID, and copy or download results without leaving the keyboard.
 
 ## AI Agent & Tooling
 - Core implementation produced by GitHub Copilot running the GPT-5.1-Codex model.
@@ -10,7 +10,8 @@ A Tailwind-styled UUID generator built with React 19 and Vite. The app lets you 
 
 ## Feature Highlights
 - Unified slider that drives both the on-screen preview count (capped at 20) and the downloadable batch size (1–200).
-- Version selector covering UUID v1 (timestamp/MAC), v4 (random), and v7 (time-ordered) via the `uuid` npm package.
+- Version selector covering v1, v3, v4, v5, v6, v7, nil, and max via the `uuid` npm package. v3/v5 are deterministic (namespace + name); v6 is the index-friendly field-reordered rewrite of v1.
+- Validator tab decodes any pasted UUID (version, variant, timestamp for v1/v7); shows the v6 counterpart for v1 inputs and vice versa.
 - Copy-to-clipboard with micro-interaction feedback plus a timestamped download action guarded against oversized files.
 - Insight cards summarizing current options (version, batch size, characters per UUID) placed directly above the list for quick scanning.
 - Responsive layout with gradients, keyboard-friendly control handling, and pointer event throttling to avoid jank.
@@ -20,7 +21,7 @@ A Tailwind-styled UUID generator built with React 19 and Vite. The app lets you 
 - ⌘/Ctrl + Alt + S — Download the current batch as a `.txt` file.
 - ⌘/Ctrl + Shift + C — Copy the first UUID in the visible list.
 - ⌥/Alt + Arrow Up/Down — Adjust batch size (hold Shift for ±10).
-- ⌥/Alt + 1 / 2 / 3 — Switch to v4, v1, or v7 generators respectively.
+- ⌥/Alt + 1 … 8 — Switch generators in order: v4, v1, v6, v7, v3, v5, nil, max.
 - ⌥/Alt + U / H / B — Toggle uppercase, remove hyphens, or wrap with braces.
 - Shift + ? — Open the in-app shortcut reference overlay.
 - Esc — Close the shortcut reference overlay.
