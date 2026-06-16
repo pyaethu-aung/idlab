@@ -1,4 +1,5 @@
 import ValidationBanner from "./ValidationBanner";
+import ValidatorConvert from "./ValidatorConvert";
 import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorRail from "./ValidatorRail";
 import ValidatorSegCard from "./ValidatorSegCard";
@@ -8,6 +9,9 @@ function ValidatorPanel({ validator }) {
     rawInput,
     setRawInput,
     result,
+    conversion,
+    copyConversion,
+    conversionCopied,
     options,
     toggleOption,
     loadSample,
@@ -37,6 +41,11 @@ function ValidatorPanel({ validator }) {
                 {result.valid && (
                   <ValidatorPropsGrid result={result} />
                 )}
+                <ValidatorConvert
+                  conversion={conversion}
+                  copied={conversionCopied}
+                  onCopy={copyConversion}
+                />
               </>
             ) : (
               <div className="v-empty-state">

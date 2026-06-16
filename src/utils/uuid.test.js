@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { validate as validateUuid, version as uuidVersion } from "uuid";
-import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, createUuid, defaultNamespace, formatUuid, isConstantVersion, makeNameBasedGenerator, namespacePresets, uuidGenerators, uuidNameBased } from "./uuid";
+import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, convertTimeUuid, createUuid, defaultNamespace, formatUuid, isConstantVersion, makeNameBasedGenerator, namespacePresets, uuidGenerators, uuidNameBased } from "./uuid";
 
 describe("buildBatch", () => {
   it("creates the requested number of UUIDs", () => {
@@ -120,6 +120,30 @@ describe("uuidGenerators.v6", () => {
 
   it("produces a fresh value on each call", () => {
     expect(uuidGenerators.v6()).not.toBe(uuidGenerators.v6());
+  });
+});
+
+describe("convertTimeUuid", () => {
+  const v1Sample = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+
+  it("converts a v1 UUID to a valid v6 UUID", () => {
+    const v6 = convertTimeUuid(v1Sample, 1);
+    expect(validateUuid(v6)).toBe(true);
+    expect(uuidVersion(v6)).toBe(6);
+  });
+
+  it("round-trips v1 → v6 → v1 back to the original value", () => {
+    const v6 = convertTimeUuid(v1Sample, 1);
+    expect(convertTimeUuid(v6, 6)).toBe(v1Sample);
+  });
+
+  it("returns null for versions that have no v1/v6 counterpart", () => {
+    expect(convertTimeUuid("550e8400-e29b-41d4-a716-446655440000", 4)).toBeNull();
+    expect(convertTimeUuid(v1Sample, 7)).toBeNull();
+  });
+
+  it("returns null instead of throwing on malformed input", () => {
+    expect(convertTimeUuid("not-a-uuid", 1)).toBeNull();
   });
 });
 

@@ -1611,6 +1611,66 @@ kbd {
   color: var(--ink-4);
 }
 
+/* ─── Convert (v1 ↔ v6) ──────────────────────────────────────────────────── */
+.v-convert-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: 18px var(--sp-10);
+  border-bottom: 1px solid var(--seam);
+}
+
+.v-convert-route {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  letter-spacing: var(--tracking-wide);
+}
+
+.v-convert-card {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: 10px 16px;
+  border: 1px solid var(--seam);
+  border-radius: var(--r-md);
+}
+
+.v-convert-val {
+  flex: 1;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.v-convert-copy {
+  flex-shrink: 0;
+  min-height: 44px;
+  min-width: 80px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--seam);
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all var(--d-settle);
+}
+
+.v-convert-copy:hover,
+.v-convert-copy.is-copied {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+
+.v-convert-note {
+  max-width: 62ch;
+  font-size: var(--fs-xxs);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .bench {
