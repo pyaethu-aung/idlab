@@ -6,6 +6,7 @@ import StatusBar from "./components/StatusBar";
 import ThemeToggle from "./components/ThemeToggle";
 import ToolbarNav from "./components/ToolbarNav";
 import UuidList from "./components/UuidList";
+import ConvertPanel from "./components/ConvertPanel";
 import ValidatorPanel from "./components/ValidatorPanel";
 import SHORTCUTS from "./data/shortcuts";
 import useActiveTab from "./hooks/useActiveTab";
@@ -13,6 +14,7 @@ import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
 import useTheme from "./hooks/useTheme";
 import useBrowserThemeSync from "./hooks/useBrowserThemeSync";
 import useUuidGenerator from "./hooks/useUuidGenerator";
+import useUuidConverter from "./hooks/useUuidConverter";
 import useUuidValidator from "./hooks/useUuidValidator";
 
 function BrandIcon() {
@@ -58,6 +60,7 @@ function App() {
   } = useUuidGenerator();
 
   const validator = useUuidValidator();
+  const converter = useUuidConverter();
 
   useKeyboardShortcuts({
     batchSize,
@@ -138,6 +141,10 @@ function App() {
 
         <div style={{ display: activeTab === "validator" ? "" : "none" }}>
           <ValidatorPanel validator={validator} />
+        </div>
+
+        <div style={{ display: activeTab === "converter" ? "" : "none" }}>
+          <ConvertPanel converter={converter} />
         </div>
       </main>
 

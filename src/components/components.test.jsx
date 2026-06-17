@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import ControlPanel from "./ControlPanel";
+import ConvertPanel from "./ConvertPanel";
 import Hero from "./Hero";
 import ShortcutReference from "./ShortcutReference";
 import ThemeToggle from "./ThemeToggle";
@@ -438,5 +439,86 @@ describe("ValidatorConvert", () => {
   it("reflects the copied state on the button", () => {
     render(<ValidatorConvert conversion={CONVERSION} copied={true} onCopy={() => {}} />);
     expect(screen.getByRole("button", { name: "Copied" })).toHaveTextContent("copied");
+  });
+});
+
+const V4 = "550e8400-e29b-41d4-a716-446655440000";
+
+const makeConverter = (overrides = {}) => ({
+  rawInput: "",
+  setRawInput: vi.fn(),
+  conversions: null,
+  hasInput: false,
+  copiedKey: null,
+  copyRow: vi.fn(),
+  clearInput: vi.fn(),
+  ...overrides,
+});
+
+describe("ConvertPanel", () => {
+  it("shows empty-state prompt when input is empty", () => {
+    render(<ConvertPanel converter={makeConverter()} />);
+    expect(screen.getByText("paste a UUID to convert")).toBeInTheDocument();
+  });
+
+  it("shows error hint when input is present but invalid", () => {
+    render(<ConvertPanel converter={makeConverter({ hasInput: true })} />);
+    expect(screen.getByText("not a valid UUID")).toBeInTheDocument();
+  });
+
+  it("renders all 9 representation rows when conversions are available", () => {
+    const conversions = {
+      canonical: V4,
+      compact: V4.replace(/-/g, ""),
+      upper: V4.toUpperCase(),
+      braces: `{${V4}}`,
+      urn: `urn:uuid:${V4}`,
+      base64: "VQ6EAOKbQdSnFkRmVUQAAA",
+      base32: "2N1T201RMV87AAE5J4CSAM8000",
+      integer: "113059749145936325402354257176981405696",
+      bytes: "[0x55, 0x0e, 0x84, 0x00, 0xe2, 0x9b, 0x41, 0xd4, 0xa7, 0x16, 0x44, 0x66, 0x55, 0x44, 0x00, 0x00]",
+    };
+    render(<ConvertPanel converter={makeConverter({ rawInput: V4, conversions, hasInput: true })} />);
+    expect(screen.getByText("canonical")).toBeInTheDocument();
+    expect(screen.getByText("base64url")).toBeInTheDocument();
+    expect(screen.getByText("bytes")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Copy this value" })).toHaveLength(9);
+  });
+
+  it("calls copyRow when a copy button is clicked", async () => {
+    const copyRow = vi.fn();
+    const conversions = {
+      canonical: V4, compact: "", upper: "", braces: "", urn: "",
+      base64: "", base32: "", integer: "", bytes: "",
+    };
+    const user = userEvent.setup();
+    render(<ConvertPanel converter={makeConverter({ rawInput: V4, conversions, hasInput: true, copyRow })} />);
+    await user.click(screen.getAllByRole("button", { name: "Copy this value" })[0]);
+    expect(copyRow).toHaveBeenCalledWith("canonical", V4);
+  });
+
+  it("reflects copied state on the correct row button", () => {
+    const conversions = {
+      canonical: V4, compact: "", upper: "", braces: "", urn: "",
+      base64: "", base32: "", integer: "", bytes: "",
+    };
+    render(<ConvertPanel converter={makeConverter({ rawInput: V4, conversions, hasInput: true, copiedKey: "canonical" })} />);
+    expect(screen.getByRole("button", { name: "Copied" })).toHaveTextContent("✓ copied");
+  });
+
+  it("calls clearInput when clear button is clicked", async () => {
+    const clearInput = vi.fn();
+    const user = userEvent.setup();
+    render(<ConvertPanel converter={makeConverter({ rawInput: V4, clearInput })} />);
+    await user.click(screen.getByRole("button", { name: "Clear input" }));
+    expect(clearInput).toHaveBeenCalled();
+  });
+
+  it("loads a sample UUID when a sample pill is clicked", async () => {
+    const setRawInput = vi.fn();
+    const user = userEvent.setup();
+    render(<ConvertPanel converter={makeConverter({ setRawInput })} />);
+    await user.click(screen.getByRole("button", { name: "Load nil sample UUID" }));
+    expect(setRawInput).toHaveBeenCalledWith("00000000-0000-0000-0000-000000000000");
   });
 });

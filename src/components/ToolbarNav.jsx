@@ -1,22 +1,23 @@
+const TABS = [
+  { id: "generator", label: "Generator" },
+  { id: "validator", label: "Validator" },
+  { id: "converter", label: "Converter" },
+];
+
 function ToolbarNav({ activeTab, onTabChange }) {
   return (
     <>
-      <button
-        type="button"
-        className={`tab-btn${activeTab === "generator" ? " tab-btn--active" : ""}`}
-        aria-current={activeTab === "generator" ? "page" : undefined}
-        onClick={() => activeTab !== "generator" && onTabChange("generator")}
-      >
-        Generator
-      </button>
-      <button
-        type="button"
-        className={`tab-btn${activeTab === "validator" ? " tab-btn--active" : ""}`}
-        aria-current={activeTab === "validator" ? "page" : undefined}
-        onClick={() => activeTab !== "validator" && onTabChange("validator")}
-      >
-        Validator
-      </button>
+      {TABS.map(({ id, label }) => (
+        <button
+          key={id}
+          type="button"
+          className={`tab-btn${activeTab === id ? " tab-btn--active" : ""}`}
+          aria-current={activeTab === id ? "page" : undefined}
+          onClick={() => activeTab !== id && onTabChange(id)}
+        >
+          {label}
+        </button>
+      ))}
     </>
   );
 }

@@ -167,13 +167,26 @@ describe("App", () => {
     expect(panels[1]).toHaveStyle({ display: "none" });
   });
 
-  it("keeps both panels in DOM when switching tabs", async () => {
+  it("switches to converter panel when Converter tab is clicked", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Converter" }));
+
+    const panels = container.querySelectorAll(".main > div");
+    expect(panels[0]).toHaveStyle({ display: "none" });
+    expect(panels[1]).toHaveStyle({ display: "none" });
+    expect(panels[2]).not.toHaveStyle({ display: "none" });
+  });
+
+  it("keeps all panels in DOM when switching tabs", async () => {
     const user = userEvent.setup();
     render(<App />);
 
     await user.click(screen.getByRole("button", { name: "Validator" }));
 
-    expect(screen.getByPlaceholderText(/xxxxxxxx-xxxx/i)).toBeInTheDocument();
+    // Validator and Converter both render UUID inputs; generator stays mounted too
+    expect(screen.getAllByPlaceholderText(/xxxxxxxx-xxxx/i)).toHaveLength(2);
     expect(screen.getByText(/Mint/i)).toBeInTheDocument();
   });
 });
