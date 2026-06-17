@@ -426,13 +426,13 @@ kbd {
 .rail-range::-webkit-slider-runnable-track {
   height: 4px;
   background: var(--seam);
-  border-radius: 2px;
+  border-radius: var(--r-xxs);
 }
 
 .rail-range::-moz-range-track {
   height: 4px;
   background: var(--seam);
-  border-radius: 2px;
+  border-radius: var(--r-xxs);
 }
 
 .rail-range::-webkit-slider-thumb {
@@ -672,7 +672,7 @@ kbd {
   width: 3px;
   height: 14px;
   background: var(--accent);
-  border-radius: 2px;
+  border-radius: var(--r-xxs);
   flex-shrink: 0;
 }
 
