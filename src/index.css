@@ -1671,6 +1671,70 @@ kbd {
   color: var(--ink-3);
 }
 
+/* ─── Convert panel rows ─────────────────────────────────────────────────── */
+.cx-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.cx-row {
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: 12px var(--sp-10);
+  border-bottom: 1px solid var(--seam);
+  min-width: 0;
+}
+
+.cx-row:last-child {
+  border-bottom: 0;
+}
+
+.cx-label {
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
+
+.cx-value {
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+  font-feature-settings: var(--font-feat-mono);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.cx-copy {
+  flex-shrink: 0;
+  min-height: 36px;
+  min-width: 72px;
+  padding: 5px 10px;
+  background: transparent;
+  border: 1px solid var(--seam);
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-feature-settings: var(--font-feat-mono);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: background var(--d-settle), color var(--d-settle), border-color var(--d-settle);
+}
+
+.cx-copy:hover,
+.cx-copy.is-copied {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+
+.v-empty-msg--error {
+  color: var(--error);
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .bench {
