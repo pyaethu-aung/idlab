@@ -9,6 +9,7 @@ import {
   uuidGenerators,
   uuidNameBased,
 } from "../utils/uuid";
+import { exportUuids } from "../utils/uuidExport";
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 const initialBatchSize = 8;
@@ -24,6 +25,7 @@ function useUuidGenerator() {
   const [feedback, setFeedback] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [exportFormat, setExportFormat] = useState("txt");
   const feedbackTimer = useRef(null);
   const refreshTimer = useRef(null);
   const downloadTimer = useRef(null);
@@ -163,25 +165,30 @@ function useUuidGenerator() {
         .toISOString()
         .replaceAll(":", "-")
         .replaceAll(".", "-");
-      const blob = new Blob([formattedDownload.join("\n")], {
-        type: "text/plain",
-      });
+      const { content, mimeType, filename } = exportUuids(
+        formattedDownload,
+        exportFormat,
+        timestamp
+      );
+      const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = `uuids-${formattedDownload.length}-${timestamp}.txt`;
+      anchor.download = filename;
       document.body.appendChild(anchor);
       anchor.click();
       document.body.removeChild(anchor);
       URL.revokeObjectURL(url);
-      stageFeedback(`Saved ${formattedDownload.length} UUIDs as a .txt file`);
+      stageFeedback(
+        `Saved ${formattedDownload.length} UUIDs as a .${exportFormat} file`
+      );
     } catch (error) {
       console.error("Unable to download UUID list", error);
       stageFeedback("Download failed — please try again");
     } finally {
       downloadTimer.current = setTimeout(() => setIsDownloading(false), 400);
     }
-  }, [batchSize, generatorForVersion, isDownloading, options, stageFeedback]);
+  }, [batchSize, exportFormat, generatorForVersion, isDownloading, options, stageFeedback]);
 
   const copyAll = useCallback(async () => {
     if (!clipboardSupported) {
@@ -227,6 +234,8 @@ function useUuidGenerator() {
     namespace,
     name,
     options,
+    exportFormat,
+    setExportFormat,
     formattedUuids,
     copiedUuid,
     feedback,
