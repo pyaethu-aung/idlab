@@ -9,6 +9,7 @@ import {
   makeNameBasedGenerator,
   makeTimestampGenerator,
   parseDateTimeLocal,
+  toDateTimeLocal,
   uuidGenerators,
   uuidNameBased,
 } from "../utils/uuid";
@@ -139,12 +140,22 @@ function useUuidGenerator() {
   const handleTimestampModeChange = useCallback(
     (mode) => {
       setTimestampMode(mode);
+      // Seed an empty/invalid pin with the current local moment so the date
+      // and time fields default to "now" instead of blank placeholders.
+      let nextTime = pinnedTime;
+      if (mode === "pinned" && parseDateTimeLocal(pinnedTime) === null) {
+        nextTime = toDateTimeLocal();
+        setPinnedTime(nextTime);
+      }
       syncVisibleBatch(
         batchSize,
-        resolveGenerator(selectedVersion, { timestampMode: mode })
+        resolveGenerator(selectedVersion, {
+          timestampMode: mode,
+          pinnedTime: nextTime,
+        })
       );
     },
-    [batchSize, selectedVersion, resolveGenerator, syncVisibleBatch]
+    [batchSize, selectedVersion, pinnedTime, resolveGenerator, syncVisibleBatch]
   );
 
   const handleTimestampChange = useCallback(

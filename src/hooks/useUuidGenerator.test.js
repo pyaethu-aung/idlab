@@ -46,6 +46,8 @@ vi.mock("../utils/uuid", () => ({
   // Parse only the fixed value the timestamp tests use; null otherwise.
   parseDateTimeLocal: (value) =>
     value === "2021-01-01T12:30" ? 1609504200000 : null,
+  // Deterministic stand-in for "now" so seeding is assertable.
+  toDateTimeLocal: () => "2030-06-01T08:00:00",
 }));
 
 import useUuidGenerator from "./useUuidGenerator";
@@ -293,6 +295,29 @@ describe("useUuidGenerator", () => {
     expect(result.current.pinnedTime).toBe("");
     expect(result.current.pinnedMsecs).toBeNull();
     expect(makeTimestampGeneratorMock).not.toHaveBeenCalled();
+  });
+
+  it("seeds the current moment when switching an empty pin to pinned", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    act(() => { result.current.handleVersionChange("v7"); });
+    expect(result.current.pinnedTime).toBe("");
+
+    act(() => { result.current.handleTimestampModeChange("pinned"); });
+    expect(result.current.timestampMode).toBe("pinned");
+    expect(result.current.pinnedTime).toBe("2030-06-01T08:00:00");
+  });
+
+  it("keeps an existing pinned moment instead of re-seeding it", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    act(() => { result.current.handleVersionChange("v7"); });
+    act(() => { result.current.handleTimestampModeChange("pinned"); });
+    act(() => { result.current.handleTimestampChange("2021-01-01T12:30"); });
+    act(() => { result.current.handleTimestampModeChange("now"); });
+    act(() => { result.current.handleTimestampModeChange("pinned"); });
+
+    expect(result.current.pinnedTime).toBe("2021-01-01T12:30");
   });
 
   it("stamps the chosen moment once a time is pinned for a time-based version", () => {
