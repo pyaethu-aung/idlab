@@ -5,7 +5,10 @@ import {
   defaultOptions,
   formatUuid,
   isConstantVersion,
+  isTimeBasedVersion,
   makeNameBasedGenerator,
+  makeTimestampGenerator,
+  parseDateTimeLocal,
   uuidGenerators,
   uuidNameBased,
 } from "../utils/uuid";
@@ -19,6 +22,8 @@ function useUuidGenerator() {
   const [selectedVersion, setSelectedVersion] = useState("v4");
   const [namespace, setNamespace] = useState(defaultNamespace);
   const [name, setName] = useState("");
+  const [timestampMode, setTimestampMode] = useState("now");
+  const [pinnedTime, setPinnedTime] = useState("");
   const [options, setOptions] = useState(defaultOptions);
   const [rawUuids, setRawUuids] = useState(() => buildBatch(initialBatchSize));
   const [copiedUuid, setCopiedUuid] = useState("");
@@ -40,16 +45,43 @@ function useUuidGenerator() {
 
   const isNameBased = selectedVersion === "v3" || selectedVersion === "v5";
   const isConstant = isConstantVersion(selectedVersion);
+  const isTimeBased = isTimeBasedVersion(selectedVersion);
   // Both name-based and sentinel versions yield one deterministic value, so
   // batch sizing and regeneration are locked off for either.
   const isFixed = isNameBased || isConstant;
 
-  const generatorForVersion = useMemo(() => {
-    if (isNameBased) {
-      return makeNameBasedGenerator(uuidNameBased[selectedVersion], namespace, name);
-    }
-    return uuidGenerators[selectedVersion] ?? uuidGenerators.v4;
-  }, [selectedVersion, isNameBased, namespace, name]);
+  // Resolve the generator for a version, honouring name inputs and a pinned
+  // timestamp. Overrides let handlers pass a not-yet-committed mode or time so
+  // the visible batch refreshes synchronously with the state change.
+  const resolveGenerator = useCallback(
+    (version, overrides = {}) => {
+      const mode = overrides.timestampMode ?? timestampMode;
+      const time = overrides.pinnedTime ?? pinnedTime;
+      if (version === "v3" || version === "v5") {
+        return makeNameBasedGenerator(uuidNameBased[version], namespace, name);
+      }
+      if (isTimeBasedVersion(version) && mode === "pinned") {
+        const stamped = makeTimestampGenerator(version, parseDateTimeLocal(time));
+        // Falls through to live generation when the pinned time is blank or
+        // unparseable, so the preview never goes empty.
+        if (stamped) {
+          return stamped;
+        }
+      }
+      return uuidGenerators[version] ?? uuidGenerators.v4;
+    },
+    [namespace, name, timestampMode, pinnedTime]
+  );
+
+  const generatorForVersion = useMemo(
+    () => resolveGenerator(selectedVersion),
+    [resolveGenerator, selectedVersion]
+  );
+
+  const pinnedMsecs = useMemo(
+    () => parseDateTimeLocal(pinnedTime),
+    [pinnedTime]
+  );
 
   const visibleBatchSize = isFixed ? 1 : Math.min(batchSize, 20);
 
@@ -98,13 +130,32 @@ function useUuidGenerator() {
       setSelectedVersion(versionId);
       const nextIsNameBased = versionId === "v3" || versionId === "v5";
       const nextIsFixed = nextIsNameBased || isConstantVersion(versionId);
-      const nextGenerator = nextIsNameBased
-        ? makeNameBasedGenerator(uuidNameBased[versionId], namespace, name)
-        : (uuidGenerators[versionId] ?? uuidGenerators.v4);
-      syncVisibleBatch(nextIsFixed ? 1 : batchSize, nextGenerator);
+      syncVisibleBatch(nextIsFixed ? 1 : batchSize, resolveGenerator(versionId));
       stageFeedback(`Switched to UUID ${versionId.toUpperCase()}`);
     },
-    [batchSize, namespace, name, syncVisibleBatch, stageFeedback]
+    [batchSize, resolveGenerator, syncVisibleBatch, stageFeedback]
+  );
+
+  const handleTimestampModeChange = useCallback(
+    (mode) => {
+      setTimestampMode(mode);
+      syncVisibleBatch(
+        batchSize,
+        resolveGenerator(selectedVersion, { timestampMode: mode })
+      );
+    },
+    [batchSize, selectedVersion, resolveGenerator, syncVisibleBatch]
+  );
+
+  const handleTimestampChange = useCallback(
+    (value) => {
+      setPinnedTime(value);
+      syncVisibleBatch(
+        batchSize,
+        resolveGenerator(selectedVersion, { pinnedTime: value })
+      );
+    },
+    [batchSize, selectedVersion, resolveGenerator, syncVisibleBatch]
   );
 
   const handleNamespaceChange = useCallback(
@@ -231,8 +282,12 @@ function useUuidGenerator() {
     selectedVersion,
     isNameBased,
     isFixed,
+    isTimeBased,
     namespace,
     name,
+    timestampMode,
+    pinnedTime,
+    pinnedMsecs,
     options,
     exportFormat,
     setExportFormat,
@@ -248,6 +303,8 @@ function useUuidGenerator() {
     handleVersionChange,
     handleNamespaceChange,
     handleNameChange,
+    handleTimestampModeChange,
+    handleTimestampChange,
     toggleOption,
     downloadList,
     commitBatchSize,
