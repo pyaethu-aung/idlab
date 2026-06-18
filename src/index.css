@@ -706,6 +706,36 @@ kbd {
   flex-shrink: 0;
 }
 
+.export-chips {
+  display: flex;
+  gap: 2px;
+  border-left: 1px solid var(--seam);
+  padding-left: 6px;
+}
+
+.export-chip {
+  padding: 5px 8px;
+  min-height: 44px;
+  background: var(--bg-2);
+  border: 1px solid var(--seam);
+  border-radius: var(--r-xs);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  white-space: nowrap;
+  transition: all var(--d-swap);
+}
+
+.export-chip:hover {
+  border-color: var(--seam-2);
+  color: var(--ink);
+}
+
+.export-chip.is-active {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
 .panel-grid {
   display: flex;
   flex-direction: column;
@@ -1756,6 +1786,16 @@ kbd {
 
   .panel-actions .ghost-btn span {
     display: none;
+  }
+
+  .panel-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .export-chips {
+    border-left: none;
+    padding-left: 0;
   }
 }
 

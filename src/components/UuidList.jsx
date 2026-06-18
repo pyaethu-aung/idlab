@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { KEY_META } from "../utils/platform";
+import { EXPORT_FORMATS } from "../utils/uuidExport";
 
 function CopyIcon() {
   return (
@@ -71,6 +72,7 @@ function UuidList({
   copiedUuid,
   onCopy,
   onCopyAll,
+  onExportFormatChange,
   onRegen,
   onDownload,
   refreshing,
@@ -96,6 +98,19 @@ function UuidList({
           <button type="button" className="ghost-btn mono" onClick={onCopyAll} aria-label="Copy all UUIDs">
             <CopyIcon /> <span>copy all</span>
           </button>
+          <div className="export-chips" role="group" aria-label="Export format">
+            {EXPORT_FORMATS.map((fmt) => (
+              <button
+                key={fmt}
+                type="button"
+                className={`export-chip mono${exportFormat === fmt ? " is-active" : ""}`}
+                onClick={() => onExportFormatChange(fmt)}
+                aria-pressed={exportFormat === fmt}
+              >
+                .{fmt}
+              </button>
+            ))}
+          </div>
           <button type="button" className="ghost-btn mono" onClick={onDownload} aria-label={`Download as .${exportFormat}`}>
             <DownIcon /> <span>download .{exportFormat}</span>
           </button>

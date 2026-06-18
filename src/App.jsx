@@ -117,14 +117,12 @@ function App() {
               namespace={namespace}
               name={name}
               options={options}
-              exportFormat={exportFormat}
               onBatchChange={setBatchSize}
               onBatchCommit={commitBatchSize}
               onVersionChange={handleVersionChange}
               onNamespaceChange={handleNamespaceChange}
               onNameChange={handleNameChange}
               onToggleOption={toggleOption}
-              onExportFormatChange={setExportFormat}
             />
 
             <UuidList
@@ -137,6 +135,7 @@ function App() {
               copiedUuid={copiedUuid}
               onCopy={handleCopy}
               onCopyAll={copyAll}
+              onExportFormatChange={setExportFormat}
               onRegen={regenerate}
               onDownload={downloadList}
               refreshing={isRefreshing}
