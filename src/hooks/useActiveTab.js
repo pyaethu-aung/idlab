@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 function pathToTab(pathname) {
   if (pathname.startsWith("/validator")) return "validator";
   if (pathname.startsWith("/converter")) return "converter";
+  if (pathname.startsWith("/bulk")) return "bulk";
   return "generator";
 }
 

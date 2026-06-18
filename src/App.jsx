@@ -7,6 +7,7 @@ import ThemeToggle from "./components/ThemeToggle";
 import ToolbarNav from "./components/ToolbarNav";
 import UuidList from "./components/UuidList";
 import ConvertPanel from "./components/ConvertPanel";
+import BulkPanel from "./components/BulkPanel";
 import ValidatorPanel from "./components/ValidatorPanel";
 import SHORTCUTS from "./data/shortcuts";
 import useActiveTab from "./hooks/useActiveTab";
@@ -15,6 +16,7 @@ import useTheme from "./hooks/useTheme";
 import useBrowserThemeSync from "./hooks/useBrowserThemeSync";
 import useUuidGenerator from "./hooks/useUuidGenerator";
 import useUuidConverter from "./hooks/useUuidConverter";
+import useUuidBulk from "./hooks/useUuidBulk";
 import useUuidValidator from "./hooks/useUuidValidator";
 
 function BrandIcon() {
@@ -69,6 +71,7 @@ function App() {
 
   const validator = useUuidValidator();
   const converter = useUuidConverter();
+  const bulk = useUuidBulk();
 
   useKeyboardShortcuts({
     batchSize,
@@ -161,6 +164,10 @@ function App() {
 
         <div style={{ display: activeTab === "converter" ? "" : "none" }}>
           <ConvertPanel converter={converter} />
+        </div>
+
+        <div style={{ display: activeTab === "bulk" ? "" : "none" }}>
+          <BulkPanel bulk={bulk} />
         </div>
       </main>
 
