@@ -67,6 +67,7 @@ function UuidList({
   version,
   opts,
   isFixed,
+  exportFormat,
   copiedUuid,
   onCopy,
   onCopyAll,
@@ -95,8 +96,8 @@ function UuidList({
           <button type="button" className="ghost-btn mono" onClick={onCopyAll} aria-label="Copy all UUIDs">
             <CopyIcon /> <span>copy all</span>
           </button>
-          <button type="button" className="ghost-btn mono" onClick={onDownload} aria-label="Download as .txt">
-            <DownIcon /> <span>download .txt</span>
+          <button type="button" className="ghost-btn mono" onClick={onDownload} aria-label={`Download as .${exportFormat}`}>
+            <DownIcon /> <span>download .{exportFormat}</span>
           </button>
           <button
             type="button"

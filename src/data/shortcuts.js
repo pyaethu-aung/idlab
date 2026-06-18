@@ -5,7 +5,7 @@ const SHORTCUTS = [
   },
   {
     combo: "⌘/Ctrl + Alt + S",
-    description: "Download the batch as a .txt file",
+    description: "Download the batch in the selected export format",
   },
   {
     combo: "⌘/Ctrl + Shift + C",
