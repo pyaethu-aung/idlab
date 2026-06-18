@@ -215,11 +215,12 @@ describe("ControlPanel", () => {
       />
     );
     expect(screen.getByRole("group", { name: /Timestamp source/i })).toBeTruthy();
-    // The moment input only appears once "pinned" is chosen.
-    expect(screen.queryByLabelText(/Timestamp to embed/i)).toBeNull();
+    // The moment inputs only appear once "pinned" is chosen.
+    expect(screen.queryByLabelText(/Date to embed/i)).toBeNull();
+    expect(screen.queryByLabelText(/Time to embed/i)).toBeNull();
   });
 
-  it("exposes the moment input and decoded readout when a time is pinned", () => {
+  it("composes date and time inputs into one moment, with a decoded readout", () => {
     const onTimestampModeChange = vi.fn();
     const onTimestampChange = vi.fn();
 
@@ -245,9 +246,14 @@ describe("ControlPanel", () => {
     fireEvent.click(screen.getByRole("button", { name: "now" }));
     expect(onTimestampModeChange).toHaveBeenCalledWith("now");
 
-    const input = screen.getByLabelText(/Timestamp to embed/i);
-    fireEvent.change(input, { target: { value: "2022-02-02T08:15" } });
-    expect(onTimestampChange).toHaveBeenCalledWith("2022-02-02T08:15");
+    // Changing the date keeps the existing time; changing the time keeps the date.
+    const dateInput = screen.getByLabelText(/Date to embed/i);
+    fireEvent.change(dateInput, { target: { value: "2022-02-02" } });
+    expect(onTimestampChange).toHaveBeenCalledWith("2022-02-02T12:30:00");
+
+    const timeInput = screen.getByLabelText(/Time to embed/i);
+    fireEvent.change(timeInput, { target: { value: "08:15" } });
+    expect(onTimestampChange).toHaveBeenCalledWith("2021-01-01T08:15");
 
     // Readout echoes the epoch ms and the decoded UTC instant.
     expect(screen.getByText("1609504200000")).toBeTruthy();

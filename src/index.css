@@ -640,8 +640,16 @@ kbd {
   outline-offset: 2px;
 }
 
-/* Native datetime-local picker should follow the active theme and accent. */
-input.name-input[type="datetime-local"] {
+/* Pinned moment is two native controls (date + time) so each browser shows a
+   dedicated, predictable picker. Stacked to fit the narrow rail without clip. */
+.ts-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+input.name-input.ts-field[type="date"],
+input.name-input.ts-field[type="time"] {
   color-scheme: light dark;
   accent-color: var(--accent);
 }
