@@ -1,6 +1,5 @@
 import { KEY_OPT } from "../utils/platform";
 import { namespacePresets } from "../utils/uuid";
-import { EXPORT_FORMATS } from "../utils/uuidExport";
 
 const NS_PLACEHOLDERS = {
   [namespacePresets[0].value]: "e.g. example.com",
@@ -37,14 +36,12 @@ function ControlPanel({
   namespace,
   name,
   options,
-  exportFormat,
   onBatchChange,
   onBatchCommit,
   onVersionChange,
   onNamespaceChange,
   onNameChange,
   onToggleOption,
-  onExportFormatChange,
 }) {
   return (
     <aside className="rail">
@@ -194,25 +191,6 @@ function ControlPanel({
         </div>
       </div>
 
-      {/* Export */}
-      <div className="rail-section">
-        <div className="rail-head">
-          <span className="rail-key mono">export</span>
-        </div>
-        <div className="batch-presets" role="group" aria-label="Export format">
-          {EXPORT_FORMATS.map((fmt) => (
-            <button
-              key={fmt}
-              type="button"
-              className={`preset-chip mono${exportFormat === fmt ? " is-active" : ""}`}
-              onClick={() => onExportFormatChange(fmt)}
-              aria-pressed={exportFormat === fmt}
-            >
-              .{fmt}
-            </button>
-          ))}
-        </div>
-      </div>
     </aside>
   );
 }
