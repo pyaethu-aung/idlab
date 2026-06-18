@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { validate as validateUuid, version as uuidVersion } from "uuid";
-import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, convertTimeUuid, createUuid, defaultNamespace, formatUuid, isConstantVersion, makeNameBasedGenerator, namespacePresets, uuidGenerators, uuidNameBased } from "./uuid";
+import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, convertTimeUuid, createUuid, defaultNamespace, formatUuid, isConstantVersion, isTimeBasedVersion, makeNameBasedGenerator, makeTimestampGenerator, namespacePresets, parseDateTimeLocal, timeBasedVersions, uuidGenerators, uuidNameBased } from "./uuid";
 
 describe("buildBatch", () => {
   it("creates the requested number of UUIDs", () => {
@@ -158,6 +158,86 @@ describe("isConstantVersion", () => {
     ["v1", "v3", "v4", "v5", "v6", "v7", "", undefined].forEach((v) => {
       expect(isConstantVersion(v)).toBe(false);
     });
+  });
+});
+
+describe("isTimeBasedVersion", () => {
+  it("is true only for the time-encoding versions", () => {
+    expect(timeBasedVersions).toEqual(["v1", "v6", "v7"]);
+    ["v1", "v6", "v7"].forEach((v) => {
+      expect(isTimeBasedVersion(v)).toBe(true);
+    });
+  });
+
+  it("is false for random, name-based, and sentinel versions", () => {
+    ["v4", "v3", "v5", "nil", "max", "", undefined].forEach((v) => {
+      expect(isTimeBasedVersion(v)).toBe(false);
+    });
+  });
+});
+
+describe("parseDateTimeLocal", () => {
+  it("parses a datetime-local string into epoch milliseconds", () => {
+    // Constructed from local parts so the assertion is timezone-independent.
+    const expected = new Date(2021, 0, 1, 12, 30).getTime();
+    expect(parseDateTimeLocal("2021-01-01T12:30")).toBe(expected);
+  });
+
+  it("supports millisecond precision", () => {
+    const expected = new Date(2021, 0, 1, 12, 30, 15, 500).getTime();
+    expect(parseDateTimeLocal("2021-01-01T12:30:15.500")).toBe(expected);
+  });
+
+  it("returns null for empty, blank, or non-string input", () => {
+    expect(parseDateTimeLocal("")).toBeNull();
+    expect(parseDateTimeLocal("   ")).toBeNull();
+    expect(parseDateTimeLocal(undefined)).toBeNull();
+    expect(parseDateTimeLocal(null)).toBeNull();
+  });
+
+  it("returns null for an unparseable value", () => {
+    expect(parseDateTimeLocal("not-a-date")).toBeNull();
+  });
+});
+
+describe("makeTimestampGenerator", () => {
+  const ms = Date.UTC(2021, 0, 1, 0, 0, 0);
+
+  it("stamps v1 / v6 / v7 UUIDs with the chosen moment", () => {
+    ["v1", "v6", "v7"].forEach((v) => {
+      const gen = makeTimestampGenerator(v, ms);
+      expect(typeof gen).toBe("function");
+      const value = gen();
+      expect(validateUuid(value)).toBe(true);
+      expect(uuidVersion(value)).toBe(Number(v.slice(1)));
+    });
+  });
+
+  it("produces a stable time prefix across a batch while values stay unique", () => {
+    const gen = makeTimestampGenerator("v7", ms);
+    const batch = buildBatch(5, gen);
+    const prefixes = new Set(batch.map((u) => u.slice(0, 13)));
+    expect(prefixes.size).toBe(1);
+    expect(new Set(batch).size).toBe(5);
+  });
+
+  it("round-trips a v7 timestamp through the decoder", () => {
+    // The decoder reads the first 48 bits of a v7 UUID as Unix milliseconds.
+    const value = makeTimestampGenerator("v7", ms)();
+    const decodedMs = parseInt(value.replace(/-/g, "").slice(0, 12), 16);
+    expect(decodedMs).toBe(ms);
+  });
+
+  it("returns null for non-time-based versions", () => {
+    ["v4", "v3", "v5", "nil", "max"].forEach((v) => {
+      expect(makeTimestampGenerator(v, ms)).toBeNull();
+    });
+  });
+
+  it("returns null for an invalid timestamp", () => {
+    expect(makeTimestampGenerator("v7", NaN)).toBeNull();
+    expect(makeTimestampGenerator("v7", Infinity)).toBeNull();
+    expect(makeTimestampGenerator("v7", null)).toBeNull();
   });
 });
 
