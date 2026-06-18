@@ -11,6 +11,7 @@ A Tailwind-styled UUID generator and validator built with React 19 and Vite. Gen
 ## Feature Highlights
 - Unified slider that drives both the on-screen preview count (capped at 20) and the downloadable batch size (1–200).
 - Version selector covering v1, v3, v4, v5, v6, v7, nil, and max via the `uuid` npm package. v3/v5 are deterministic (namespace + name); v6 is the index-friendly field-reordered rewrite of v1.
+- Pinned timestamp for the time-based versions (v1, v6, v7): switch from live "now" to a chosen moment to mint UUIDs for that instant, with a readout echoing the epoch milliseconds and decoded UTC. Useful for testing time-ordered ID systems; the inverse of the validator's timestamp decode.
 - Validator tab decodes any pasted UUID (version, variant, timestamp for v1/v7); shows the v6 counterpart for v1 inputs and vice versa.
 - Copy-to-clipboard with micro-interaction feedback plus a timestamped download action guarded against oversized files.
 - Insight cards summarizing current options (version, batch size, characters per UUID) placed directly above the list for quick scanning.
