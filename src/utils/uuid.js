@@ -49,6 +49,17 @@ export const isTimeBasedVersion = (version) =>
 
 const timeBasedFns = { v1: uuidV1, v6: uuidV6, v7: uuidV7 };
 
+// Format a moment as a local-time <input type="datetime-local"> value
+// (YYYY-MM-DDTHH:MM:SS), defaulting to the current instant. Used to seed the
+// pin-time controls so they open on "now" rather than a blank placeholder.
+export const toDateTimeLocal = (date = new Date()) => {
+  const pad = (n) => String(n).padStart(2, "0");
+  return (
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+    `T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+  );
+};
+
 // Parse a browser <input type="datetime-local"> value into epoch milliseconds.
 // Returns null for empty or unparseable input so callers fall back to live time.
 export const parseDateTimeLocal = (value) => {

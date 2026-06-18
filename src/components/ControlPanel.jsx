@@ -54,6 +54,22 @@ function ControlPanel({
   onTimestampChange,
   onToggleOption,
 }) {
+  // Split the combined pinned value into the two native controls; composing
+  // them back keeps the hook's single YYYY-MM-DDTHH:MM contract unchanged.
+  const [pinnedDate = "", pinnedClock = ""] = pinnedTime ? pinnedTime.split("T") : [];
+
+  const handleDatePart = (date) =>
+    onTimestampChange(date ? `${date}T${pinnedClock || "00:00"}` : "");
+
+  const handleTimePart = (time) => {
+    if (!time) {
+      onTimestampChange(pinnedDate ? `${pinnedDate}T00:00` : "");
+      return;
+    }
+    const date = pinnedDate || new Date().toLocaleDateString("en-CA");
+    onTimestampChange(`${date}T${time}`);
+  };
+
   return (
     <aside className="rail">
       {/* Version */}
@@ -150,17 +166,27 @@ function ControlPanel({
               <div className="rail-head name-section-head">
                 <span className="rail-key mono">moment</span>
               </div>
-              <input
-                type="datetime-local"
-                step="1"
-                min="1970-01-01T00:00:00"
-                max="2100-12-31T23:59:59"
-                className="name-input mono"
-                value={pinnedTime}
-                onChange={(e) => onTimestampChange(e.target.value)}
-                aria-label="Timestamp to embed in generated UUIDs"
-                aria-describedby={pinnedMsecs === null ? "ts-empty-hint" : "ts-readout"}
-              />
+              <div className="ts-fields">
+                <input
+                  type="date"
+                  min="1970-01-01"
+                  max="2100-12-31"
+                  className="name-input mono ts-field"
+                  value={pinnedDate}
+                  onChange={(e) => handleDatePart(e.target.value)}
+                  aria-label="Date to embed in generated UUIDs"
+                  aria-describedby={pinnedMsecs === null ? "ts-empty-hint" : "ts-readout"}
+                />
+                <input
+                  type="time"
+                  step="1"
+                  className="name-input mono ts-field"
+                  value={pinnedClock}
+                  onChange={(e) => handleTimePart(e.target.value)}
+                  aria-label="Time to embed in generated UUIDs"
+                  aria-describedby={pinnedMsecs === null ? "ts-empty-hint" : "ts-readout"}
+                />
+              </div>
               {pinnedMsecs === null ? (
                 <p id="ts-empty-hint" className="name-empty-hint mono" aria-live="polite">
                   Using live time until you pick a moment

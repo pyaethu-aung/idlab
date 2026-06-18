@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { validate as validateUuid, version as uuidVersion } from "uuid";
-import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, convertTimeUuid, createUuid, defaultNamespace, formatUuid, isConstantVersion, isTimeBasedVersion, makeNameBasedGenerator, makeTimestampGenerator, namespacePresets, parseDateTimeLocal, timeBasedVersions, uuidGenerators, uuidNameBased } from "./uuid";
+import { MAX_UUID, NIL_UUID, buildBatch, constantVersions, convertTimeUuid, createUuid, defaultNamespace, formatUuid, isConstantVersion, isTimeBasedVersion, makeNameBasedGenerator, makeTimestampGenerator, namespacePresets, parseDateTimeLocal, timeBasedVersions, toDateTimeLocal, uuidGenerators, uuidNameBased } from "./uuid";
 
 describe("buildBatch", () => {
   it("creates the requested number of UUIDs", () => {
@@ -173,6 +173,25 @@ describe("isTimeBasedVersion", () => {
     ["v4", "v3", "v5", "nil", "max", "", undefined].forEach((v) => {
       expect(isTimeBasedVersion(v)).toBe(false);
     });
+  });
+});
+
+describe("toDateTimeLocal", () => {
+  it("formats a date as a zero-padded local datetime-local value", () => {
+    expect(toDateTimeLocal(new Date(2021, 0, 5, 9, 7, 3))).toBe(
+      "2021-01-05T09:07:03"
+    );
+  });
+
+  it("round-trips through parseDateTimeLocal", () => {
+    const date = new Date(2026, 5, 18, 14, 30, 0);
+    expect(parseDateTimeLocal(toDateTimeLocal(date))).toBe(date.getTime());
+  });
+
+  it("defaults to the current moment", () => {
+    expect(toDateTimeLocal()).toMatch(
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
+    );
   });
 });
 
