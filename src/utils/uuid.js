@@ -41,6 +41,39 @@ export const uuidNameBased = { v3: uuidV3, v5: uuidV5 };
 export const makeNameBasedGenerator = (versionFn, namespace, name) =>
   () => versionFn(name, namespace);
 
+// Versions that encode a timestamp directly in the UUID, so they can be minted
+// for an arbitrary moment by passing { msecs }. Used to gate the pin-time UI.
+export const timeBasedVersions = ["v1", "v6", "v7"];
+export const isTimeBasedVersion = (version) =>
+  timeBasedVersions.includes(version);
+
+const timeBasedFns = { v1: uuidV1, v6: uuidV6, v7: uuidV7 };
+
+// Parse a browser <input type="datetime-local"> value into epoch milliseconds.
+// Returns null for empty or unparseable input so callers fall back to live time.
+export const parseDateTimeLocal = (value) => {
+  if (typeof value !== "string" || value.trim() === "") {
+    return null;
+  }
+  const ms = new Date(value).getTime();
+  return Number.isNaN(ms) ? null : ms;
+};
+
+// Build a zero-arg generator that stamps every UUID with the given moment.
+// Returns null when the version is not time-based, the timestamp is invalid, or
+// the package function is unavailable, so the caller can keep live generation.
+export const makeTimestampGenerator = (version, msecs) => {
+  const versionFn = timeBasedFns[version];
+  if (
+    typeof versionFn !== "function" ||
+    typeof msecs !== "number" ||
+    !Number.isFinite(msecs)
+  ) {
+    return null;
+  }
+  return () => versionFn({ msecs });
+};
+
 export const versionChoices = [
   {
     id: "v4",
