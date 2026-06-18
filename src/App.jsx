@@ -55,6 +55,8 @@ function App() {
     handleNamespaceChange,
     handleNameChange,
     toggleOption,
+    exportFormat,
+    setExportFormat,
     downloadList,
     commitBatchSize,
   } = useUuidGenerator();
@@ -115,12 +117,14 @@ function App() {
               namespace={namespace}
               name={name}
               options={options}
+              exportFormat={exportFormat}
               onBatchChange={setBatchSize}
               onBatchCommit={commitBatchSize}
               onVersionChange={handleVersionChange}
               onNamespaceChange={handleNamespaceChange}
               onNameChange={handleNameChange}
               onToggleOption={toggleOption}
+              onExportFormatChange={setExportFormat}
             />
 
             <UuidList
@@ -129,6 +133,7 @@ function App() {
               batch={batchSize}
               opts={options}
               isFixed={isFixed}
+              exportFormat={exportFormat}
               copiedUuid={copiedUuid}
               onCopy={handleCopy}
               onCopyAll={copyAll}
