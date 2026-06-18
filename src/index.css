@@ -640,6 +640,33 @@ kbd {
   outline-offset: 2px;
 }
 
+/* Native datetime-local picker should follow the active theme and accent. */
+input.name-input[type="datetime-local"] {
+  color-scheme: light dark;
+  accent-color: var(--accent);
+}
+
+/* ─── Pinned-timestamp readout (v1/v6/v7) ──────────────────────────────────── */
+.ts-readout {
+  margin: var(--sp-3) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+.ts-readout-ms {
+  color: var(--accent);
+}
+
+.ts-readout-utc {
+  flex-basis: 100%;
+  color: var(--ink-2);
+}
+
 /* ─── Panel ──────────────────────────────────────────────────────────────── */
 .panel {
   background: var(--bg-2);

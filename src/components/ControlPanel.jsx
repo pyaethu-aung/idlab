@@ -27,20 +27,31 @@ const FORMAT_OPTS = [
 
 const BATCH_PRESETS = [1, 8, 25, 100, 200];
 
+const TIMESTAMP_MODES = [
+  { id: "now", label: "now" },
+  { id: "pinned", label: "pinned" },
+];
+
 function ControlPanel({
   batchSize,
   visibleBatchSize,
   selectedVersion,
   isNameBased,
   isFixed,
+  isTimeBased,
   namespace,
   name,
+  timestampMode,
+  pinnedTime,
+  pinnedMsecs,
   options,
   onBatchChange,
   onBatchCommit,
   onVersionChange,
   onNamespaceChange,
   onNameChange,
+  onTimestampModeChange,
+  onTimestampChange,
   onToggleOption,
 }) {
   return (
@@ -111,6 +122,56 @@ function ControlPanel({
             <p id="name-empty-hint" className="name-empty-hint mono" aria-live="polite">
               Empty name — output will repeat until you type a value
             </p>
+          )}
+        </div>
+      )}
+
+      {/* Timestamp (v1/v6/v7 only) */}
+      {isTimeBased && (
+        <div className="rail-section">
+          <div className="rail-head">
+            <span className="rail-key mono">timestamp</span>
+          </div>
+          <div className="ns-grid" role="group" aria-label="Timestamp source">
+            {TIMESTAMP_MODES.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                className={`ns-chip mono${timestampMode === m.id ? " is-active" : ""}`}
+                onClick={() => onTimestampModeChange(m.id)}
+                aria-pressed={timestampMode === m.id}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+          {timestampMode === "pinned" && (
+            <>
+              <div className="rail-head name-section-head">
+                <span className="rail-key mono">moment</span>
+              </div>
+              <input
+                type="datetime-local"
+                step="1"
+                min="1970-01-01T00:00:00"
+                max="2100-12-31T23:59:59"
+                className="name-input mono"
+                value={pinnedTime}
+                onChange={(e) => onTimestampChange(e.target.value)}
+                aria-label="Timestamp to embed in generated UUIDs"
+                aria-describedby={pinnedMsecs === null ? "ts-empty-hint" : "ts-readout"}
+              />
+              {pinnedMsecs === null ? (
+                <p id="ts-empty-hint" className="name-empty-hint mono" aria-live="polite">
+                  Using live time until you pick a moment
+                </p>
+              ) : (
+                <p id="ts-readout" className="ts-readout mono" aria-live="polite">
+                  <span className="ts-readout-ms">{pinnedMsecs}</span> ms
+                  <span className="ts-readout-utc">{new Date(pinnedMsecs).toISOString()}</span>
+                </p>
+              )}
+            </>
           )}
         </div>
       )}

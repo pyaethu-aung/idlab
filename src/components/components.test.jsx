@@ -181,6 +181,103 @@ describe("ControlPanel", () => {
     fireEvent.click(toggle);
     expect(onToggleOption).toHaveBeenCalled();
   });
+
+  it("hides the timestamp section unless a time-based version is active", () => {
+    const { rerender } = render(
+      <ControlPanel
+        batchSize={5}
+        visibleBatchSize={5}
+        selectedVersion="v4"
+        isTimeBased={false}
+        options={defaultOptions}
+        onBatchChange={() => {}}
+        onBatchCommit={() => {}}
+        onVersionChange={() => {}}
+        onToggleOption={() => {}}
+      />
+    );
+    expect(screen.queryByRole("group", { name: /Timestamp source/i })).toBeNull();
+
+    rerender(
+      <ControlPanel
+        batchSize={5}
+        visibleBatchSize={5}
+        selectedVersion="v7"
+        isTimeBased
+        timestampMode="now"
+        pinnedTime=""
+        pinnedMsecs={null}
+        options={defaultOptions}
+        onBatchChange={() => {}}
+        onBatchCommit={() => {}}
+        onVersionChange={() => {}}
+        onToggleOption={() => {}}
+      />
+    );
+    expect(screen.getByRole("group", { name: /Timestamp source/i })).toBeTruthy();
+    // The moment input only appears once "pinned" is chosen.
+    expect(screen.queryByLabelText(/Timestamp to embed/i)).toBeNull();
+  });
+
+  it("exposes the moment input and decoded readout when a time is pinned", () => {
+    const onTimestampModeChange = vi.fn();
+    const onTimestampChange = vi.fn();
+
+    render(
+      <ControlPanel
+        batchSize={5}
+        visibleBatchSize={5}
+        selectedVersion="v7"
+        isTimeBased
+        timestampMode="pinned"
+        pinnedTime="2021-01-01T12:30:00"
+        pinnedMsecs={1609504200000}
+        options={defaultOptions}
+        onBatchChange={() => {}}
+        onBatchCommit={() => {}}
+        onVersionChange={() => {}}
+        onTimestampModeChange={onTimestampModeChange}
+        onTimestampChange={onTimestampChange}
+        onToggleOption={() => {}}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "now" }));
+    expect(onTimestampModeChange).toHaveBeenCalledWith("now");
+
+    const input = screen.getByLabelText(/Timestamp to embed/i);
+    fireEvent.change(input, { target: { value: "2022-02-02T08:15" } });
+    expect(onTimestampChange).toHaveBeenCalledWith("2022-02-02T08:15");
+
+    // Readout echoes the epoch ms and the decoded UTC instant.
+    expect(screen.getByText("1609504200000")).toBeTruthy();
+    expect(screen.getByText(/2021-01-01T12:30:00\.000Z/)).toBeTruthy();
+  });
+
+  it("shows a live-time fallback hint when the pinned time is blank", () => {
+    render(
+      <ControlPanel
+        batchSize={5}
+        visibleBatchSize={5}
+        selectedVersion="v1"
+        isTimeBased
+        timestampMode="pinned"
+        pinnedTime=""
+        pinnedMsecs={null}
+        options={defaultOptions}
+        onBatchChange={() => {}}
+        onBatchCommit={() => {}}
+        onVersionChange={() => {}}
+        onTimestampModeChange={() => {}}
+        onTimestampChange={() => {}}
+        onToggleOption={() => {}}
+      />
+    );
+
+    expect(screen.getByText(/Using live time until you pick a moment/i)).toBeTruthy();
+    // The decoded readout is suppressed while no valid moment is pinned.
+    expect(screen.queryByText("1609504200000")).toBeNull();
+  });
 });
 
 describe("ShortcutReference", () => {

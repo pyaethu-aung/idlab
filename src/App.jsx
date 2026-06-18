@@ -41,8 +41,12 @@ function App() {
     selectedVersion,
     isNameBased,
     isFixed,
+    isTimeBased,
     namespace,
     name,
+    timestampMode,
+    pinnedTime,
+    pinnedMsecs,
     options,
     formattedUuids,
     copiedUuid,
@@ -54,6 +58,8 @@ function App() {
     handleVersionChange,
     handleNamespaceChange,
     handleNameChange,
+    handleTimestampModeChange,
+    handleTimestampChange,
     toggleOption,
     exportFormat,
     setExportFormat,
@@ -114,14 +120,20 @@ function App() {
               selectedVersion={selectedVersion}
               isNameBased={isNameBased}
               isFixed={isFixed}
+              isTimeBased={isTimeBased}
               namespace={namespace}
               name={name}
+              timestampMode={timestampMode}
+              pinnedTime={pinnedTime}
+              pinnedMsecs={pinnedMsecs}
               options={options}
               onBatchChange={setBatchSize}
               onBatchCommit={commitBatchSize}
               onVersionChange={handleVersionChange}
               onNamespaceChange={handleNamespaceChange}
               onNameChange={handleNameChange}
+              onTimestampModeChange={handleTimestampModeChange}
+              onTimestampChange={handleTimestampChange}
               onToggleOption={toggleOption}
             />
 
