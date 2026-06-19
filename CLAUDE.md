@@ -33,6 +33,8 @@ This is a single-page React app with all state managed in custom hooks. `App.jsx
 
 **UUID utilities (`src/utils/uuid.js`):** All generation, conversion, and formatting logic is here. `buildBatch` produces arrays, `formatUuid` applies the three output options (uppercase, trimHyphens, wrapBraces) in order. `uuidGenerators` wraps the `uuid` npm package (v1/v3/v4/v5/v6/v7 plus the nil/max sentinels) with a `crypto.randomUUID` fallback for environments where the package functions are unavailable. `convertTimeUuid(value, version)` converts between the v1 and v6 forms of the same identifier via the package's `v1ToV6`/`v6ToV1`, returning `null` for any other version; it backs the validator's v1↔v6 conversion.
 
+**ULID utilities (`src/utils/ulid.js`):** ULID generate/decode plus ULID↔UUIDv7 conversion, with no new runtime dependency. `generateUlid(seedTime?)` mints a 26-char Crockford Base32 ULID (48-bit ms timestamp + 80-bit `crypto.getRandomValues` randomness). `decodeUlid` parses a ULID back to timestamp/randomness/UUID forms; `ulidToUuid`/`uuidToUlid` do the lossless 128-bit reinterpretation (the same Crockford Base32 the Converter's `base32` row uses). `inspectIdentifier` is the ULID tab's single entry point: it accepts a ULID or a UUIDv7 (the only UUID version that shares ULID's ms-timestamp layout) and returns one decoded shape. Backed by the `useUlid` hook and `ULID` tab (`UlidPanel`); reuses `formatRelativeTime` from `uuidDecoder.js`.
+
 **Static data (`src/data/shortcuts.js`):** The keyboard shortcut reference overlay is driven entirely from this data file — `useKeyboardShortcuts` and `ShortcutReference` must stay in sync with it manually.
 
 ## Testing
