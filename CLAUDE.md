@@ -25,6 +25,12 @@ This is a single-page React app with all state managed in custom hooks. `App.jsx
 
 **Hook responsibilities:**
 - `useUuidGenerator` — the central hook. Owns batch size (1–200), UUID version, formatting options, raw UUID array, copy/download state, and all derived values. The visible preview is capped at 20 (`visibleBatchSize`) while downloads generate the full `batchSize` (up to 200).
+- `useActiveTab` — maps `/generator`, `/validator`, `/converter`, `/bulk`, `/ulid`, and `/nanoid` paths to the active tab via `pushState`; listens for `popstate` so the browser back/forward buttons stay in sync. No client-side router needed.
+- `useUuidValidator` — owns the validator's raw input, parse options, decoded result, v1↔v6 conversion value, copy state, and a check counter that increments each time a new valid UUID is entered.
+- `useUuidBulk` — owns the bulk textarea input, parse options, and the parsed row array; exposes a summary of valid/invalid/total counts and one-click copy of all valid UUIDs.
+- `useUuidConverter` — owns the converter's raw input and per-row copy state; delegates all representation math to `convertUuid` in `uuidConvert.js`.
+- `useUlid` — owns ULID/UUIDv7 input, drives `inspectIdentifier` for decode, and exposes generate/clear/sample/copy helpers; tracks which sample pill is active.
+- `useNanoId` — owns size, count, and alphabet selection; re-mints the full batch on every control change with explicit overrides so output stays in sync without waiting for a state flush; exposes entropy stats (bit strength, 1%-collision id count).
 - `useTheme` — persists the selected theme to `localStorage` and writes `data-theme` on `<html>`. Returns `dark` by default and derives the initial value from `localStorage` falling back to `prefers-color-scheme`.
 - `useBrowserThemeSync` — a side-effect-only hook that listens for OS-level `prefers-color-scheme` changes and syncs them while the app is open. Kept separate from `useTheme` so the media query listener lifecycle is isolated.
 - `useKeyboardShortcuts` — attaches a single `keydown` listener on `window` and maps all keyboard shortcuts. Skips events when the target is a text input or when the shortcut overlay is open.
@@ -99,12 +105,3 @@ npm run build   # Build succeeds
 - **Target**: Linux/AMD64 only (<5min build time).
 - **Registry**: GHCR.
 
-### 010-uuid-decode
-
-**UUID Validator & Decoder** — Implementation plan: [`specs/010-uuid-decode/plan.md`](specs/010-uuid-decode/plan.md)
-
-- **New utility**: `src/utils/uuidDecoder.js` — pure parse/decode functions (must have test file).
-- **New hooks**: `useActiveTab` (tab state), `useUuidValidator` (input + decoded result).
-- **New components**: `ToolbarNav`, `ValidatorPanel`, `UuidInput`, `ValidationBadge`, `UuidBreakdown`, `DecodedFields`.
-- **Modified**: `App.jsx` (tab integration), `index.css` (validator + breakdown styles).
-- **Key constraint**: No new runtime dependencies; no client-side routing.
