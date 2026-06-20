@@ -74,9 +74,10 @@ kbd {
 
 /* ─── Top bar ────────────────────────────────────────────────────────────── */
 .topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 24px;
+  column-gap: 24px;
   height: 44px;
   padding: 0 28px;
   border-bottom: 1px solid var(--seam);
@@ -91,7 +92,6 @@ kbd {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 180px;
 }
 
 .brand-mark {
@@ -105,21 +105,19 @@ kbd {
   font-size: 16px;
 }
 
-.brand-tag {
-  color: var(--ink-3);
-  font-size: 13px;
-}
-
 .topbar-nav {
   display: flex;
-  gap: 4px;
-  flex: 1;
+  height: 100%;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2px;
 }
 
 .topbar-right {
   display: flex;
   gap: 8px;
   align-items: center;
+  justify-self: end;
 }
 
 /* ─── Buttons ────────────────────────────────────────────────────────────── */
@@ -1092,19 +1090,14 @@ input.name-input.ts-field[type="time"] {
 }
 
 /* ─── Toolbar nav tabs ───────────────────────────────────────────────────── */
-.topbar-nav {
-  display: flex;
-  gap: 4px;
-  flex: 1;
-}
-
 .tab-btn {
   display: inline-flex;
   align-items: center;
-  padding: 5px 10px;
+  padding: 0 12px;
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: var(--r-md);
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
   font-family: var(--font-mono);
   font-feature-settings: var(--font-feat-mono);
   font-size: var(--fs-sm);
@@ -1115,17 +1108,12 @@ input.name-input.ts-field[type="time"] {
 
 .tab-btn:hover {
   color: var(--ink-2);
-  border-color: var(--seam);
+  border-bottom-color: var(--seam-2);
 }
 
 .tab-btn--active {
   color: var(--accent);
-  border-color: var(--seam);
   border-bottom-color: var(--accent);
-}
-
-[data-theme="light"] .tab-btn--active {
-  color: var(--ink);
 }
 
 /* ─── Validator panel ────────────────────────────────────────────────────── */
