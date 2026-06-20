@@ -1,7 +1,7 @@
 function StatusBar({
   activeTab,
   version, batch, visible, opts, feedback,
-  validatorResult, validatorCheckCount,
+  validatorSummary, validatorExpanded, validatorCheckCount,
   ulidResult,
   nanoidStats, nanoidCount,
   onShortcuts,
@@ -9,7 +9,8 @@ function StatusBar({
   if (activeTab === "validator") {
     return (
       <ValidatorStatusBar
-        result={validatorResult}
+        summary={validatorSummary}
+        expanded={validatorExpanded}
         checkCount={validatorCheckCount}
         onShortcuts={onShortcuts}
       />
@@ -65,27 +66,33 @@ function StatusBar({
   );
 }
 
-function ValidatorStatusBar({ result, checkCount, onShortcuts }) {
-  const isValid = result?.valid ?? null;
-  const version = result?.valid ? `v${result.version} detected` : null;
-  const variant = result?.valid ? result.variantBits.split(" · b")[0] : null;
-  const charCount = result?.valid ? `${result.charCount} chars` : null;
-  const tsLabel = result?.valid && result.decoded
-    ? `ts · ${result.decoded.timestampIso?.slice(0, 19).replace("T", " ")} UTC`
+function ValidatorStatusBar({ summary, expanded, checkCount, onShortcuts }) {
+  const hasRows = summary !== null && summary !== undefined;
+  // The aggregate dot reads valid only when every row passed; any failure tints
+  // it like the old single-UUID invalid state. With input present there is
+  // always at least one row, so "no invalid" means "all valid".
+  const okState = hasRows ? summary.invalid === 0 : null;
+
+  // When a row is open, surface its specifics so the footer reflects the
+  // selection the way the single inspector used to.
+  const expVersion = expanded?.valid ? `v${expanded.version} selected` : null;
+  const expTs = expanded?.valid && expanded.decoded
+    ? `ts · ${expanded.decoded.timestampIso?.slice(0, 19).replace("T", " ")} UTC`
     : null;
 
   return (
     <footer className="status mono">
-      {isValid !== null && (
-        <span className={`status-cell${isValid ? " status-cell--valid" : " status-cell--invalid"}`}>
-          <span className={`status-dot${isValid ? "" : " status-dot--invalid"}`} />
-          {isValid ? "VALID" : "INVALID"}
+      {okState !== null && (
+        <span className={`status-cell${okState ? " status-cell--valid" : " status-cell--invalid"}`}>
+          <span className={`status-dot${okState ? "" : " status-dot--invalid"}`} />
+          {okState ? "ALL VALID" : "HAS INVALID"}
         </span>
       )}
-      {version  && <span className="status-cell">{version}</span>}
-      {variant  && <span className="status-cell">{variant}</span>}
-      {tsLabel  && <span className="status-cell">{tsLabel}</span>}
-      {charCount && <span className="status-cell">{charCount}</span>}
+      {hasRows && <span className="status-cell">{summary.valid} valid</span>}
+      {hasRows && <span className="status-cell">{summary.invalid} invalid</span>}
+      {hasRows && <span className="status-cell">{summary.total} total</span>}
+      {expVersion && <span className="status-cell">{expVersion}</span>}
+      {expTs && <span className="status-cell">{expTs}</span>}
       <span className="status-cell">{checkCount} checks today</span>
       <span className="status-spacer" />
       <button className="status-btn" onClick={onShortcuts}>

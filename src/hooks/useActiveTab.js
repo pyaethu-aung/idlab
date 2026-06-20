@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 
 function pathToTab(pathname) {
-  if (pathname.startsWith("/validator")) return "validator";
+  // /bulk folded into the validator, which now handles one UUID or many; the
+  // old deep link still lands on the unified tab.
+  if (pathname.startsWith("/validator") || pathname.startsWith("/bulk")) return "validator";
   if (pathname.startsWith("/converter")) return "converter";
-  if (pathname.startsWith("/bulk")) return "bulk";
   if (pathname.startsWith("/ulid")) return "ulid";
   if (pathname.startsWith("/nanoid")) return "nanoid";
   return "generator";
@@ -16,7 +17,12 @@ function useActiveTab() {
       window.history.replaceState(null, "", "/generator");
       return "generator";
     }
-    return pathToTab(pathname);
+    const tab = pathToTab(pathname);
+    // Rewrite the retired /bulk path to its new home so the URL stays canonical.
+    if (pathname.startsWith("/bulk")) {
+      window.history.replaceState(null, "", "/validator");
+    }
+    return tab;
   });
 
   useEffect(() => {

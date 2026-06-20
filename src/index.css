@@ -2007,6 +2007,72 @@ input.name-input.ts-field[type="time"] {
   font-size: var(--fs-xxs);
 }
 
+/* ─── Validator: expandable rows (master-detail) ─────────────────────────── */
+.v-col-expand {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.v-row-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all var(--d-swap);
+}
+
+.v-row-toggle:hover {
+  background: var(--bg-3);
+  border-color: var(--seam);
+  color: var(--ink);
+}
+
+.v-row-chev {
+  display: inline-block;
+  font-size: var(--fs-base);
+  line-height: 1;
+  transition: transform var(--d-swap);
+}
+
+.v-row-chev--open {
+  transform: rotate(90deg);
+}
+
+.v-row--open td {
+  background: color-mix(in oklch, var(--accent) 7%, var(--bg-2));
+}
+
+.v-row--open:hover td {
+  background: color-mix(in oklch, var(--accent) 10%, var(--bg-2));
+}
+
+.v-row-detail-row td.v-row-detail {
+  padding: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--seam-2);
+}
+
+/* The inspector sections self-pad and self-divide, so the detail stacks them
+   flush (like the standalone panel did) — no extra inset or floating gaps. */
+.v-row-detail-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.v-row-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--sp-7) var(--sp-10);
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .bench {

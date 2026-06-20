@@ -2,7 +2,6 @@ const TABS = [
   { id: "generator", label: "Generator" },
   { id: "validator", label: "Validator" },
   { id: "converter", label: "Converter" },
-  { id: "bulk", label: "Bulk" },
   { id: "ulid", label: "ULID" },
   { id: "nanoid", label: "NanoID" },
 ];

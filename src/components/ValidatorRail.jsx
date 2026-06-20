@@ -19,39 +19,59 @@ function Toggle({ on }) {
   );
 }
 
-function ValidatorRail({ value, onChange, options, onToggleOption, onLoadSample, activeSample }) {
-  const charCount = value ? value.replace(/[{} ]/g, "").replace(/-/g, "").length : 0;
-  const hasHyphens = value ? value.includes("-") : false;
-  const formatHint = !value
-    ? ""
-    : hasHyphens
-    ? `${value.trim().replace(/[{}]/g, "").length} chars · hyphenated`
-    : `${charCount} chars · compact`;
+// Describe a single line the way the old single-UUID inspector did, so pasting
+// one value still reads as "36 chars · hyphenated" rather than "1 line".
+function singleLineHint(line) {
+  const compactLen = line.replace(/[{} ]/g, "").replace(/-/g, "").length;
+  const hasHyphens = line.includes("-");
+  return hasHyphens
+    ? `${line.trim().replace(/[{}]/g, "").length} chars · hyphenated`
+    : `${compactLen} chars · compact`;
+}
+
+function ValidatorRail({
+  value,
+  onChange,
+  options,
+  onToggleOption,
+  onClear,
+  onLoadSample,
+  onLoadSampleList,
+  activeSample,
+}) {
+  const lines = value ? value.split(/\r?\n/).filter((line) => line.trim()) : [];
+  const lineCount = lines.length;
+  const meta =
+    lineCount === 0
+      ? ""
+      : lineCount === 1
+      ? singleLineHint(lines[0])
+      : `${lineCount} lines`;
 
   return (
     <div className="v-rail">
       {/* Input Section */}
       <div className="v-rail-section">
         <div className="v-rail-head">
-          <span className="v-rail-key mono">paste uuid</span>
-          <span className="v-rail-hint mono">{KEY_META}V</span>
+          <span className="v-rail-key mono">paste uuid(s)</span>
+          <span className="v-rail-hint mono">{KEY_META}V · one per line</span>
         </div>
         <div className="v-input-field-wrap">
-          <input
-            type="text"
-            className="v-input-field mono"
+          <textarea
+            className="v-input-field bulk-textarea mono"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+            placeholder={"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n…paste more on new lines"}
             spellCheck={false}
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            aria-label="UUID input"
+            rows={6}
+            aria-label="UUIDs to validate, one per line"
           />
           {value && (
             <div className="v-input-meta-row">
-              <span className="mono v-input-meta-text">{formatHint}</span>
+              <span className="mono v-input-meta-text">{meta}</span>
               <span className="v-input-meta-spacer" />
               <span className="v-input-live-wrap">
                 <span className="v-input-live-dot" aria-hidden="true" />
@@ -64,11 +84,19 @@ function ValidatorRail({ value, onChange, options, onToggleOption, onLoadSample,
           <button
             type="button"
             className="v-input-btn v-input-btn--secondary mono"
-            onClick={() => onChange("")}
+            onClick={onClear}
             disabled={!value}
             aria-label="Clear input"
           >
             <span aria-hidden="true">×</span> clear
+          </button>
+          <button
+            type="button"
+            className="v-input-btn v-input-btn--secondary mono"
+            onClick={onLoadSampleList}
+            aria-label="Load a sample list"
+          >
+            sample list
           </button>
         </div>
       </div>
@@ -76,7 +104,7 @@ function ValidatorRail({ value, onChange, options, onToggleOption, onLoadSample,
       {/* Samples Section */}
       <div className="v-rail-section">
         <div className="v-rail-head">
-          <span className="v-rail-key mono">try a sample</span>
+          <span className="v-rail-key mono">try one</span>
           <span className="v-rail-hint mono">click to load</span>
         </div>
         {SAMPLE_ROWS.map((row, ri) => (
