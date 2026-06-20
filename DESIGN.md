@@ -306,8 +306,10 @@ centered in the `1fr` column, utility controls on the right.
 
 ### Tab Navigation
 
-Six tabs (Generator / Validator / Converter / Bulk / ULID / NanoID), rendered inside a flex
-container that stretches to the topbar's full 44px height (`align-items: stretch`).
+Five tabs (Generator / Validator / Converter / ULID / NanoID), rendered inside a flex
+container that stretches to the topbar's full 44px height (`align-items: stretch`). The
+Validator absorbed the former Bulk tab: it validates one UUID or a pasted list, with each
+row expandable into the full inspector.
 
 - **Default:** `--ink-3` text, 2px `transparent` bottom border, no border-radius (zero radius
   keeps the underline flush with the topbar's hairline without a gap). 0/12px padding.
@@ -331,12 +333,20 @@ Sticky bottom. Mono throughout, 11px. 1px `--seam` right-divider between cells. 
 (`translateY(16px)` → 0) + scale (0.97 → 1) over 220ms on `--ease-standard`. Two-column body
 grid (200px / 1fr): key combinations / descriptions. All text Geist Mono. Closed by Esc.
 
-### Validator Input
+### Validator Input & Results
 
-Single-line input for UUID validation. `--bg-2` fill, 1px `--seam` border, `--r-md` radius.
-Geist Mono body, 14px. On focus: `--seam-2` border, no glow (flat system). Inline validation
-badge (valid / invalid) to the right of the input. UUID breakdown panel below renders decoded
-fields (version, variant, timestamp, node) on a valid parse.
+Multi-line textarea for one UUID or many (one per line). `--bg-2` fill, 1px `--seam` border,
+`--r-md` radius. Geist Mono body, 14px. On focus: `--seam-2` border, no glow (flat system). The
+rail carries a char/line meta row, clear + sample-list buttons, version sample pills, and the
+shared parse options.
+
+Every non-blank line becomes a row in a triage table (`bulk-table`): index / uuid / status /
+version / variant / time, with a valid/invalid/total summary and "copy N valid" above it. Each
+row carries a chevron expand button (`v-row-toggle`, 28px, accent `:focus-visible` ring); clicking
+it reveals the full inspector inline (`v-row-detail` on a recessed `--bg` surface): validation
+banner, parsed-structure segment card, properties grid, the v1↔v6 conversion, and a copy button.
+A lone UUID auto-expands; many rows start collapsed. The detail reuses the standalone inspector
+sections flush, so the expanded row and a single-UUID inspection look identical.
 
 ### ULID Panel
 
