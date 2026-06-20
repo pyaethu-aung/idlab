@@ -103,6 +103,13 @@ components:
     textColor: "{colors.on-accent}"
     rounded: "{rounded.sm}"
     padding: "4px 8px"
+  tab-btn:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-3}"
+    padding: "0 12px"
+  tab-btn-active:
+    textColor: "{colors.accent-lime}"
+    padding: "0 12px"
 ---
 
 # Design System: uuidlab
@@ -286,9 +293,29 @@ only bottom-heavy border in the system. `--r-xs` (4px) radius.
 
 ### Top Bar
 
-Sticky, `backdrop-filter: blur(10px)`. 14px/28px padding. 1px `--seam` bottom hairline.
-Left: brand mark icon (16×16 SVG) + brand name (Geist Sans 700, 16px, tracking -0.01em) + mono
-`/ tag` label in `--ink-3`. Right: ghost shortcut button + theme toggle button.
+Sticky, `backdrop-filter: blur(10px)`. `height: 44px`. 0 vertical padding (tab buttons stretch
+to full height). `padding: 0 28px`. 1px `--seam` bottom hairline.
+
+Three-column grid (`grid-template-columns: auto 1fr auto`): brand on the left, tab navigation
+centered in the `1fr` column, utility controls on the right.
+
+- **Left:** brand mark icon (16×16 SVG, `--accent`-colored) + brand name (Geist Sans 700, 16px,
+  tracking -0.01em). No route label — the active tab communicates current location.
+- **Center:** six tab buttons (see Tab Navigation), centered via `justify-content: center`.
+- **Right:** ghost shortcut button + theme toggle button.
+
+### Tab Navigation
+
+Six tabs (Generator / Validator / Converter / Bulk / ULID / NanoID), rendered inside a flex
+container that stretches to the topbar's full 44px height (`align-items: stretch`).
+
+- **Default:** `--ink-3` text, 2px `transparent` bottom border, no border-radius (zero radius
+  keeps the underline flush with the topbar's hairline without a gap). 0/12px padding.
+- **Hover:** `--ink-2` text, `--seam-2` bottom border, over `var(--d-swap)`.
+- **Active:** `--accent` text, `--accent` 2px bottom border. The underline sits flush against the
+  topbar's own `--seam` bottom hairline — it reads as a continuation of that edge, not a
+  floating decoration.
+- **Font:** Geist Mono, `var(--fs-sm)` (11px), label weight.
 
 ### Status Bar
 
@@ -310,6 +337,33 @@ Single-line input for UUID validation. `--bg-2` fill, 1px `--seam` border, `--r-
 Geist Mono body, 14px. On focus: `--seam-2` border, no glow (flat system). Inline validation
 badge (valid / invalid) to the right of the input. UUID breakdown panel below renders decoded
 fields (version, variant, timestamp, node) on a valid parse.
+
+### ULID Panel
+
+Reuses the validator workbench shell (`v-workbench` / `v-rail` / `v-panel-view`). Accepts a
+ULID or a UUIDv7 (the only UUID version that shares ULID's 48-bit millisecond timestamp layout);
+`inspectIdentifier` determines which path to take.
+
+- **Rail:** three sections — generate ("mint a ulid" primary CTA), paste input (text field with
+  live-valid indicator and char-count meta row; clear button), sample pills (ulid / uuidv7).
+- **Decoded view (valid):** validation banner (accent ✓), decoded section (`v-props-grid`:
+  timestamp UTC + relative, epoch ms, randomness), representations section (three `cx-row`
+  items: ulid / uuid / compact — each with inline row-copy button). A prose note explains
+  the lossless 128-bit reinterpretation.
+- **Empty / invalid state:** centered `v-empty-msg mono` text; `v-empty-msg--error` modifier on
+  invalid input shows the parse failure reason.
+
+### NanoID Panel
+
+Reuses the validator workbench shell. Generation-first — no paste/decode flow.
+
+- **Rail:** three sections — generate ("mint nanoids" primary CTA + count slider 1–N), length
+  slider (2–36 chars), alphabet preset pills (url-safe / alphanumeric / lowercase / hex / numbers).
+- **Generated list:** `ulid-repr` container of `cx-row` items (2-digit zero-padded index / value
+  code / copy button), mirroring the ULID representation rows. Header row (`v-props-head`) shows
+  count and a copy-all button.
+- **Entropy section:** `v-props-grid` with alphabet size, length, and bit strength; prose note
+  below quotes the 1%-birthday-bound collision threshold as `~10^N`.
 
 ## 6. Do's and Don'ts
 
@@ -338,4 +392,6 @@ fields (version, variant, timestamp, node) on a valid parse.
 - **Don't** add page-load choreography or staggered entrance sequences. Motion is feedback: state changes, copy confirmation, regenerate spin.
 - **Don't** invent a fourth button variant. Three roles (CTA, ghost, row-copy) are complete.
 - **Don't** use `--ink-4` or lighter for actionable copy. Ghost Ink is the informational floor; anything lighter is decoration.
-- **Don't** add a `border-bottom: 2px` to anything other than `<kbd>`. That bottom-heavy border is the key-cap cue and its uniqueness is the point.
+- **Don't** use `border-bottom: 2px` as a depth cue on anything other than `<kbd>` (the
+  key-cap affordance). The only other sanctioned 2px bottom is the active tab underline on
+  `.tab-btn--active`, where it is a directional indicator, not a depth cue.
