@@ -11,8 +11,10 @@ import UlidPanel from "./UlidPanel";
 import UuidList from "./UuidList";
 import ValidationBanner from "./ValidationBanner";
 import ValidatorConvert from "./ValidatorConvert";
+import ValidatorPanel from "./ValidatorPanel";
 import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorSegCard from "./ValidatorSegCard";
+import { parseUuidList } from "../utils/uuidBulk";
 
 const defaultOptions = {
   uppercase: false,
@@ -740,5 +742,118 @@ describe("UlidPanel", () => {
     render(<UlidPanel ulid={makeUlid({ loadSample })} />);
     await user.click(screen.getByRole("button", { name: "Load uuidv7 sample" }));
     expect(loadSample).toHaveBeenCalledWith("uuidv7");
+  });
+});
+
+const VALIDATOR_OPTIONS = { strictRfc: false, allowBraces: true, allowNoHyphens: false };
+const V1 = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+
+const makeValidator = (overrides = {}) => ({
+  rawInput: "",
+  setRawInput: vi.fn(),
+  options: VALIDATOR_OPTIONS,
+  toggleOption: vi.fn(),
+  parsed: null,
+  summary: null,
+  validCount: 0,
+  expandedLine: null,
+  toggleRow: vi.fn(),
+  conversion: null,
+  conversionCopied: false,
+  copyConversion: vi.fn(),
+  copyValid: vi.fn(),
+  copiedAll: false,
+  copyOne: vi.fn(),
+  copiedLine: null,
+  clearInput: vi.fn(),
+  loadSample: vi.fn(),
+  loadSampleList: vi.fn(),
+  activeSample: null,
+  ...overrides,
+});
+
+const withList = (text, overrides = {}) => {
+  const parsed = parseUuidList(text, VALIDATOR_OPTIONS);
+  return makeValidator({
+    rawInput: text,
+    parsed,
+    summary: parsed.summary,
+    validCount: parsed.summary.valid,
+    ...overrides,
+  });
+};
+
+describe("ValidatorPanel", () => {
+  it("shows the empty-state prompt when there is no input", () => {
+    render(<ValidatorPanel validator={makeValidator()} />);
+    expect(screen.getByText("paste one or more uuids to validate")).toBeInTheDocument();
+  });
+
+  it("renders the summary count and one row per parsed line", () => {
+    render(<ValidatorPanel validator={withList([V4, "not-a-uuid"].join("\n"))} />);
+    expect(screen.getByText(V4)).toBeInTheDocument();
+    expect(screen.getByText("not-a-uuid")).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("button", { name: /details for line/ })
+    ).toHaveLength(2);
+    expect(screen.getByRole("button", { name: "Copy all valid UUIDs" })).toHaveTextContent("copy 1 valid");
+  });
+
+  it("calls toggleRow with the line number when an expand button is clicked", async () => {
+    const toggleRow = vi.fn();
+    const user = userEvent.setup();
+    render(<ValidatorPanel validator={withList([V4, V1].join("\n"), { toggleRow })} />);
+    await user.click(screen.getByRole("button", { name: "Expand details for line 1" }));
+    expect(toggleRow).toHaveBeenCalledWith(1);
+  });
+
+  it("renders the inspector detail for the expanded row", () => {
+    render(<ValidatorPanel validator={withList([V4, V1].join("\n"), { expandedLine: 1 })} />);
+    expect(screen.getByRole("button", { name: "Collapse details for line 1" })).toBeInTheDocument();
+    expect(screen.getByText(/Valid · UUID v4/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Copy this UUID" })).toBeInTheDocument();
+  });
+
+  it("surfaces the v1→v6 conversion inside an expanded time-based row", () => {
+    const conversion = { from: 1, to: 6, value: "1d19dad6-ba7b-6810-80b4-00c04fd430c8" };
+    render(<ValidatorPanel validator={withList(V1, { expandedLine: 1, conversion })} />);
+    expect(screen.getByText("v1 → v6")).toBeInTheDocument();
+    expect(screen.getByText(conversion.value)).toBeInTheDocument();
+  });
+
+  it("wires copy-all, copy-one, clear, sample, and sample-list controls", async () => {
+    const copyValid = vi.fn();
+    const copyOne = vi.fn();
+    const clearInput = vi.fn();
+    const loadSample = vi.fn();
+    const loadSampleList = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <ValidatorPanel
+        validator={withList(V4, {
+          expandedLine: 1,
+          copyValid,
+          copyOne,
+          clearInput,
+          loadSample,
+          loadSampleList,
+        })}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Copy all valid UUIDs" }));
+    expect(copyValid).toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Copy this UUID" }));
+    expect(copyOne).toHaveBeenCalledWith(1, V4);
+
+    await user.click(screen.getByRole("button", { name: "Clear input" }));
+    expect(clearInput).toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Load a sample list" }));
+    expect(loadSampleList).toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Load v4 sample UUID" }));
+    expect(loadSample).toHaveBeenCalledWith("v4");
   });
 });

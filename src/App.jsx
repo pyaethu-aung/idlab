@@ -7,7 +7,6 @@ import ThemeToggle from "./components/ThemeToggle";
 import ToolbarNav from "./components/ToolbarNav";
 import UuidList from "./components/UuidList";
 import ConvertPanel from "./components/ConvertPanel";
-import BulkPanel from "./components/BulkPanel";
 import ValidatorPanel from "./components/ValidatorPanel";
 import UlidPanel from "./components/UlidPanel";
 import NanoIdPanel from "./components/NanoIdPanel";
@@ -18,7 +17,6 @@ import useTheme from "./hooks/useTheme";
 import useBrowserThemeSync from "./hooks/useBrowserThemeSync";
 import useUuidGenerator from "./hooks/useUuidGenerator";
 import useUuidConverter from "./hooks/useUuidConverter";
-import useUuidBulk from "./hooks/useUuidBulk";
 import useUuidValidator from "./hooks/useUuidValidator";
 import useUlid from "./hooks/useUlid";
 import useNanoId from "./hooks/useNanoId";
@@ -75,7 +73,6 @@ function App() {
 
   const validator = useUuidValidator();
   const converter = useUuidConverter();
-  const bulk = useUuidBulk();
   const ulid = useUlid();
   const nanoid = useNanoId();
 
@@ -171,10 +168,6 @@ function App() {
           <ConvertPanel converter={converter} />
         </div>
 
-        <div style={{ display: activeTab === "bulk" ? "" : "none" }}>
-          <BulkPanel bulk={bulk} />
-        </div>
-
         <div style={{ display: activeTab === "ulid" ? "" : "none" }}>
           <UlidPanel ulid={ulid} />
         </div>
@@ -191,7 +184,8 @@ function App() {
         visible={visibleBatchSize}
         opts={options}
         feedback={feedback}
-        validatorResult={validator.result}
+        validatorSummary={validator.summary}
+        validatorExpanded={validator.expandedResult}
         validatorCheckCount={validator.checkCount}
         ulidResult={ulid.result}
         nanoidStats={nanoid.stats}

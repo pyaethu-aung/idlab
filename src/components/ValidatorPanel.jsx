@@ -1,20 +1,27 @@
-import ValidationBanner from "./ValidationBanner";
-import ValidatorConvert from "./ValidatorConvert";
-import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorRail from "./ValidatorRail";
-import ValidatorSegCard from "./ValidatorSegCard";
+import ValidatorResultsTable from "./ValidatorResultsTable";
 
 function ValidatorPanel({ validator }) {
   const {
     rawInput,
     setRawInput,
-    result,
-    conversion,
-    copyConversion,
-    conversionCopied,
     options,
     toggleOption,
+    parsed,
+    summary,
+    validCount,
+    expandedLine,
+    toggleRow,
+    conversion,
+    conversionCopied,
+    copyConversion,
+    copyValid,
+    copiedAll,
+    copyOne,
+    copiedLine,
+    clearInput,
     loadSample,
+    loadSampleList,
     activeSample,
   } = validator;
 
@@ -26,30 +33,57 @@ function ValidatorPanel({ validator }) {
           onChange={setRawInput}
           options={options}
           onToggleOption={toggleOption}
+          onClear={clearInput}
           onLoadSample={loadSample}
+          onLoadSampleList={loadSampleList}
           activeSample={activeSample}
         />
 
         <div className="v-panel-view">
           <div className="v-panel-body">
-            {result ? (
+            {parsed ? (
               <>
-                <div className="v-result-section">
-                  <ValidationBanner result={result} />
-                  <ValidatorSegCard fields={result?.valid ? result.fields : null} />
+                <div className="bulk-summary">
+                  <div className="bulk-summary-counts">
+                    <span className="bulk-count bulk-count--ok mono">
+                      <span className="bulk-count-num">{summary.valid}</span> valid
+                    </span>
+                    <span className="bulk-count bulk-count--bad mono">
+                      <span className="bulk-count-num">{summary.invalid}</span> invalid
+                    </span>
+                    <span className="bulk-count bulk-count--total mono">
+                      <span className="bulk-count-num">{summary.total}</span> total
+                    </span>
+                    {summary.truncated && (
+                      <span className="bulk-count bulk-count--warn mono">
+                        capped at 1000
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    className={`v-input-btn v-input-btn--secondary bulk-copy-btn mono${copiedAll ? " is-copied" : ""}`}
+                    onClick={copyValid}
+                    disabled={validCount === 0}
+                    aria-label="Copy all valid UUIDs"
+                  >
+                    {copiedAll ? "✓ copied" : `copy ${validCount} valid`}
+                  </button>
                 </div>
-                {result.valid && (
-                  <ValidatorPropsGrid result={result} />
-                )}
-                <ValidatorConvert
+                <ValidatorResultsTable
+                  rows={parsed.rows}
+                  expandedLine={expandedLine}
+                  onToggleRow={toggleRow}
                   conversion={conversion}
-                  copied={conversionCopied}
-                  onCopy={copyConversion}
+                  conversionCopied={conversionCopied}
+                  onCopyConversion={copyConversion}
+                  copyOne={copyOne}
+                  copiedLine={copiedLine}
                 />
               </>
             ) : (
               <div className="v-empty-state">
-                <span className="v-empty-msg mono">paste a UUID to inspect</span>
+                <span className="v-empty-msg mono">paste one or more uuids to validate</span>
               </div>
             )}
           </div>
