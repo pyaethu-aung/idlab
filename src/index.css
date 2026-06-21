@@ -2014,6 +2014,13 @@ input.name-input.ts-field[type="time"] {
   text-align: right;
 }
 
+/* Other cells top-align (the two-line time reads from the top); the lone
+   chevron control instead centers in the full row height. Selector must
+   outweigh `.bulk-table tbody td { vertical-align: top }`. */
+.bulk-table tbody td.v-col-expand {
+  vertical-align: middle;
+}
+
 .v-row-toggle {
   display: inline-flex;
   align-items: center;
