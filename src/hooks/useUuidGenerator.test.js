@@ -153,6 +153,27 @@ describe("useUuidGenerator", () => {
     );
   });
 
+  it("cycles the export format and wraps past the last entry", () => {
+    const { result } = renderHook(() => useUuidGenerator());
+
+    expect(result.current.exportFormat).toBe("txt");
+
+    act(() => {
+      result.current.cycleExportFormat();
+    });
+    expect(result.current.exportFormat).toBe("json");
+    expect(result.current.feedback).toMatch(/Export format: \.json/i);
+
+    // txt -> json -> csv -> sql -> env -> txt
+    act(() => {
+      result.current.cycleExportFormat();
+      result.current.cycleExportFormat();
+      result.current.cycleExportFormat();
+      result.current.cycleExportFormat();
+    });
+    expect(result.current.exportFormat).toBe("txt");
+  });
+
   it("copies UUIDs when the Clipboard API is present", async () => {
     const clipboardSpy = vi.spyOn(navigator.clipboard, "writeText");
     const { result } = renderHook(() => useUuidGenerator());

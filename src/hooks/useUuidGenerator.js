@@ -13,7 +13,7 @@ import {
   uuidGenerators,
   uuidNameBased,
 } from "../utils/uuid";
-import { exportUuids } from "../utils/uuidExport";
+import { EXPORT_FORMATS, exportUuids } from "../utils/uuidExport";
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 const initialBatchSize = 8;
@@ -265,6 +265,15 @@ function useUuidGenerator() {
     }
   }, [clipboardSupported, formattedUuids, stageFeedback]);
 
+  const cycleExportFormat = useCallback(() => {
+    setExportFormat((prev) => {
+      const index = EXPORT_FORMATS.indexOf(prev);
+      const next = EXPORT_FORMATS[(index + 1) % EXPORT_FORMATS.length];
+      stageFeedback(`Export format: .${next}`);
+      return next;
+    });
+  }, [stageFeedback]);
+
   const toggleOption = useCallback((key) => {
     setOptions((prev) => ({
       ...prev,
@@ -302,6 +311,7 @@ function useUuidGenerator() {
     options,
     exportFormat,
     setExportFormat,
+    cycleExportFormat,
     formattedUuids,
     copiedUuid,
     feedback,
