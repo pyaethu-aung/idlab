@@ -10,6 +10,7 @@ const {
   mockCopyAll,
   mockHandleVersionChange,
   mockToggleOption,
+  mockCycleExportFormat,
   mockSetBatchSize,
   mockCommitBatchSize,
   mockSetBatchSizeAndCommit,
@@ -24,6 +25,7 @@ const {
   mockCopyAll: vi.fn(),
   mockHandleVersionChange: vi.fn(),
   mockToggleOption: vi.fn(),
+  mockCycleExportFormat: vi.fn(),
   mockSetBatchSize: vi.fn(),
   mockCommitBatchSize: vi.fn(),
   mockSetBatchSizeAndCommit: vi.fn(),
@@ -62,6 +64,7 @@ const createGeneratorState = (overrides = {}) => ({
   copyAll: mockCopyAll,
   handleVersionChange: mockHandleVersionChange,
   toggleOption: mockToggleOption,
+  cycleExportFormat: mockCycleExportFormat,
   downloadList: mockDownloadList,
   commitBatchSize: mockCommitBatchSize,
   ...overrides,
@@ -127,6 +130,9 @@ describe("App", () => {
       toggleValidatorOption: expect.any(Function),
       setBatchSizeAndCommit: state.setBatchSizeAndCommit,
       handleCopy: state.handleCopy,
+      copyAll: state.copyAll,
+      cycleExportFormat: state.cycleExportFormat,
+      setActiveTab: expect.any(Function),
     });
   });
 
