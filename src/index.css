@@ -1052,6 +1052,19 @@ input.name-input.ts-field[type="time"] {
   padding: 8px;
 }
 
+.modal-group + .modal-group {
+  margin-top: 14px;
+}
+
+.modal-group-title {
+  margin: 0;
+  padding: 0 14px 6px;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
 .modal-row {
   display: grid;
   grid-template-columns: 200px 1fr;
