@@ -195,7 +195,7 @@ function ValidatorRail({
       <div className="v-rail-section v-rail-section--last">
         <div className="v-rail-head">
           <span className="v-rail-key mono">accept</span>
-          <span className="v-rail-hint mono">{KEY_OPT}R · {KEY_OPT}{"{"} · {KEY_OPT}-</span>
+          <span className="v-rail-hint mono">{KEY_OPT}R · {KEY_OPT}[ · {KEY_OPT}-</span>
         </div>
         <div className="v-opt-stack">
           {OPTIONS_CONFIG.map(({ key, label, desc }) => (
