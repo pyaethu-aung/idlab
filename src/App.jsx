@@ -3,6 +3,7 @@ import ControlPanel from "./components/ControlPanel";
 import Hero from "./components/Hero";
 import ShortcutReference from "./components/ShortcutReference";
 import StatusBar from "./components/StatusBar";
+import TabAnnouncer from "./components/TabAnnouncer";
 import ThemeToggle from "./components/ThemeToggle";
 import ToolbarNav from "./components/ToolbarNav";
 import UuidList from "./components/UuidList";
@@ -118,6 +119,7 @@ function App() {
 
   return (
     <div className="root">
+      <TabAnnouncer activeTab={activeTab} />
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark">

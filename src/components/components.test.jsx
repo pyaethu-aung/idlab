@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -5,6 +6,7 @@ import ControlPanel from "./ControlPanel";
 import ConvertPanel from "./ConvertPanel";
 import Hero from "./Hero";
 import ShortcutReference from "./ShortcutReference";
+import TabAnnouncer from "./TabAnnouncer";
 import ThemeToggle from "./ThemeToggle";
 import ToolbarNav from "./ToolbarNav";
 import UlidPanel from "./UlidPanel";
@@ -511,6 +513,46 @@ describe("ToolbarNav", () => {
     render(<ToolbarNav activeTab="generator" onTabChange={onTabChange} />);
     await user.click(screen.getByRole("button", { name: "Generator" }));
     expect(onTabChange).not.toHaveBeenCalled();
+  });
+});
+
+describe("TabAnnouncer", () => {
+  it("stays silent on the initial render", () => {
+    render(<TabAnnouncer activeTab="generator" />);
+    expect(screen.getByRole("status")).toHaveTextContent("");
+  });
+
+  it("stays silent on initial render under StrictMode", () => {
+    // StrictMode double-invokes effects on mount; a boolean first-render flag
+    // would flip and then announce the default tab on load. The previous-value
+    // comparison must keep the region silent.
+    render(
+      <StrictMode>
+        <TabAnnouncer activeTab="generator" />
+      </StrictMode>
+    );
+    expect(screen.getByRole("status")).toHaveTextContent("");
+  });
+
+  it("announces the new tab label when the active tab changes", () => {
+    const { rerender } = render(<TabAnnouncer activeTab="generator" />);
+    rerender(<TabAnnouncer activeTab="ulid" />);
+    expect(screen.getByRole("status")).toHaveTextContent("ULID tab");
+  });
+
+  it("re-announces on every subsequent change", () => {
+    const { rerender } = render(<TabAnnouncer activeTab="generator" />);
+    rerender(<TabAnnouncer activeTab="validator" />);
+    expect(screen.getByRole("status")).toHaveTextContent("Validator tab");
+    rerender(<TabAnnouncer activeTab="nanoid" />);
+    expect(screen.getByRole("status")).toHaveTextContent("NanoID tab");
+  });
+
+  it("exposes a polite, atomic live region", () => {
+    render(<TabAnnouncer activeTab="generator" />);
+    const region = screen.getByRole("status");
+    expect(region).toHaveAttribute("aria-live", "polite");
+    expect(region).toHaveAttribute("aria-atomic", "true");
   });
 });
 

@@ -1,12 +1,5 @@
 import { KEY_OPT } from "../utils/platform";
-
-const TABS = [
-  { id: "generator", label: "Generator" },
-  { id: "validator", label: "Validator" },
-  { id: "converter", label: "Converter" },
-  { id: "ulid", label: "ULID" },
-  { id: "nanoid", label: "NanoID" },
-];
+import { TABS } from "../data/tabs";
 
 function ToolbarNav({ activeTab, onTabChange }) {
   return (
