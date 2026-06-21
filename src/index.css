@@ -2177,6 +2177,111 @@ input.name-input.ts-field[type="time"] {
   }
 }
 
+/* ─── 768px: topbar wraps to 2 rows; main/panel padding tightens ────────── */
+@media (max-width: 768px) {
+  .topbar {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 44px 44px;
+    height: auto;
+    padding: 0;
+    column-gap: 0;
+  }
+
+  .brand {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: center;
+    padding-left: 16px;
+  }
+
+  .topbar-right {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: center;
+    padding-right: 16px;
+  }
+
+  .topbar-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    padding: 0 4px;
+    border-top: 1px solid var(--seam);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    height: 44px;
+  }
+
+  .topbar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    padding: 0 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .main,
+  .validator-panel {
+    padding: 24px 16px 60px;
+  }
+}
+
+/* ─── 640px: status bar scrollable; cx-row stacks on narrow panels ──────── */
+@media (max-width: 640px) {
+  .status {
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+
+  .status::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cx-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "label copy"
+      "value value";
+    gap: 6px var(--sp-6);
+  }
+
+  .cx-label { grid-area: label; }
+  .cx-copy  { grid-area: copy;  }
+  .cx-value { grid-area: value; }
+}
+
+/* ─── 480px: hero scales down; modal becomes a bottom sheet ─────────────── */
+@media (max-width: 480px) {
+  :root {
+    --fs-hero: clamp(32px, 9vw, 52px);
+  }
+
+  .modal-scrim {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-row {
+    grid-template-columns: 1fr;
+    gap: 1px;
+    padding: 6px 14px 8px;
+  }
+
+  .modal-keys {
+    padding-top: 6px;
+  }
+}
+
 /* ─── Touch targets ──────────────────────────────────────────────────────── */
 .ghost-btn  { min-height: 44px; }
 .tab-btn    { min-height: 44px; }
