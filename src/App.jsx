@@ -67,6 +67,7 @@ function App() {
     toggleOption,
     exportFormat,
     setExportFormat,
+    cycleExportFormat,
     downloadList,
     commitBatchSize,
   } = useUuidGenerator();
@@ -89,6 +90,9 @@ function App() {
     toggleValidatorOption: validator.toggleOption,
     setBatchSizeAndCommit,
     handleCopy,
+    copyAll,
+    cycleExportFormat,
+    setActiveTab,
   });
 
   return (

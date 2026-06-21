@@ -10,6 +10,15 @@ const TEXT_INPUT_TYPES = [
   "tel",
 ];
 
+const TAB_ORDER = ["generator", "validator", "converter", "ulid", "nanoid"];
+const TAB_DIGITS = {
+  Digit1: 0,
+  Digit2: 1,
+  Digit3: 2,
+  Digit4: 3,
+  Digit5: 4,
+};
+
 const shouldIgnoreTarget = (target) => {
   if (!target) return false;
   if (target.isContentEditable) return true;
@@ -35,6 +44,9 @@ function useKeyboardShortcuts({
   toggleValidatorOption,
   setBatchSizeAndCommit,
   handleCopy,
+  copyAll,
+  cycleExportFormat,
+  setActiveTab,
   activeTab,
 }) {
   useEffect(() => {
@@ -100,6 +112,24 @@ function useKeyboardShortcuts({
           setBatchSizeAndCommit(batchSize - decrement);
           return;
         }
+        // Alt+Shift tab navigation. Checked before the version digits so the
+        // shifted digits route to tabs instead of generator versions.
+        if (event.shiftKey && setActiveTab) {
+          if (code in TAB_DIGITS) {
+            event.preventDefault();
+            setActiveTab(TAB_ORDER[TAB_DIGITS[code]]);
+            return;
+          }
+          if (code === "ArrowLeft" || code === "ArrowRight") {
+            event.preventDefault();
+            const current = TAB_ORDER.indexOf(activeTab);
+            const start = current === -1 ? 0 : current;
+            const delta = code === "ArrowRight" ? 1 : -1;
+            const next = (start + delta + TAB_ORDER.length) % TAB_ORDER.length;
+            setActiveTab(TAB_ORDER[next]);
+            return;
+          }
+        }
         if (code === "Digit1") {
           event.preventDefault();
           handleVersionChange("v4");
@@ -155,6 +185,17 @@ function useKeyboardShortcuts({
           toggleOption("wrapBraces");
           return;
         }
+        // Export format / copy-all act on the generator's batch, so keep them
+        // scoped to that tab.
+        if (code === "KeyC" && activeTab === "generator") {
+          event.preventDefault();
+          if (event.shiftKey) {
+            copyAll?.();
+          } else {
+            cycleExportFormat?.();
+          }
+          return;
+        }
         if (activeTab === "validator") {
           if (code === "KeyR") {
             event.preventDefault();
@@ -180,12 +221,15 @@ function useKeyboardShortcuts({
   }, [
     activeTab,
     batchSize,
+    copyAll,
+    cycleExportFormat,
     downloadList,
     formattedUuids,
     handleCopy,
     handleVersionChange,
     isShortcutHelpOpen,
     regenerate,
+    setActiveTab,
     setBatchSizeAndCommit,
     setShortcutHelpOpen,
     toggleOption,

@@ -17,6 +17,10 @@ describe("useKeyboardShortcuts", () => {
       toggleOption: vi.fn(),
       setBatchSizeAndCommit: vi.fn(),
       handleCopy: vi.fn(),
+      copyAll: vi.fn(),
+      cycleExportFormat: vi.fn(),
+      setActiveTab: vi.fn(),
+      activeTab: "generator",
     };
   });
 
@@ -247,6 +251,95 @@ describe("useKeyboardShortcuts", () => {
       window.dispatchEvent(event);
 
       expect(mockProps.handleCopy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("export format and copy-all shortcuts", () => {
+    it("cycles export format with Alt + C on the generator tab", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({ key: "c", code: "KeyC", altKey: true });
+      window.dispatchEvent(event);
+
+      expect(mockProps.cycleExportFormat).toHaveBeenCalled();
+      expect(mockProps.copyAll).not.toHaveBeenCalled();
+    });
+
+    it("copies the whole batch with Alt + Shift + C on the generator tab", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "c",
+        code: "KeyC",
+        altKey: true,
+        shiftKey: true,
+      });
+      window.dispatchEvent(event);
+
+      expect(mockProps.copyAll).toHaveBeenCalled();
+      expect(mockProps.cycleExportFormat).not.toHaveBeenCalled();
+    });
+
+    it("does not cycle export format when off the generator tab", () => {
+      mockProps.activeTab = "validator";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({ key: "c", code: "KeyC", altKey: true });
+      window.dispatchEvent(event);
+
+      expect(mockProps.cycleExportFormat).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("tab navigation shortcuts", () => {
+    it("jumps to a tab with Alt + Shift + digit", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "2",
+        code: "Digit2",
+        altKey: true,
+        shiftKey: true,
+      });
+      window.dispatchEvent(event);
+
+      expect(mockProps.setActiveTab).toHaveBeenCalledWith("validator");
+    });
+
+    it("does not switch versions for Alt + Shift + digit", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "1",
+        code: "Digit1",
+        altKey: true,
+        shiftKey: true,
+      });
+      window.dispatchEvent(event);
+
+      expect(mockProps.handleVersionChange).not.toHaveBeenCalled();
+      expect(mockProps.setActiveTab).toHaveBeenCalledWith("generator");
+    });
+
+    it("cycles to the next tab with Alt + Shift + ArrowRight", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "ArrowRight",
+        code: "ArrowRight",
+        altKey: true,
+        shiftKey: true,
+      });
+      window.dispatchEvent(event);
+
+      expect(mockProps.setActiveTab).toHaveBeenCalledWith("validator");
+    });
+
+    it("wraps to the last tab with Alt + Shift + ArrowLeft from the first", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "ArrowLeft",
+        code: "ArrowLeft",
+        altKey: true,
+        shiftKey: true,
+      });
+      window.dispatchEvent(event);
+
+      expect(mockProps.setActiveTab).toHaveBeenCalledWith("nanoid");
     });
   });
 
