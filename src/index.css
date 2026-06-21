@@ -317,6 +317,10 @@ kbd {
 .rail-hint {
   color: var(--ink-4);
   font-size: var(--fs-xxs);
+  /* The parent .rail-head lowercases the rail key (version, batch, format).
+     Shortcut letters must stay uppercase to match every other rail and the
+     Mac convention (⌥U, not ⌥u), so opt the hint out of that transform. */
+  text-transform: none;
 }
 
 /* ─── Version stack ──────────────────────────────────────────────────────── */
