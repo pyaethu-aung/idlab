@@ -705,7 +705,7 @@ describe("UlidPanel", () => {
     const generate = vi.fn();
     const user = userEvent.setup();
     render(<UlidPanel ulid={makeUlid({ generate })} />);
-    await user.click(screen.getByRole("button", { name: "mint a ulid" }));
+    await user.click(screen.getByRole("button", { name: "Mint a ULID" }));
     expect(generate).toHaveBeenCalledTimes(1);
   });
 

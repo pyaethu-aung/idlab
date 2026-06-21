@@ -132,8 +132,10 @@ function ValidatorRail({
             onClick={onClear}
             disabled={!value}
             aria-label="Clear input"
+            aria-keyshortcuts="Alt+Backspace"
           >
             <span aria-hidden="true">×</span> clear
+            <kbd className="kbd-hint">{KEY_OPT}⌫</kbd>
           </button>
           <button
             type="button"

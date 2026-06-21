@@ -5,6 +5,7 @@ import {
   NANOID_MIN_COUNT,
   NANOID_MAX_COUNT,
 } from "../utils/nanoid";
+import { KEY_META } from "../utils/platform";
 
 // Render the 1%-collision threshold compactly: a power of ten once it is large,
 // a plain count for the rare tiny-keyspace configs.
@@ -57,8 +58,11 @@ function NanoIdPanel({ nanoid }) {
                 type="button"
                 className="v-input-btn v-input-btn--primary mono"
                 onClick={() => regenerate()}
+                aria-label="Mint NanoIDs"
+                aria-keyshortcuts="Meta+Enter Control+Enter"
               >
                 mint nanoids
+                <kbd className="cta-kbd">{KEY_META}↵</kbd>
               </button>
             </div>
             <label htmlFor="nanoid-count" className="sr-only">

@@ -1,4 +1,4 @@
-import { KEY_META } from "../utils/platform";
+import { KEY_META, KEY_OPT } from "../utils/platform";
 
 const SAMPLES = [
   ["nil", "00000000-0000-0000-0000-000000000000"],
@@ -65,8 +65,10 @@ function ConvertPanel({ converter }) {
                 onClick={clearInput}
                 disabled={!rawInput}
                 aria-label="Clear input"
+                aria-keyshortcuts="Alt+Backspace"
               >
                 <span aria-hidden="true">×</span> clear
+                <kbd className="kbd-hint">{KEY_OPT}⌫</kbd>
               </button>
             </div>
           </div>

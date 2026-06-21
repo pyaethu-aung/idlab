@@ -1,4 +1,4 @@
-import { KEY_META } from "../utils/platform";
+import { KEY_META, KEY_OPT } from "../utils/platform";
 import { ULID_SAMPLES } from "../hooks/useUlid";
 
 const KIND_COPY = {
@@ -136,8 +136,11 @@ function UlidPanel({ ulid }) {
                 type="button"
                 className="v-input-btn v-input-btn--primary mono"
                 onClick={generate}
+                aria-label="Mint a ULID"
+                aria-keyshortcuts="Meta+Enter Control+Enter"
               >
                 mint a ulid
+                <kbd className="cta-kbd">{KEY_META}↵</kbd>
               </button>
             </div>
           </div>
@@ -182,8 +185,10 @@ function UlidPanel({ ulid }) {
                 onClick={clearInput}
                 disabled={!rawInput}
                 aria-label="Clear input"
+                aria-keyshortcuts="Alt+Backspace"
               >
                 <span aria-hidden="true">×</span> clear
+                <kbd className="kbd-hint">{KEY_OPT}⌫</kbd>
               </button>
             </div>
           </div>
