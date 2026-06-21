@@ -1,4 +1,4 @@
-# idlab — ID workbench (AI Built)
+# idlab: ID workbench (AI Built)
 
 A keyboard-first ID workbench built with React 19 and Vite, organised by ID family. **UUID** is the anchor (generate v1/v3/v4/v5/v6/v7 plus nil/max, validate and decode, convert between representations), with **ULID** and **NanoID** alongside it. Generate, validate, decode, convert, and copy or download results without leaving the keyboard.
 
@@ -115,10 +115,10 @@ Production-ready Docker support is available with optimized multi-stage builds a
 ### Pull from GHCR
 ```bash
 # Pull the latest published version (e.g. v1.0.0 → tag 1.0.0)
-docker pull ghcr.io/pyaethu-aung/uuid-generator:1.0.0
+docker pull ghcr.io/pyaethu-aung/idlab:1.0.0
 
 # Run on port 8080
-docker run -d -p 8080:80 --name uuid-app ghcr.io/pyaethu-aung/uuid-generator:1.0.0
+docker run -d -p 8080:80 --name idlab-app ghcr.io/pyaethu-aung/idlab:1.0.0
 ```
 
 ### Build Locally

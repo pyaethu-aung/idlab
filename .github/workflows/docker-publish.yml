@@ -1,5 +1,5 @@
 # =============================================================================
-# Docker CI/CD Pipeline — UUID Generator
+# Docker CI/CD Pipeline: idlab
 #
 # Triggers:
 #   - release published:    Build + Scan + Push to GHCR + Cosign Sign

@@ -1,5 +1,5 @@
 {
-  "name": "uuid-generator",
+  "name": "idlab",
   "private": true,
   "version": "1.9.0",
   "type": "module",
@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "docker:build": "docker build -t uuid-generator:local .",
-    "docker:run": "docker run --rm -p 8080:80 --name uuid-app --read-only --cap-drop ALL --tmpfs /var/cache/nginx:mode=1777 --tmpfs /var/run:mode=1777 --tmpfs /tmp:mode=1777 uuid-generator:local"
+    "docker:build": "docker build -t idlab:local .",
+    "docker:run": "docker run --rm -p 8080:80 --name idlab-app --read-only --cap-drop ALL --tmpfs /var/cache/nginx:mode=1777 --tmpfs /var/run:mode=1777 --tmpfs /tmp:mode=1777 idlab:local"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",

@@ -1,4 +1,4 @@
-# UUID Generator – AI-Oriented Overview
+# idlab: AI-Oriented Overview
 
 This document summarizes the project structure, behaviors, and extension points so an AI agent can quickly reason about and modify the app. Paths are workspace-relative.
 
