@@ -19,6 +19,32 @@ const TAB_DIGITS = {
   Digit5: 4,
 };
 
+// Generator version order behind ⌥1…8.
+const VERSION_DIGITS = {
+  Digit1: "v4",
+  Digit2: "v1",
+  Digit3: "v6",
+  Digit4: "v7",
+  Digit5: "v3",
+  Digit6: "v5",
+  Digit7: "nil",
+  Digit8: "max",
+};
+
+// Generator format toggles behind ⌥U / ⌥H / ⌥B.
+const FORMAT_KEYS = {
+  KeyU: "uppercase",
+  KeyH: "trimHyphens",
+  KeyB: "wrapBraces",
+};
+
+// Validator accept-option toggles behind ⌥R / ⌥[ / ⌥-.
+const VALIDATOR_KEYS = {
+  KeyR: "strictRfc",
+  BracketLeft: "allowBraces",
+  Minus: "allowNoHyphens",
+};
+
 const shouldIgnoreTarget = (target) => {
   if (!target) return false;
   if (target.isContentEditable) return true;
@@ -105,20 +131,9 @@ function useKeyboardShortcuts({
       }
 
       if (event.altKey && !metaOrCtrl) {
-        if (code === "ArrowUp") {
-          event.preventDefault();
-          const increment = event.shiftKey ? 10 : 1;
-          setBatchSizeAndCommit(batchSize + increment);
-          return;
-        }
-        if (code === "ArrowDown") {
-          event.preventDefault();
-          const decrement = event.shiftKey ? 10 : 1;
-          setBatchSizeAndCommit(batchSize - decrement);
-          return;
-        }
-        // Alt+Shift tab navigation. Checked before the version digits so the
-        // shifted digits route to tabs instead of generator versions.
+        // ── Global ⌥ keys (work on every tab) ──────────────────────────────
+        // Alt+Shift tab navigation. Checked before anything tab-scoped so the
+        // shifted digits route to tabs, not generator versions.
         if (event.shiftKey && setActiveTab) {
           if (code in TAB_DIGITS) {
             event.preventDefault();
@@ -135,61 +150,6 @@ function useKeyboardShortcuts({
             return;
           }
         }
-        if (code === "Digit1") {
-          event.preventDefault();
-          handleVersionChange("v4");
-          return;
-        }
-        if (code === "Digit2") {
-          event.preventDefault();
-          handleVersionChange("v1");
-          return;
-        }
-        if (code === "Digit3") {
-          event.preventDefault();
-          handleVersionChange("v6");
-          return;
-        }
-        if (code === "Digit4") {
-          event.preventDefault();
-          handleVersionChange("v7");
-          return;
-        }
-        if (code === "Digit5") {
-          event.preventDefault();
-          handleVersionChange("v3");
-          return;
-        }
-        if (code === "Digit6") {
-          event.preventDefault();
-          handleVersionChange("v5");
-          return;
-        }
-        if (code === "Digit7") {
-          event.preventDefault();
-          handleVersionChange("nil");
-          return;
-        }
-        if (code === "Digit8") {
-          event.preventDefault();
-          handleVersionChange("max");
-          return;
-        }
-        if (code === "KeyU") {
-          event.preventDefault();
-          toggleOption("uppercase");
-          return;
-        }
-        if (code === "KeyH") {
-          event.preventDefault();
-          toggleOption("trimHyphens");
-          return;
-        }
-        if (code === "KeyB") {
-          event.preventDefault();
-          toggleOption("wrapBraces");
-          return;
-        }
         // ⌥⌫ → clear the input on tabs that have one.
         if (code === "Backspace") {
           if (actions.clear) {
@@ -198,36 +158,53 @@ function useKeyboardShortcuts({
           }
           return;
         }
-        // ⌥⇧C → copy all output (any tab that has a batch). ⌥C cycles the
-        // export format, which only exists on the generator.
-        if (code === "KeyC") {
-          if (event.shiftKey) {
-            if (actions.copyAll) {
-              event.preventDefault();
-              actions.copyAll();
-            }
+        // ⌥⇧C → copy all output on tabs that have a batch.
+        if (code === "KeyC" && event.shiftKey) {
+          if (actions.copyAll) {
+            event.preventDefault();
+            actions.copyAll();
+          }
+          return;
+        }
+
+        // ── Generator-only ⌥ keys ──────────────────────────────────────────
+        // Scoped so they never mutate generator state from another tab.
+        if (activeTab === "generator") {
+          if (code === "ArrowUp") {
+            event.preventDefault();
+            setBatchSizeAndCommit(batchSize + (event.shiftKey ? 10 : 1));
             return;
           }
-          if (activeTab === "generator") {
+          if (code === "ArrowDown") {
+            event.preventDefault();
+            setBatchSizeAndCommit(batchSize - (event.shiftKey ? 10 : 1));
+            return;
+          }
+          const version = VERSION_DIGITS[code];
+          if (version) {
+            event.preventDefault();
+            handleVersionChange(version);
+            return;
+          }
+          const option = FORMAT_KEYS[code];
+          if (option) {
+            event.preventDefault();
+            toggleOption(option);
+            return;
+          }
+          if (code === "KeyC") {
             event.preventDefault();
             cycleExportFormat?.();
             return;
           }
         }
+
+        // ── Validator-only ⌥ keys ──────────────────────────────────────────
         if (activeTab === "validator") {
-          if (code === "KeyR") {
+          const validatorOption = VALIDATOR_KEYS[code];
+          if (validatorOption) {
             event.preventDefault();
-            toggleValidatorOption("strictRfc");
-            return;
-          }
-          if (code === "BracketLeft") {
-            event.preventDefault();
-            toggleValidatorOption("allowBraces");
-            return;
-          }
-          if (code === "Minus") {
-            event.preventDefault();
-            toggleValidatorOption("allowNoHyphens");
+            toggleValidatorOption(validatorOption);
             return;
           }
         }

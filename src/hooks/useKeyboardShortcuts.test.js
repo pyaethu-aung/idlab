@@ -421,6 +421,40 @@ describe("useKeyboardShortcuts", () => {
     });
   });
 
+  describe("generator keys are scoped to the generator tab", () => {
+    // Regression: ⌥ batch/version/format keys used to fire on every tab,
+    // silently mutating generator state from ULID/NanoID/etc.
+    it("does not change version off the generator tab", () => {
+      mockProps.activeTab = "ulid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "1", code: "Digit1", altKey: true })
+      );
+
+      expect(mockProps.handleVersionChange).not.toHaveBeenCalled();
+    });
+
+    it("does not adjust batch size off the generator tab", () => {
+      mockProps.activeTab = "nanoid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "ArrowUp", code: "ArrowUp", altKey: true })
+      );
+
+      expect(mockProps.setBatchSizeAndCommit).not.toHaveBeenCalled();
+    });
+
+    it("does not toggle format options off the generator tab", () => {
+      mockProps.activeTab = "converter";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "u", code: "KeyU", altKey: true })
+      );
+
+      expect(mockProps.toggleOption).not.toHaveBeenCalled();
+    });
+  });
+
   describe("version selection shortcuts", () => {
     it("should select UUID v4 with Alt + 1", () => {
       renderHook(() => useKeyboardShortcuts(mockProps));
