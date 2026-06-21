@@ -11,7 +11,14 @@ function toGroups(shortcuts) {
   return [{ items: shortcuts }];
 }
 
-function ShortcutReference({ isOpen, shortcuts, onClose }) {
+// A group with no `tab` is global and always shown; a tab-scoped group is shown
+// only on its own tab. When activeTab is omitted (e.g. tests), keep every group.
+function visibleGroups(groups, activeTab) {
+  if (!activeTab) return groups;
+  return groups.filter((group) => !group.tab || group.tab === activeTab);
+}
+
+function ShortcutReference({ isOpen, shortcuts, onClose, activeTab }) {
   const dialogRef = useRef(null);
   const triggerRef = useRef(null);
 
@@ -67,7 +74,7 @@ function ShortcutReference({ isOpen, shortcuts, onClose }) {
             </button>
           </div>
           <div className="modal-body">
-            {toGroups(shortcuts).map((group, gi) => (
+            {visibleGroups(toGroups(shortcuts), activeTab).map((group, gi) => (
               <div className="modal-group" key={group.group ?? gi}>
                 {group.group ? (
                   <p className="modal-group-title mono">{group.group}</p>
@@ -96,6 +103,7 @@ ShortcutReference.propTypes = {
       combo: PropTypes.string,
       description: PropTypes.string,
       group: PropTypes.string,
+      tab: PropTypes.string,
       items: PropTypes.arrayOf(
         PropTypes.shape({
           combo: PropTypes.string.isRequired,
@@ -105,6 +113,7 @@ ShortcutReference.propTypes = {
     })
   ).isRequired,
   onClose: PropTypes.func.isRequired,
+  activeTab: PropTypes.string,
 };
 
 export default ShortcutReference;

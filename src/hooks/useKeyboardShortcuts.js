@@ -37,17 +37,18 @@ function useKeyboardShortcuts({
   formattedUuids,
   isShortcutHelpOpen,
   setShortcutHelpOpen,
-  regenerate,
   downloadList,
   handleVersionChange,
   toggleOption,
   toggleValidatorOption,
   setBatchSizeAndCommit,
   handleCopy,
-  copyAll,
   cycleExportFormat,
   setActiveTab,
   activeTab,
+  // Per-tab dispatch for the shared verbs: { [tab]: { generate, copyAll, clear } }.
+  // A missing entry means the verb is a no-op on that tab.
+  tabActions = {},
 }) {
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -62,6 +63,7 @@ function useKeyboardShortcuts({
       const code = event.code;
       const isEnterKey = key === "enter" || key === "return";
       const metaOrCtrl = event.metaKey || event.ctrlKey;
+      const actions = tabActions[activeTab] ?? {};
 
       if (key === "escape" && isShortcutHelpOpen) {
         event.preventDefault();
@@ -79,9 +81,12 @@ function useKeyboardShortcuts({
         return;
       }
 
+      // ⌘/Ctrl + Enter → generate / mint on tabs that produce output.
       if (metaOrCtrl && isEnterKey) {
-        event.preventDefault();
-        regenerate();
+        if (actions.generate) {
+          event.preventDefault();
+          actions.generate();
+        }
         return;
       }
 
@@ -185,16 +190,29 @@ function useKeyboardShortcuts({
           toggleOption("wrapBraces");
           return;
         }
-        // Export format / copy-all act on the generator's batch, so keep them
-        // scoped to that tab.
-        if (code === "KeyC" && activeTab === "generator") {
-          event.preventDefault();
-          if (event.shiftKey) {
-            copyAll?.();
-          } else {
-            cycleExportFormat?.();
+        // ⌥⌫ → clear the input on tabs that have one.
+        if (code === "Backspace") {
+          if (actions.clear) {
+            event.preventDefault();
+            actions.clear();
           }
           return;
+        }
+        // ⌥⇧C → copy all output (any tab that has a batch). ⌥C cycles the
+        // export format, which only exists on the generator.
+        if (code === "KeyC") {
+          if (event.shiftKey) {
+            if (actions.copyAll) {
+              event.preventDefault();
+              actions.copyAll();
+            }
+            return;
+          }
+          if (activeTab === "generator") {
+            event.preventDefault();
+            cycleExportFormat?.();
+            return;
+          }
         }
         if (activeTab === "validator") {
           if (code === "KeyR") {
@@ -221,17 +239,16 @@ function useKeyboardShortcuts({
   }, [
     activeTab,
     batchSize,
-    copyAll,
     cycleExportFormat,
     downloadList,
     formattedUuids,
     handleCopy,
     handleVersionChange,
     isShortcutHelpOpen,
-    regenerate,
     setActiveTab,
     setBatchSizeAndCommit,
     setShortcutHelpOpen,
+    tabActions,
     toggleOption,
     toggleValidatorOption,
   ]);

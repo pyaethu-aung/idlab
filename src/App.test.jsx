@@ -123,16 +123,15 @@ describe("App", () => {
       formattedUuids: state.formattedUuids,
       isShortcutHelpOpen: false,
       setShortcutHelpOpen: expect.any(Function),
-      regenerate: state.regenerate,
       downloadList: state.downloadList,
       handleVersionChange: state.handleVersionChange,
       toggleOption: state.toggleOption,
       toggleValidatorOption: expect.any(Function),
       setBatchSizeAndCommit: state.setBatchSizeAndCommit,
       handleCopy: state.handleCopy,
-      copyAll: state.copyAll,
       cycleExportFormat: state.cycleExportFormat,
       setActiveTab: expect.any(Function),
+      tabActions: expect.any(Object),
     });
   });
 

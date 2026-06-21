@@ -17,10 +17,16 @@ describe("useKeyboardShortcuts", () => {
       toggleOption: vi.fn(),
       setBatchSizeAndCommit: vi.fn(),
       handleCopy: vi.fn(),
-      copyAll: vi.fn(),
       cycleExportFormat: vi.fn(),
       setActiveTab: vi.fn(),
       activeTab: "generator",
+      tabActions: {
+        generator: { generate: vi.fn(), copyAll: vi.fn(), clear: null },
+        validator: { generate: null, copyAll: null, clear: vi.fn() },
+        converter: { generate: null, copyAll: null, clear: vi.fn() },
+        ulid: { generate: vi.fn(), copyAll: null, clear: vi.fn() },
+        nanoid: { generate: vi.fn(), copyAll: vi.fn(), clear: null },
+      },
     };
   });
 
@@ -157,17 +163,17 @@ describe("useKeyboardShortcuts", () => {
       const event = createKeyboardEvent({ key: "Enter", metaKey: true });
       window.dispatchEvent(event);
 
-      expect(mockProps.regenerate).not.toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.generate).not.toHaveBeenCalled();
     });
   });
 
-  describe("regenerate shortcut", () => {
-    it("should regenerate with Cmd + Enter", () => {
+  describe("generate shortcut (Cmd/Ctrl + Enter)", () => {
+    it("should regenerate on the generator tab with Cmd + Enter", () => {
       renderHook(() => useKeyboardShortcuts(mockProps));
       const event = createKeyboardEvent({ key: "Enter", metaKey: true });
       window.dispatchEvent(event);
 
-      expect(mockProps.regenerate).toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.generate).toHaveBeenCalled();
     });
 
     it("should regenerate with Ctrl + Enter", () => {
@@ -175,7 +181,7 @@ describe("useKeyboardShortcuts", () => {
       const event = createKeyboardEvent({ key: "Enter", ctrlKey: true });
       window.dispatchEvent(event);
 
-      expect(mockProps.regenerate).toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.generate).toHaveBeenCalled();
     });
 
     it("should regenerate with Return key", () => {
@@ -183,7 +189,33 @@ describe("useKeyboardShortcuts", () => {
       const event = createKeyboardEvent({ key: "Return", metaKey: true });
       window.dispatchEvent(event);
 
-      expect(mockProps.regenerate).toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.generate).toHaveBeenCalled();
+    });
+
+    it("should mint a ULID on the ulid tab with Cmd + Enter", () => {
+      mockProps.activeTab = "ulid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(createKeyboardEvent({ key: "Enter", metaKey: true }));
+
+      expect(mockProps.tabActions.ulid.generate).toHaveBeenCalled();
+    });
+
+    it("should mint a NanoID batch on the nanoid tab with Cmd + Enter", () => {
+      mockProps.activeTab = "nanoid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(createKeyboardEvent({ key: "Enter", metaKey: true }));
+
+      expect(mockProps.tabActions.nanoid.generate).toHaveBeenCalled();
+    });
+
+    it("should be a no-op on a tab with no generate action", () => {
+      mockProps.activeTab = "converter";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({ key: "Enter", metaKey: true });
+      const preventDefaultSpy = vi.spyOn(event, "preventDefault");
+      window.dispatchEvent(event);
+
+      expect(preventDefaultSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -261,7 +293,7 @@ describe("useKeyboardShortcuts", () => {
       window.dispatchEvent(event);
 
       expect(mockProps.cycleExportFormat).toHaveBeenCalled();
-      expect(mockProps.copyAll).not.toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.copyAll).not.toHaveBeenCalled();
     });
 
     it("copies the whole batch with Alt + Shift + C on the generator tab", () => {
@@ -274,8 +306,18 @@ describe("useKeyboardShortcuts", () => {
       });
       window.dispatchEvent(event);
 
-      expect(mockProps.copyAll).toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.copyAll).toHaveBeenCalled();
       expect(mockProps.cycleExportFormat).not.toHaveBeenCalled();
+    });
+
+    it("copies the whole batch with Alt + Shift + C on the nanoid tab", () => {
+      mockProps.activeTab = "nanoid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "c", code: "KeyC", altKey: true, shiftKey: true })
+      );
+
+      expect(mockProps.tabActions.nanoid.copyAll).toHaveBeenCalled();
     });
 
     it("does not cycle export format when off the generator tab", () => {
@@ -285,6 +327,42 @@ describe("useKeyboardShortcuts", () => {
       window.dispatchEvent(event);
 
       expect(mockProps.cycleExportFormat).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("clear shortcut (Alt + Backspace)", () => {
+    it("clears the input on the converter tab", () => {
+      mockProps.activeTab = "converter";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "Backspace", code: "Backspace", altKey: true })
+      );
+
+      expect(mockProps.tabActions.converter.clear).toHaveBeenCalled();
+    });
+
+    it("clears the input on the ulid tab", () => {
+      mockProps.activeTab = "ulid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "Backspace", code: "Backspace", altKey: true })
+      );
+
+      expect(mockProps.tabActions.ulid.clear).toHaveBeenCalled();
+    });
+
+    it("is a no-op on a tab with no clear action", () => {
+      mockProps.activeTab = "generator";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "Backspace",
+        code: "Backspace",
+        altKey: true,
+      });
+      const preventDefaultSpy = vi.spyOn(event, "preventDefault");
+      window.dispatchEvent(event);
+
+      expect(preventDefaultSpy).not.toHaveBeenCalled();
     });
   });
 

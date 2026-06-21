@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ControlPanel from "./components/ControlPanel";
 import Hero from "./components/Hero";
 import ShortcutReference from "./components/ShortcutReference";
@@ -77,22 +77,43 @@ function App() {
   const ulid = useUlid();
   const nanoid = useNanoId();
 
+  // One keyboard model across screens: the same verb key dispatches to the
+  // active tab's action. A missing slot makes the verb a no-op on that tab.
+  const tabActions = useMemo(
+    () => ({
+      generator: { generate: regenerate, copyAll, clear: null },
+      validator: { generate: null, copyAll: null, clear: validator.clearInput },
+      converter: { generate: null, copyAll: null, clear: converter.clearInput },
+      ulid: { generate: ulid.generate, copyAll: null, clear: ulid.clearInput },
+      nanoid: { generate: nanoid.regenerate, copyAll: nanoid.copyAll, clear: null },
+    }),
+    [
+      regenerate,
+      copyAll,
+      validator.clearInput,
+      converter.clearInput,
+      ulid.generate,
+      ulid.clearInput,
+      nanoid.regenerate,
+      nanoid.copyAll,
+    ]
+  );
+
   useKeyboardShortcuts({
     activeTab,
     batchSize,
     formattedUuids,
     isShortcutHelpOpen,
     setShortcutHelpOpen,
-    regenerate,
     downloadList,
     handleVersionChange,
     toggleOption,
     toggleValidatorOption: validator.toggleOption,
     setBatchSizeAndCommit,
     handleCopy,
-    copyAll,
     cycleExportFormat,
     setActiveTab,
+    tabActions,
   });
 
   return (
@@ -202,6 +223,7 @@ function App() {
       <ShortcutReference
         isOpen={isShortcutHelpOpen}
         shortcuts={SHORTCUTS}
+        activeTab={activeTab}
         onClose={() => setShortcutHelpOpen(false)}
       />
     </div>
