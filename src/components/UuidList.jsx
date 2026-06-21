@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { KEY_META } from "../utils/platform";
+import { KEY_META, KEY_OPT } from "../utils/platform";
 import { EXPORT_FORMATS } from "../utils/uuidExport";
 
 function CopyIcon() {
@@ -95,10 +95,22 @@ function UuidList({
           <span className="panel-flag mono">{version} · {flagSummary}</span>
         </div>
         <div className="panel-actions">
-          <button type="button" className="ghost-btn mono" onClick={onCopyAll} aria-label="Copy all UUIDs">
+          <button
+            type="button"
+            className="ghost-btn mono"
+            onClick={onCopyAll}
+            aria-label="Copy all UUIDs"
+            aria-keyshortcuts={`${KEY_OPT}+Shift+C`}
+          >
             <CopyIcon /> <span>copy all</span>
+            <kbd className="kbd-hint">{KEY_OPT}⇧C</kbd>
           </button>
-          <div className="export-chips" role="group" aria-label="Export format">
+          <div
+            className="export-chips"
+            role="group"
+            aria-label="Export format"
+            title={`Cycle export format · ${KEY_OPT}C`}
+          >
             {EXPORT_FORMATS.map((fmt) => (
               <button
                 key={fmt}
@@ -111,8 +123,15 @@ function UuidList({
               </button>
             ))}
           </div>
-          <button type="button" className="ghost-btn mono" onClick={onDownload} aria-label={`Download as .${exportFormat}`}>
+          <button
+            type="button"
+            className="ghost-btn mono"
+            onClick={onDownload}
+            aria-label={`Download as .${exportFormat}`}
+            aria-keyshortcuts={`${KEY_META}${KEY_OPT}S`}
+          >
             <DownIcon /> <span>download .{exportFormat}</span>
+            <kbd className="kbd-hint">{KEY_META}{KEY_OPT}S</kbd>
           </button>
           <button
             type="button"

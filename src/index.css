@@ -145,6 +145,14 @@ kbd {
   background: var(--bg);
 }
 
+/* Inline shortcut hint on a secondary action. Muted so it reads as a hint, not
+   a control; Step-3 pointer gating decides whether it shows at all. */
+.kbd-hint {
+  margin-left: 2px;
+  color: var(--ink-3);
+  border-bottom-width: 1px;
+}
+
 .icon-btn {
   padding: 7px 9px;
 }
