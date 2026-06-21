@@ -32,8 +32,10 @@ function useKeyboardShortcuts({
   downloadList,
   handleVersionChange,
   toggleOption,
+  toggleValidatorOption,
   setBatchSizeAndCommit,
   handleCopy,
+  activeTab,
 }) {
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -153,12 +155,30 @@ function useKeyboardShortcuts({
           toggleOption("wrapBraces");
           return;
         }
+        if (activeTab === "validator") {
+          if (code === "KeyR") {
+            event.preventDefault();
+            toggleValidatorOption("strictRfc");
+            return;
+          }
+          if (code === "BracketLeft") {
+            event.preventDefault();
+            toggleValidatorOption("allowBraces");
+            return;
+          }
+          if (code === "Minus") {
+            event.preventDefault();
+            toggleValidatorOption("allowNoHyphens");
+            return;
+          }
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [
+    activeTab,
     batchSize,
     downloadList,
     formattedUuids,
@@ -169,6 +189,7 @@ function useKeyboardShortcuts({
     setBatchSizeAndCommit,
     setShortcutHelpOpen,
     toggleOption,
+    toggleValidatorOption,
   ]);
 }
 

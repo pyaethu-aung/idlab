@@ -115,6 +115,7 @@ describe("App", () => {
     render(<App />);
 
     expect(useKeyboardShortcutsMock).toHaveBeenCalledWith({
+      activeTab: "generator",
       batchSize: state.batchSize,
       formattedUuids: state.formattedUuids,
       isShortcutHelpOpen: false,
@@ -123,6 +124,7 @@ describe("App", () => {
       downloadList: state.downloadList,
       handleVersionChange: state.handleVersionChange,
       toggleOption: state.toggleOption,
+      toggleValidatorOption: expect.any(Function),
       setBatchSizeAndCommit: state.setBatchSizeAndCommit,
       handleCopy: state.handleCopy,
     });

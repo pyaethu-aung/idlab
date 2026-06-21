@@ -77,6 +77,7 @@ function App() {
   const nanoid = useNanoId();
 
   useKeyboardShortcuts({
+    activeTab,
     batchSize,
     formattedUuids,
     isShortcutHelpOpen,
@@ -85,6 +86,7 @@ function App() {
     downloadList,
     handleVersionChange,
     toggleOption,
+    toggleValidatorOption: validator.toggleOption,
     setBatchSizeAndCommit,
     handleCopy,
   });
