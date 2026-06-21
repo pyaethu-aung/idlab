@@ -1,8 +1,8 @@
 import { KEY_META, KEY_OPT } from "../utils/platform";
 
 const SAMPLE_ROWS = [
-  ["nil", "v1", "v6", "v7"],
-  ["v3", "v4", "v5"],
+  ["nil", "max", "v1", "v6"],
+  ["v7", "v3", "v4", "v5"],
 ];
 
 const OPTIONS_CONFIG = [

@@ -119,6 +119,15 @@ describe("useUuidValidator", () => {
     expect(result.current.expandedResult.version).toBe(4);
   });
 
+  it("loadSample('max') loads the max sentinel and decodes as max", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.loadSample("max"));
+    expect(result.current.rawInput).toBe("ffffffff-ffff-ffff-ffff-ffffffffffff");
+    expect(result.current.activeSample).toBe("max");
+    expect(result.current.expandedResult.valid).toBe(true);
+    expect(result.current.expandedResult.version).toBe(15);
+  });
+
   it("loadSampleList loads a mixed valid/invalid list", () => {
     const { result } = renderHook(() => useUuidValidator());
     act(() => result.current.loadSampleList());
