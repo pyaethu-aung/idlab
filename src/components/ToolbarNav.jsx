@@ -11,24 +11,21 @@ const TABS = [
 function ToolbarNav({ activeTab, onTabChange }) {
   return (
     <>
-      {TABS.map(({ id, label }, i) => {
+      {TABS.map(({ id, label }, i) => (
         // Keep the topbar uncluttered: surface the jump key via tooltip and
         // aria-keyshortcuts rather than a visible glyph under each tab.
-        const combo = `${KEY_OPT}+Shift+${i + 1}`;
-        return (
-          <button
-            key={id}
-            type="button"
-            className={`tab-btn${activeTab === id ? " tab-btn--active" : ""}`}
-            aria-current={activeTab === id ? "page" : undefined}
-            aria-keyshortcuts={combo}
-            title={`${label} · ${KEY_OPT}⇧${i + 1}`}
-            onClick={() => activeTab !== id && onTabChange(id)}
-          >
-            {label}
-          </button>
-        );
-      })}
+        <button
+          key={id}
+          type="button"
+          className={`tab-btn${activeTab === id ? " tab-btn--active" : ""}`}
+          aria-current={activeTab === id ? "page" : undefined}
+          aria-keyshortcuts={`Alt+Shift+${i + 1}`}
+          title={`${label} · ${KEY_OPT}⇧${i + 1}`}
+          onClick={() => activeTab !== id && onTabChange(id)}
+        >
+          {label}
+        </button>
+      ))}
     </>
   );
 }

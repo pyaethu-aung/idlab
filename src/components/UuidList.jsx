@@ -100,7 +100,7 @@ function UuidList({
             className="ghost-btn mono"
             onClick={onCopyAll}
             aria-label="Copy all UUIDs"
-            aria-keyshortcuts={`${KEY_OPT}+Shift+C`}
+            aria-keyshortcuts="Alt+Shift+C"
           >
             <CopyIcon /> <span>copy all</span>
             <kbd className="kbd-hint">{KEY_OPT}⇧C</kbd>
@@ -128,7 +128,7 @@ function UuidList({
             className="ghost-btn mono"
             onClick={onDownload}
             aria-label={`Download as .${exportFormat}`}
-            aria-keyshortcuts={`${KEY_META}${KEY_OPT}S`}
+            aria-keyshortcuts="Meta+Alt+S Control+Alt+S"
           >
             <DownIcon /> <span>download .{exportFormat}</span>
             <kbd className="kbd-hint">{KEY_META}{KEY_OPT}S</kbd>
