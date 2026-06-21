@@ -1,3 +1,4 @@
+import Hero from "./Hero";
 import { KEY_META, KEY_OPT } from "../utils/platform";
 import { ULID_SAMPLES } from "../hooks/useUlid";
 
@@ -124,6 +125,13 @@ function UlidPanel({ ulid }) {
 
   return (
     <section className="validator-panel">
+      <Hero
+        lead="Mint "
+        accent="time-sortable"
+        trail=" ids"
+        line2="ordered to the millisecond."
+        sub="Generate ULIDs, decode any ULID or UUIDv7, and convert losslessly between the two. A 48-bit clock plus 80 bits of randomness, never leaving the browser."
+      />
       <div className="v-workbench">
         <div className="v-rail">
           <div className="v-rail-section">

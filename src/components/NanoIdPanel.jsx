@@ -5,6 +5,7 @@ import {
   NANOID_MIN_COUNT,
   NANOID_MAX_COUNT,
 } from "../utils/nanoid";
+import Hero from "./Hero";
 import { KEY_META } from "../utils/platform";
 
 // Render the 1%-collision threshold compactly: a power of ten once it is large,
@@ -46,6 +47,13 @@ function NanoIdPanel({ nanoid }) {
 
   return (
     <section className="validator-panel">
+      <Hero
+        lead="Mint "
+        accent="URL-safe"
+        trail=" tokens"
+        line2="at the length you choose."
+        sub="Compact NanoIDs across five alphabets and any size from 2 to 36, with live bit-strength and collision math. Copied without leaving the keyboard."
+      />
       <div className="v-workbench">
         <div className="v-rail">
           <div className="v-rail-section">

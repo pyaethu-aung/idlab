@@ -204,6 +204,13 @@ describe("App", () => {
     expect(screen.getByText(/mint\s+identifiers/i)).toBeInTheDocument();
   });
 
+  it("gives the ULID and NanoID sections their own headers", () => {
+    render(<App />);
+    // Panels stay mounted (display:none), so both family headers are present.
+    expect(screen.getByText(/ordered to the millisecond/i)).toBeInTheDocument();
+    expect(screen.getByText(/at the length you choose/i)).toBeInTheDocument();
+  });
+
   it("hides the mode switcher for single-mode families and shows it for UUID", async () => {
     const user = userEvent.setup();
     const { container } = render(<App />);

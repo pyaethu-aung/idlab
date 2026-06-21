@@ -56,10 +56,27 @@ describe("ValidationBanner", () => {
 });
 
 describe("Hero", () => {
-  it("renders the headline", () => {
+  it("renders the default UUID headline", () => {
     render(<Hero />);
     expect(screen.getByText(/Mint/i)).toBeInTheDocument();
     expect(screen.getByText(/RFC 4122/i)).toBeInTheDocument();
+  });
+
+  it("renders a custom headline, accent, and subtitle from props", () => {
+    render(
+      <Hero
+        lead="Mint "
+        accent="time-sortable"
+        trail=" ids"
+        line2="ordered to the millisecond."
+        sub="Generate ULIDs and decode them in place."
+      />
+    );
+    expect(screen.getByText("time-sortable")).toBeInTheDocument();
+    expect(screen.getByText(/ordered to the millisecond/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Generate ULIDs and decode them in place/i)
+    ).toBeInTheDocument();
   });
 });
 
