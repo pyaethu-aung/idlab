@@ -2,7 +2,8 @@ import { renderHook, act } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import useTheme from "./useTheme";
 
-const THEME_KEY = "uuid-generator-theme";
+const THEME_KEY = "idlab-theme";
+const LEGACY_THEME_KEY = "uuid-generator-theme";
 
 const matchMediaMock =
   (matches = false) =>
@@ -42,6 +43,15 @@ describe("useTheme", () => {
 
     expect(result.current.theme).toBe("light");
     expect(document.documentElement.dataset.theme).toBe("light");
+  });
+
+  it("migrates a theme stored under the legacy pre-rename key", () => {
+    window.localStorage.setItem(LEGACY_THEME_KEY, "light");
+    const { result } = renderHook(() => useTheme());
+
+    expect(result.current.theme).toBe("light");
+    // The persist effect rewrites it under the new key, so it is a one-time read.
+    expect(window.localStorage.getItem(THEME_KEY)).toBe("light");
   });
 
   it("falls back to system preference and persists toggles", () => {

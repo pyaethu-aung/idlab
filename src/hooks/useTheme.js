@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
-const THEME_KEY = "uuid-generator-theme";
+const THEME_KEY = "idlab-theme";
+// Read once for users who stored a preference under the pre-rename key, so the
+// rebrand doesn't reset their theme. The persist effect rewrites it under
+// THEME_KEY on first render, making the migration one-time.
+const LEGACY_THEME_KEY = "uuid-generator-theme";
 const THEMES = {
   DARK: "dark",
   LIGHT: "light",
@@ -19,7 +23,9 @@ const resolveInitialTheme = () => {
   }
 
   try {
-    const stored = window.localStorage.getItem(THEME_KEY);
+    const stored =
+      window.localStorage.getItem(THEME_KEY) ??
+      window.localStorage.getItem(LEGACY_THEME_KEY);
     if (stored === THEMES.DARK || stored === THEMES.LIGHT) {
       applyThemeAttribute(stored);
       return stored;
