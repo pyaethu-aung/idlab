@@ -9,6 +9,7 @@ import {
   formatRelativeTime,
   normalizeInput,
   parseUuid,
+  versionLabel,
 } from "./uuidDecoder";
 
 const V4 = "550e8400-e29b-41d4-a716-446655440000";
@@ -352,5 +353,21 @@ describe("formatRelativeTime", () => {
   it("handles future dates", () => {
     const future = new Date(Date.now() + 120_000);
     expect(formatRelativeTime(future)).toMatch(/in \d+ minutes?/);
+  });
+});
+
+describe("versionLabel", () => {
+  it("labels the nil sentinel as nil", () => {
+    expect(versionLabel(parseUuid("00000000-0000-0000-0000-000000000000"))).toBe("nil");
+  });
+  it("labels the max sentinel as max", () => {
+    expect(versionLabel(parseUuid("ffffffff-ffff-ffff-ffff-ffffffffffff"))).toBe("max");
+  });
+  it("labels a normal version as v<N>", () => {
+    expect(versionLabel(parseUuid("550e8400-e29b-41d4-a716-446655440000"))).toBe("v4");
+  });
+  it("returns null for an invalid result", () => {
+    expect(versionLabel(parseUuid("not-a-uuid"))).toBeNull();
+    expect(versionLabel(null)).toBeNull();
   });
 });

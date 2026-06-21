@@ -1,12 +1,14 @@
+import { versionLabel } from "../utils/uuidDecoder";
+
 const VERSION_DETAIL = {
-  0:  "nil — all zeros",
+  0:  "all zeros",
   1:  "gregorian-time (100 ns ticks)",
   3:  "name-based (MD5)",
   4:  "random (CSPRNG)",
   5:  "name-based (SHA-1)",
   6:  "reordered time",
   7:  "time-ordered (Unix-ms + rand)",
-  15: "max — all ones",
+  15: "all ones",
 };
 
 function MinusIcon() {
@@ -43,7 +45,7 @@ function ValidatorPropsGrid({ result }) {
       <div className="v-props-grid">
         <PropRow label="version">
           <span className="v-prop-val-row">
-            <span className="v-prop-pill mono">v{result.version}</span>
+            <span className="v-prop-pill mono">{versionLabel(result)}</span>
             <span className="mono v-prop-val">{versionDetail}</span>
           </span>
         </PropRow>
@@ -55,7 +57,7 @@ function ValidatorPropsGrid({ result }) {
         <PropRow label="timestamp">
           {result.decoded ? (
             <span className="v-prop-val-row">
-              <span className="v-prop-pill mono">v{result.version}</span>
+              <span className="v-prop-pill mono">{versionLabel(result)}</span>
               <span className="mono v-prop-val">
                 {result.decoded.timestampIso.slice(0, 19).replace("T", " ")} UTC
                 {" · "}

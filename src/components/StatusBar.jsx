@@ -1,3 +1,5 @@
+import { versionLabel } from "../utils/uuidDecoder";
+
 function StatusBar({
   activeTab,
   version, batch, visible, opts, feedback,
@@ -75,7 +77,7 @@ function ValidatorStatusBar({ summary, expanded, checkCount, onShortcuts }) {
 
   // When a row is open, surface its specifics so the footer reflects the
   // selection the way the single inspector used to.
-  const expVersion = expanded?.valid ? `v${expanded.version} selected` : null;
+  const expVersion = expanded?.valid ? `${versionLabel(expanded)} selected` : null;
   const expTs = expanded?.valid && expanded.decoded
     ? `ts · ${expanded.decoded.timestampIso?.slice(0, 19).replace("T", " ")} UTC`
     : null;

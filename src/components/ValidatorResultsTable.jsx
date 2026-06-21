@@ -3,6 +3,7 @@ import ValidationBanner from "./ValidationBanner";
 import ValidatorConvert from "./ValidatorConvert";
 import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorSegCard from "./ValidatorSegCard";
+import { versionLabel } from "../utils/uuidDecoder";
 
 function StatusCell({ result }) {
   if (result.valid) {
@@ -23,8 +24,7 @@ function StatusCell({ result }) {
 
 function VersionCell({ result }) {
   if (!result.valid) return <span className="mono bulk-muted">—</span>;
-  const label = result.isNil ? "nil" : result.version === 15 ? "max" : `v${result.version}`;
-  return <span className="bulk-ver-pill mono">{label}</span>;
+  return <span className="bulk-ver-pill mono">{versionLabel(result)}</span>;
 }
 
 function TimeCell({ result }) {

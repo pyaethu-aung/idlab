@@ -127,6 +127,16 @@ export function parseUuid(raw, options = {}) {
   return { valid: true, raw: normalized, version, variant, fields, decoded, unixMs, ...props };
 }
 
+// Friendly short label for a parsed UUID's version: the nil and max sentinels
+// read as words, every other version as v<N>. One source of truth so the
+// banner, properties, and status bar never disagree with the version column.
+export function versionLabel(result) {
+  if (!result?.valid) return null;
+  if (result.isNil) return "nil";
+  if (result.version === 15) return "max";
+  return `v${result.version}`;
+}
+
 export function decodeUuidV7(fields) {
   const hex =
     fields.timeLow +
