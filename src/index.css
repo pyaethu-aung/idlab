@@ -2229,16 +2229,14 @@ input.name-input.ts-field[type="time"] {
   }
 }
 
-/* ─── 640px: status bar scrollable; cx-row stacks on narrow panels ──────── */
+/* ─── 640px: status bar condenses; cx-row stacks on narrow panels ───────── */
 @media (max-width: 640px) {
-  .status {
-    overflow-x: auto;
-    scrollbar-width: none;
-    flex-wrap: nowrap;
+  .status-hide-sm {
+    display: none;
   }
 
-  .status::-webkit-scrollbar {
-    display: none;
+  .status-feedback {
+    min-width: 0;
   }
 
   .cx-row {

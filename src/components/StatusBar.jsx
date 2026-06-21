@@ -45,8 +45,8 @@ function StatusBar({
         live
       </span>
       <span className="status-cell">ver {version}</span>
-      <span className="status-cell">batch {String(batch).padStart(3, "0")}</span>
-      <span className="status-cell">visible {String(visible).padStart(2, "0")}</span>
+      <span className="status-cell status-hide-sm">batch {String(batch).padStart(3, "0")}</span>
+      <span className="status-cell status-hide-sm">visible {String(visible).padStart(2, "0")}</span>
       <span className="status-cell">
         flags [{flags.length ? flags.join(" ") : "none"}]
       </span>
@@ -61,7 +61,7 @@ function StatusBar({
         )}
       </span>
       <span className="status-spacer" />
-      <button className="status-btn" onClick={onShortcuts}>
+      <button className="status-btn status-hide-sm" onClick={onShortcuts}>
         press <kbd>?</kbd> for shortcuts
       </button>
     </footer>
@@ -92,12 +92,12 @@ function ValidatorStatusBar({ summary, expanded, checkCount, onShortcuts }) {
       )}
       {hasRows && <span className="status-cell">{summary.valid} valid</span>}
       {hasRows && <span className="status-cell">{summary.invalid} invalid</span>}
-      {hasRows && <span className="status-cell">{summary.total} total</span>}
-      {expVersion && <span className="status-cell">{expVersion}</span>}
-      {expTs && <span className="status-cell">{expTs}</span>}
-      <span className="status-cell">{checkCount} checks today</span>
+      {hasRows && <span className="status-cell status-hide-sm">{summary.total} total</span>}
+      {expVersion && <span className="status-cell status-hide-sm">{expVersion}</span>}
+      {expTs && <span className="status-cell status-hide-sm">{expTs}</span>}
+      <span className="status-cell status-hide-sm">{checkCount} checks today</span>
       <span className="status-spacer" />
-      <button className="status-btn" onClick={onShortcuts}>
+      <button className="status-btn status-hide-sm" onClick={onShortcuts}>
         press <kbd>?</kbd> for shortcuts
       </button>
     </footer>
@@ -120,10 +120,10 @@ function UlidStatusBar({ result, onShortcuts }) {
         </span>
       )}
       {kind     && <span className="status-cell">{kind}</span>}
-      {tsLabel  && <span className="status-cell">{tsLabel}</span>}
-      <span className="status-cell">ulid · 26 chars</span>
+      {tsLabel  && <span className="status-cell status-hide-sm">{tsLabel}</span>}
+      <span className="status-cell status-hide-sm">ulid · 26 chars</span>
       <span className="status-spacer" />
-      <button className="status-btn" onClick={onShortcuts}>
+      <button className="status-btn status-hide-sm" onClick={onShortcuts}>
         press <kbd>?</kbd> for shortcuts
       </button>
     </footer>
@@ -139,9 +139,9 @@ function NanoIdStatusBar({ stats, count, onShortcuts }) {
       </span>
       <span className="status-cell">{stats.alphabetSize} symbols</span>
       <span className="status-cell">{stats.bits.toFixed(1)} bits</span>
-      <span className="status-cell">batch {String(count).padStart(2, "0")}</span>
+      <span className="status-cell status-hide-sm">batch {String(count).padStart(2, "0")}</span>
       <span className="status-spacer" />
-      <button className="status-btn" onClick={onShortcuts}>
+      <button className="status-btn status-hide-sm" onClick={onShortcuts}>
         press <kbd>?</kbd> for shortcuts
       </button>
     </footer>
