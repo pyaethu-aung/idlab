@@ -72,7 +72,7 @@ function diagnoseFormat(stripped) {
   const hyphenless = stripped.replace(/-/g, "").toLowerCase();
   const nonHexMatch = hyphenless.match(/[^0-9a-f]/);
   if (nonHexMatch) {
-    const pos = hyphenless.indexOf(nonHexMatch[0]) + 1;
+    const pos = nonHexMatch.index + 1;
     return `invalid character '${nonHexMatch[0]}' at position ${pos}`;
   }
   if (hyphenless.length !== 32) {
