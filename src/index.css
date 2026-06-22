@@ -831,7 +831,7 @@ input.name-input.ts-field[type="time"] {
   letter-spacing: var(--tracking-wide);
 }
 
-.row.is-hover .row-idx,
+.row:hover .row-idx,
 .row.is-copied .row-idx {
   color: var(--accent);
 }

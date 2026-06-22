@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { KEY_META, KEY_OPT } from "../utils/platform";
 import { EXPORT_FORMATS } from "../utils/uuidExport";
 
@@ -28,14 +28,11 @@ function RefreshIcon() {
 }
 
 function UuidRow({ index, uuid, isCopied, onCopy }) {
-  const [hover, setHover] = useState(false);
   const parts = uuid.includes("-") ? uuid.split("-") : [uuid];
 
   return (
     <div
-      className={`row${isCopied ? " is-copied" : ""}${hover ? " is-hover" : ""}`}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      className={`row${isCopied ? " is-copied" : ""}`}
       onClick={onCopy}
     >
       <span className="row-idx mono">{String(index).padStart(3, "0")}</span>
