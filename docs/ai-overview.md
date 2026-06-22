@@ -39,7 +39,7 @@ This document summarizes the project structure, behaviors, and extension points 
 - UuidList: [src/components/UuidList.jsx](src/components/UuidList.jsx) renders numbered list with copy buttons and copied-state feedback.
 - ControlPanel: [src/components/ControlPanel.jsx](src/components/ControlPanel.jsx)
   - Batch slider (1–200) commits on pointer/key release; notes preview vs download counts.
-  - Version selector uses `versionChoices`; option toggles use `optionDescriptors` (both from utils).
+  - Version selector uses `VERSIONS`; option toggles use `FORMAT_OPTS` (both defined in ControlPanel).
   - Primary generate button + clipboard warning fallback.
 - ThemeToggle: [src/components/ThemeToggle.jsx](src/components/ThemeToggle.jsx) switches light/dark.
 - ShortcutReference: [src/components/ShortcutReference.jsx](src/components/ShortcutReference.jsx) modal using `focus-trap-react`, restores focus on close. Shortcuts data in [src/data/shortcuts.js](src/data/shortcuts.js).
@@ -54,8 +54,8 @@ This document summarizes the project structure, behaviors, and extension points 
 - Download guarded by busy flag to avoid double-click; adds timestamped filename.
 
 ## Extension Pointers
-- Add new UUID version: extend `uuidGenerators`, `versionChoices`, and wire into version selector; keyboard shortcuts can map additional digits.
-- Add format option: extend `defaultOptions`, `optionDescriptors`, and update `formatUuid`.
+- Add new UUID version: extend `uuidGenerators` (utils) and `VERSIONS` (ControlPanel) to wire it into the version selector; keyboard shortcuts can map additional digits.
+- Add format option: extend `defaultOptions` (utils) and `FORMAT_OPTS` (ControlPanel), and update `formatUuid`.
 - Analytics/telemetry hook points: `regenerate`, `handleCopy`, `downloadList`, and `handleVersionChange` already centralize side effects.
 - Accessibility: shortcut modal focus trap; keyboard shortcuts skip inputs; buttons include aria labels. Ensure new UI respects `shouldIgnoreTarget` rules when adding shortcuts.
 
