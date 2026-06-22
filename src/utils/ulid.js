@@ -118,15 +118,12 @@ export function decodeUlid(raw) {
   }
 
   const ulid = trimmed.toUpperCase();
-  const timeChars = ulid.slice(0, TIME_LEN);
   const randomChars = ulid.slice(TIME_LEN);
 
-  const timestampMs = Number(crockfordToBigInt(timeChars));
-  const timestamp = new Date(timestampMs);
-  const randomnessHex = crockfordToBigInt(randomChars)
-    .toString(16)
-    .padStart(20, "0");
   const hex = crockfordToBigInt(ulid).toString(16).padStart(32, "0");
+  const timestampMs = parseInt(hex.slice(0, 12), 16);
+  const timestamp = new Date(timestampMs);
+  const randomnessHex = hex.slice(12);
 
   return {
     valid: true,
