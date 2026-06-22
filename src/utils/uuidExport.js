@@ -37,10 +37,9 @@ const serializers = { txt: asTxt, json: asJson, csv: asCsv, sql: asSql, env: asE
 export function exportUuids(uuids, format, timestamp) {
   const serialize = serializers[format] ?? serializers.txt;
   const { content, mimeType } = serialize(uuids);
-  const ext = format === "env" ? "env" : format;
   return {
     content,
     mimeType,
-    filename: `uuids-${uuids.length}-${timestamp}.${ext}`,
+    filename: `uuids-${uuids.length}-${timestamp}.${format}`,
   };
 }
