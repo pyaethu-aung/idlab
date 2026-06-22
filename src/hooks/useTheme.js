@@ -60,17 +60,10 @@ function useTheme() {
     );
   }, []);
 
-  const setThemeExplicit = useCallback((nextTheme) => {
-    if (nextTheme === THEMES.DARK || nextTheme === THEMES.LIGHT) {
-      setTheme(nextTheme);
-    }
-  }, []);
-
   return {
     theme,
     isDark: theme === THEMES.DARK,
     toggleTheme,
-    setTheme: setThemeExplicit,
   };
 }
 

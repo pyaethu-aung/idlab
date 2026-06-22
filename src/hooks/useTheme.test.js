@@ -69,15 +69,4 @@ describe("useTheme", () => {
     expect(window.localStorage.getItem(THEME_KEY)).toBe("light");
     expect(document.documentElement.dataset.theme).toBe("light");
   });
-
-  it("ignores invalid explicit theme assignments", () => {
-    const { result } = renderHook(() => useTheme());
-    const initialTheme = result.current.theme;
-
-    act(() => {
-      result.current.setTheme("purple");
-    });
-
-    expect(result.current.theme).toBe(initialTheme);
-  });
 });
