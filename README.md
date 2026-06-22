@@ -1,14 +1,8 @@
-# idlab: ID workbench (AI Built)
+# idlab: ID workbench
 
 A keyboard-first ID workbench built with React 19 and Vite, organised by ID family. **UUID** is the anchor (generate v1/v3/v4/v5/v6/v7 plus nil/max, validate and decode, convert between representations), with **ULID** and **NanoID** alongside it. Generate, validate, decode, convert, and copy or download results without leaving the keyboard.
 
 The top bar selects an ID family (UUID / ULID / NanoID); within UUID a mode switcher picks the operation (Generate / Validate / Convert). The canonical routes are `/uuid/generate`, `/uuid/validate`, `/uuid/convert`, `/ulid`, and `/nanoid`; the old `/generator`, `/validator`, `/converter`, and `/bulk` links redirect to their new homes.
-
-## AI Agent & Tooling
-- Core implementation produced by GitHub Copilot running the GPT-5.1-Codex model.
-- Copilot authored UI layout, React state logic, clipboard/download utilities, and Tailwind styling inside VS Code.
-- Human input focused on high-level requirements, reviewing each iteration, and applying the prompts listed below.
-- Spec-driven development workflow managed with [spec-kit](https://github.com/speckit-ai/speckit) **v0.8.7**.
 
 ## Feature Highlights
 - Unified slider that drives both the on-screen preview count (capped at 20) and the downloadable batch size (1–200).
@@ -22,28 +16,35 @@ The top bar selects an ID family (UUID / ULID / NanoID); within UUID a mode swit
 - Responsive layout with gradients, keyboard-friendly control handling, and pointer event throttling to avoid jank.
 
 ## Keyboard Shortcuts
-- ⌘/Ctrl + Enter — Regenerate the latest UUID batch.
-- ⌘/Ctrl + Alt + S — Download the current batch as a `.txt` file.
-- ⌘/Ctrl + Shift + C — Copy the first UUID in the visible list.
-- ⌥/Alt + Arrow Up/Down — Adjust batch size (hold Shift for ±10).
-- ⌥/Alt + 1 … 8 — Switch generators in order: v4, v1, v6, v7, v3, v5, nil, max.
-- ⌥/Alt + U / H / B — Toggle uppercase, remove hyphens, or wrap with braces.
-- ⌥/Alt + R / [ / − — (Validator tab) Toggle strict RFC 4122, allow braces, allow no-hyphens.
-- ⌥/Alt + Shift + 1 … 5 — Jump to a tool: UUID Generate, UUID Validate, UUID Convert, ULID, NanoID.
+
+Press **Shift + ?** in the app for the context-aware overlay. Verb keys dispatch to the active tool.
+
+**Global**
+- ⌥/Alt + Shift + 1 … 5 — Jump to a tool: UUID Generate, Validate, Convert, ULID, NanoID.
 - ⌥/Alt + Shift + ← / → — Cycle to the previous / next tool (wraps at the ends).
-- Shift + ? — Open the in-app shortcut reference overlay.
+- Shift + ? — Open the shortcut reference overlay.
 - Esc — Close the shortcut reference overlay.
 
-## Rephrased Prompt Log
-1. Build a Tailwind-forward UUID generator interface that feels polished and modern.
-2. Add a selector that lets the user toggle between UUID versions v1, v4, and v7.
-3. Keep badges/stat labels on a single line so that wording like "Characters Each" never wraps or overflows.
-4. Provide animated feedback when copying UUIDs and acknowledge downloads with contextual text.
-5. Extend download batches to 200 entries while keeping only 20 visible in the live preview.
-6. Replace multiple controls with one slider that manages both preview and download counts, updating immediately as it moves.
-7. Relocate version, batch size, and per-UUID character details into the stat cards above the list to avoid duplicate text elsewhere.
-8. Introduce power-user keyboard shortcuts for regeneration, downloading, batch tweaks, and formatting toggles.
-9. Add an in-app shortcut reference modal opened via Shift + ?, plus documentation describing every combo.
+**UUID Generate**
+- ⌘/Ctrl + Enter — Regenerate the latest UUID batch.
+- ⌥/Alt + Arrow Up/Down — Adjust batch size (hold Shift for ±10).
+- ⌥/Alt + 1 … 8 — Switch generators: v4, v1, v6, v7, v3, v5, nil, max.
+- ⌥/Alt + U / H / B — Toggle uppercase, remove hyphens, wrap braces.
+- ⌥/Alt + C — Cycle export format: txt, json, csv, sql, env.
+- ⌘/Ctrl + Alt + S — Download the batch in the selected export format.
+- ⌘/Ctrl + Shift + C — Copy the first UUID in the batch.
+- ⌥/Alt + Shift + C — Copy the whole visible batch.
+
+**UUID Validate**
+- ⌥/Alt + R / [ / − — Toggle strict RFC validation, allow braces, allow no-hyphens.
+- ⌥/Alt + Backspace — Clear the input.
+
+**UUID Convert / ULID**
+- ⌥/Alt + Backspace — Clear the input.
+
+**ULID / NanoID**
+- ⌘/Ctrl + Enter — Mint a new ULID / fresh batch of NanoIDs.
+- ⌥/Alt + Shift + C — (NanoID) Copy the whole batch.
 
 ## Getting Started
 1. `npm install`
