@@ -181,7 +181,6 @@ function App() {
             <UuidList
               uuids={formattedUuids}
               version={selectedVersion}
-              batch={batchSize}
               opts={options}
               isFixed={isFixed}
               exportFormat={exportFormat}
