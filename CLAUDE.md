@@ -69,6 +69,46 @@ Tests live alongside their source files. `src/setupTests.js` imports `@testing-l
 | VI | Execution Discipline | Run `npm run test`, `npm run lint`, `npm run build` after every task |
 | VII | Cross-Platform & Browser Compatibility | Chrome, Safari, Firefox, Edge; desktop & mobile |
 | VIII | Theme Support Planning | CSS custom properties, prefers-color-scheme, localStorage persistence |
+| IX | YAGNI (You Aren't Gonna Need It) | Build only what a real caller needs now; no speculative code |
+
+### YAGNI (Principle IX)
+
+Default to the simplest thing that satisfies a present, real requirement. Do not
+add code in anticipation of a need that does not yet exist. This refines
+Principle I ("No dead code") into a rule that applies *before* code is written,
+not just after.
+
+**Do not add:**
+- Exported functions, constants, or data with no importer (e.g. config/metadata
+  arrays the UI never reads). Define values where they are used.
+- Parameters, options, or config keys with only one caller that always passes the
+  same value. Add the second path when a second real caller arrives.
+- Setters, hooks, or wrappers that exist "for completeness" but nothing calls
+  (e.g. an explicit setter when only a toggle is used).
+- Abstractions with a single implementation/caller, unless the indirection
+  measurably aids readability. Prefer inlining.
+- Defensive handling for inputs or states that cannot occur given actual callers.
+
+**Do keep (not YAGNI violations):**
+- Functions that back a real feature but are exported only for unit-test
+  granularity. A test is not a "use," but the feature it tests is. Removing it
+  would delete working, tested behaviour. Prefer narrowing the export to keeping
+  it tested. Never delete tested feature code just because no component imports it.
+- Small local helpers used more than once, or stable lookup tables that make a
+  component readable. Simplicity, not maximal deletion, is the goal.
+
+**When adding generality, justify it.** If a change introduces a parameter,
+option, or abstraction, the same change must include the real caller that needs
+it. "We might need it later" is not a justification: add it later, when later
+arrives. When unsure, choose the less general option and note the trade-off.
+
+Mechanical enforcement of unused *exports* across modules is not configured;
+ESLint `no-unused-vars` only catches unused locals (and its `^[A-Z_]` ignore
+pattern skips capitalized consts). Reviewers and authors must catch unused
+exports by hand, or by grepping for an export's name across `src/` before keeping
+it. Adding `eslint-plugin-import`'s `import/no-unused-modules` is the option if
+automated enforcement becomes worthwhile (weigh the dependency against the need,
+per this principle).
 
 ### Validation Checklist
 
@@ -79,6 +119,10 @@ npm run test    # All tests pass, coverage ≥85%
 npm run lint    # No linting errors
 npm run build   # Build succeeds
 ```
+
+Also confirm no YAGNI violations were introduced (Principle IX): every new
+export has a real caller, no new single-use parameter/option/abstraction was
+added without the caller that needs it, and any dead code touched was removed.
 
 ### Commit Discipline
 
