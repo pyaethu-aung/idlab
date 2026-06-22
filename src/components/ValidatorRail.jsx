@@ -25,11 +25,10 @@ function Toggle({ on }) {
 // Describe a single line the way the old single-UUID inspector did, so pasting
 // one value still reads as "36 chars · hyphenated" rather than "1 line".
 function singleLineHint(line) {
-  const compactLen = line.replace(/[{} ]/g, "").replace(/-/g, "").length;
   const hasHyphens = line.includes("-");
   return hasHyphens
     ? `${line.trim().replace(/[{}]/g, "").length} chars · hyphenated`
-    : `${compactLen} chars · compact`;
+    : `${line.replace(/[{} ]/g, "").replace(/-/g, "").length} chars · compact`;
 }
 
 function ValidatorRail({
