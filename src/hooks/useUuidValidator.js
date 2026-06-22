@@ -85,13 +85,6 @@ function useUuidValidator() {
     prevValidRef.current = validCount;
   }, [validCount]);
 
-  // Mirror the effective expanded line into a ref so toggleRow can compare
-  // against it without re-deriving (the lone-row case has no explicit state).
-  const expandedLineRef = useRef(null);
-  useEffect(() => {
-    expandedLineRef.current = expandedLine;
-  }, [expandedLine]);
-
   const setRawInput = useCallback((value) => {
     setRawInputState(value);
     setExpandState(null);
@@ -103,8 +96,8 @@ function useUuidValidator() {
   }, []);
 
   const toggleRow = useCallback((line) => {
-    setExpandState(expandedLineRef.current === line ? "none" : line);
-  }, []);
+    setExpandState(expandedLine === line ? "none" : line);
+  }, [expandedLine]);
 
   const clearInput = useCallback(() => {
     setRawInputState("");
