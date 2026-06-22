@@ -48,7 +48,7 @@ export function computeProperties(raw, normalized, version, variant) {
   const hasHyphens = UUID_REGEX.test(normalized);
   const hasBraces = raw.trim().startsWith("{") && raw.trim().endsWith("}");
   const isNil = /^0+$/.test(hex);
-  const charCount = normalized.replace(/-/g, "").length === 32 && !hasHyphens ? 32 : 36;
+  const charCount = hasHyphens ? 36 : 32;
 
   let format = "canonical";
   if (hasBraces) format = "braces";
