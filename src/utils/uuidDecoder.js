@@ -173,20 +173,22 @@ export function decodeUuidV1(fields) {
   };
 }
 
+const RTF = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
 export function formatRelativeTime(date) {
   const diffMs = Date.now() - date.getTime();
-  const diffSec = Math.round(Math.abs(diffMs) / 1000);
-  const diffMin = Math.round(Math.abs(diffMs) / 60000);
-  const diffHour = Math.round(Math.abs(diffMs) / 3600000);
-  const diffDay = Math.round(Math.abs(diffMs) / 86400000);
+  const absDiffMs = Math.abs(diffMs);
+  const diffSec = Math.round(absDiffMs / 1000);
+  const diffMin = Math.round(absDiffMs / 60000);
+  const diffHour = Math.round(absDiffMs / 3600000);
+  const diffDay = Math.round(absDiffMs / 86400000);
   const sign = diffMs >= 0 ? -1 : 1;
-  const fmt = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-  if (diffSec < 60) return fmt.format(sign * diffSec, "second");
-  if (diffMin < 60) return fmt.format(sign * diffMin, "minute");
-  if (diffHour < 24) return fmt.format(sign * diffHour, "hour");
-  if (diffDay < 30) return fmt.format(sign * diffDay, "day");
-  const diffMonth = Math.round(Math.abs(diffMs) / (30 * 86400000));
-  if (diffMonth < 24) return fmt.format(sign * diffMonth, "month");
-  const diffYear = Math.round(Math.abs(diffMs) / (365 * 86400000));
-  return fmt.format(sign * diffYear, "year");
+  if (diffSec < 60) return RTF.format(sign * diffSec, "second");
+  if (diffMin < 60) return RTF.format(sign * diffMin, "minute");
+  if (diffHour < 24) return RTF.format(sign * diffHour, "hour");
+  if (diffDay < 30) return RTF.format(sign * diffDay, "day");
+  const diffMonth = Math.round(absDiffMs / (30 * 86400000));
+  if (diffMonth < 24) return RTF.format(sign * diffMonth, "month");
+  const diffYear = Math.round(absDiffMs / (365 * 86400000));
+  return RTF.format(sign * diffYear, "year");
 }
