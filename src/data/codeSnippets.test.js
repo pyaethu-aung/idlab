@@ -45,6 +45,30 @@ describe("CODE_SNIPPETS matrix", () => {
     }
   });
 
+  it("gives every row a non-empty, multi-line full program", () => {
+    for (const rows of Object.values(CODE_SNIPPETS)) {
+      for (const row of rows) {
+        expect(typeof row.full).toBe("string");
+        expect(row.full.trim().length).toBeGreaterThan(0);
+        // Full snippets are complete programs, so they always span more than
+        // the single inline line (import/header + the call, at minimum).
+        expect(row.full).toContain("\n");
+      }
+    }
+  });
+
+  it("scaffolds runnable go and java programs in full mode", () => {
+    for (const rows of Object.values(CODE_SNIPPETS)) {
+      const go = rows.find((r) => r.lang === "go");
+      expect(go.full).toContain("package main");
+      expect(go.full).toContain("func main()");
+
+      const java = rows.find((r) => r.lang === "java");
+      expect(java.full).toContain("public class Main");
+      expect(java.full).toContain("public static void main");
+    }
+  });
+
   it("has no duplicate language within a version", () => {
     for (const rows of Object.values(CODE_SNIPPETS)) {
       const langs = rows.map((r) => r.lang);

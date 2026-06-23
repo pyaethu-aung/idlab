@@ -293,6 +293,38 @@ kbd {
   overflow-x: auto;
 }
 
+/* inline | full detail toggle in the panel head. Borrows the mode-switcher
+   shell but sits tighter to fit the 14px-tall header band. */
+.snip-toggle {
+  display: inline-flex;
+  gap: var(--sp-1);
+  flex-shrink: 0;
+  padding: var(--sp-1);
+  background: var(--bg-2);
+  border: 1px solid var(--seam);
+  border-radius: var(--r-md);
+}
+
+.snip-toggle .mode-btn {
+  padding: var(--sp-2) var(--sp-5);
+  font-size: var(--fs-xs);
+}
+
+/* Full mode renders a multi-line program: the label and copy button align to
+   the top of the block, and the <pre> keeps its own indentation, scrolling
+   sideways for long lines rather than wrapping. */
+.snip-row--full {
+  align-items: start;
+}
+
+.snip-full {
+  margin: 0;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: var(--lh-snug);
+  tab-size: 4;
+}
+
 /* ─── Rail ───────────────────────────────────────────────────────────────── */
 .rail {
   border-right: 1px solid var(--seam);
