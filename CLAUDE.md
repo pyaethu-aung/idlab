@@ -8,8 +8,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev              # start dev server at http://localhost:5173
 npm run build            # production build to dist/
 npm run lint             # ESLint with cache
-npm run test             # run all tests once
+npm run test             # run all unit tests once (Vitest, src/ only)
 npm run test:coverage    # run tests with V8 coverage report
+npm run test:e2e         # Playwright E2E (auto-starts dev server; dark+light)
+npm run test:e2e:ui      # Playwright interactive runner
 npm run docker:build     # build Docker image locally
 npm run docker:run       # run container on port 8080
 ```

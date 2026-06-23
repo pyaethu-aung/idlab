@@ -79,10 +79,21 @@ All design tokens — colour, typography, spacing, radius, and motion — live i
 Before opening a pull request, verify the UI using [Playwright](https://playwright.dev):
 
 ```bash
-npx playwright install        # first time only — installs browser binaries
-npx playwright test           # run all E2E tests headlessly
-npx playwright test --ui      # interactive test runner with time-travel
+npx playwright install chromium   # first time only — installs the browser binary
+npm run test:e2e                  # run all E2E tests headlessly
+npm run test:e2e:ui               # interactive runner with time-travel
 ```
+
+Specs live in `e2e/` (Vitest only globs `src/`, so unit and E2E suites never
+collide). `playwright.config.js` starts the Vite dev server automatically, so no
+separate `npm run dev` is needed. Two Chromium projects run every spec under
+`prefers-color-scheme: dark` and `light`, exercising both themes; failures and
+explicit `page.screenshot(...)` calls land under `test-results/`.
+
+This is also the project's browser tool for **design critique**: prefer the
+Playwright CLI over a browser MCP. `e2e/snippets.spec.js` is a worked example
+that screenshots a panel in both themes — copy it to capture any surface for
+visual review.
 
 Key flows to cover:
 
