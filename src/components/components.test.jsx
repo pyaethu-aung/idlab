@@ -1049,16 +1049,20 @@ describe("CodeSnippets", () => {
   it("renders the version header, one row per language, full programs by default", () => {
     render(<Harness version="v4" />);
     expect(screen.getByText("/ snippets · v4")).toBeInTheDocument();
-    expect(screen.getAllByRole("listitem")).toHaveLength(5);
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(5);
     expect(screen.getByText("js")).toBeInTheDocument();
-    // Full mode is the default: the js block is the complete program.
-    expect(screen.getByText(/console\.log\(uuidv4\(\)\)/)).toBeInTheDocument();
+    // Code is split into syntax-highlight spans, so assert on the row's
+    // concatenated textContent rather than a single text node. Full mode is
+    // the default: the js block is the complete program.
+    expect(items.some((li) => li.textContent.includes("console.log(uuidv4())"))).toBe(true);
   });
 
   it("flips to the inline one-liner when the toggle is pressed", () => {
     render(<Harness version="v4" />);
     fireEvent.click(screen.getByRole("button", { name: "inline" }));
-    expect(screen.getByText("import uuid; uuid.uuid4()")).toBeInTheDocument();
+    const items = screen.getAllByRole("listitem");
+    expect(items.some((li) => li.textContent.includes("import uuid; uuid.uuid4()"))).toBe(true);
   });
 
   it("renders nothing for the nil and max sentinels", () => {

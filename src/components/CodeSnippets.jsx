@@ -1,3 +1,15 @@
+import highlightCode from "../utils/highlightCode";
+
+// Render a snippet as syntax-coloured spans. The corpus is tiny, so tokenizing
+// on each render is negligible; no memo needed.
+function Highlighted({ code, lang }) {
+  return highlightCode(code, lang).map((tok, idx) => (
+    <span key={idx} className={`tok-${tok.type}`}>
+      {tok.text}
+    </span>
+  ));
+}
+
 // Generator-side "Copy as code" panel: for the version selected in the rail,
 // show how to produce it in each language. A header toggle switches between
 // "inline" (the compact import + call one-liner) and "full" (the complete,
@@ -48,9 +60,13 @@ function CodeSnippets({ version, snippets }) {
             <div key={lang} className={`cx-row${full ? " snip-row--full" : ""}`} role="listitem">
               <span className="cx-label mono">{lang}</span>
               {full ? (
-                <pre className="cx-value mono snip-full">{snippet}</pre>
+                <pre className="cx-value mono snip-full">
+                  <Highlighted code={snippet} lang={lang} />
+                </pre>
               ) : (
-                <code className="cx-value mono snip-code">{snippet}</code>
+                <code className="cx-value mono snip-code">
+                  <Highlighted code={snippet} lang={lang} />
+                </code>
               )}
               <button
                 type="button"
