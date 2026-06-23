@@ -325,6 +325,17 @@ kbd {
   tab-size: 4;
 }
 
+/* Shown only when navigator.clipboard is unavailable (non-secure context or
+   older browser): the copy click can't write, so name the fallback instead of
+   failing silently. Sits below the rows on its own seam. */
+.snip-clip-error {
+  margin: 0;
+  padding: 12px var(--sp-10);
+  border-top: 1px solid var(--seam);
+  color: var(--error);
+  font-size: var(--fs-xs);
+}
+
 /* ─── Rail ───────────────────────────────────────────────────────────────── */
 .rail {
   border-right: 1px solid var(--seam);

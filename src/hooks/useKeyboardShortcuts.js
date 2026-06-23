@@ -75,6 +75,9 @@ function useKeyboardShortcuts({
   // Per-tab dispatch for the shared verbs: { [tab]: { generate, copyAll, clear } }.
   // A missing entry means the verb is a no-op on that tab.
   tabActions = {},
+  // Generator "Copy as code" panel accelerators (⌥F flip, ⌥S copy default lang).
+  toggleSnippetFull,
+  copySnippet,
 }) {
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -197,6 +200,22 @@ function useKeyboardShortcuts({
             cycleExportFormat?.();
             return;
           }
+          // ⌥F → flip the snippet panel between inline and full.
+          if (code === "KeyF") {
+            if (toggleSnippetFull) {
+              event.preventDefault();
+              toggleSnippetFull();
+            }
+            return;
+          }
+          // ⌥S → copy the default-language snippet for the current version.
+          if (code === "KeyS") {
+            if (copySnippet) {
+              event.preventDefault();
+              copySnippet();
+            }
+            return;
+          }
         }
 
         // ── Validator-only ⌥ keys ──────────────────────────────────────────
@@ -228,6 +247,8 @@ function useKeyboardShortcuts({
     tabActions,
     toggleOption,
     toggleValidatorOption,
+    toggleSnippetFull,
+    copySnippet,
   ]);
 }
 

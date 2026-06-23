@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import CodeSnippets from "./CodeSnippets";
+import useCodeSnippets from "../hooks/useCodeSnippets";
 import ControlPanel from "./ControlPanel";
 import ConvertPanel from "./ConvertPanel";
 import Hero from "./Hero";
@@ -1038,28 +1039,42 @@ describe("ValidatorPanel file upload", () => {
 describe("CodeSnippets", () => {
   afterEach(() => vi.unstubAllGlobals());
 
-  it("renders the version header and one row per language", () => {
-    render(<CodeSnippets version="v4" />);
+  // CodeSnippets is a pure renderer of useCodeSnippets; the harness supplies
+  // real hook state so the tests exercise the component as App wires it.
+  function Harness({ version }) {
+    const snippets = useCodeSnippets(version);
+    return <CodeSnippets version={version} snippets={snippets} />;
+  }
+
+  it("renders the version header, one row per language, full programs by default", () => {
+    render(<Harness version="v4" />);
     expect(screen.getByText("/ snippets · v4")).toBeInTheDocument();
     expect(screen.getAllByRole("listitem")).toHaveLength(5);
     expect(screen.getByText("js")).toBeInTheDocument();
+    // Full mode is the default: the js block is the complete program.
+    expect(screen.getByText(/console\.log\(uuidv4\(\)\)/)).toBeInTheDocument();
+  });
+
+  it("flips to the inline one-liner when the toggle is pressed", () => {
+    render(<Harness version="v4" />);
+    fireEvent.click(screen.getByRole("button", { name: "inline" }));
     expect(screen.getByText("import uuid; uuid.uuid4()")).toBeInTheDocument();
   });
 
   it("renders nothing for the nil and max sentinels", () => {
-    const { container, rerender } = render(<CodeSnippets version="nil" />);
+    const { container, rerender } = render(<Harness version="nil" />);
     expect(container.firstChild).toBeNull();
-    rerender(<CodeSnippets version="max" />);
+    rerender(<Harness version="max" />);
     expect(container.firstChild).toBeNull();
   });
 
-  it("copies the snippet and reflects the copied state", async () => {
+  it("copies the full program and reflects the copied state", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal("navigator", { clipboard: { writeText } });
 
-    render(<CodeSnippets version="v4" />);
-    fireEvent.click(screen.getByRole("button", { name: "Copy py snippet" }));
-    expect(writeText).toHaveBeenCalledWith("import uuid; uuid.uuid4()");
+    render(<Harness version="v4" />);
+    fireEvent.click(screen.getByRole("button", { name: "Copy py program" }));
+    expect(writeText).toHaveBeenCalledWith("import uuid\n\nprint(uuid.uuid4())");
     expect(
       await screen.findByRole("button", { name: "Copied" })
     ).toHaveTextContent("✓ copied");

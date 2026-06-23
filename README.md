@@ -11,6 +11,7 @@ The top bar selects an ID family (UUID / ULID / NanoID); within UUID a mode swit
 - Validator tab handles one UUID or many: paste a single value or a list (one per line), or upload a `.txt` / `.csv` file — select multiple files to merge their contents. Every entry becomes a row in a triage table of status, version, variant, and timestamp, with a valid/invalid/total summary and one-click copy of every valid UUID. Click any row to expand the full inspector inline (parsed structure, properties, timestamp decode, and the v1↔v6 counterpart) — a lone UUID auto-expands. The retired `/bulk` deep link now lands here (`/uuid/validate`).
 - ULID tab mints ULIDs (crypto-random, no dependency) and decodes a pasted ULID into its timestamp, randomness, and equivalent UUID forms. Accepts a UUIDv7 in the same field to convert the other way, since ULID and UUIDv7 share the 48-bit millisecond timestamp.
 - NanoID tab generates batches of compact, URL-safe NanoIDs (crypto-random, no dependency) with an adjustable length (2–36) and alphabet preset (url-safe, alphanumeric, lowercase, hex, numbers); a live entropy readout reports the bit strength and the id count needed for a 1% collision chance.
+- Copy as code: for the selected UUID version, the Generator shows how to mint it in JavaScript, Python, Go, Java, and SQL. Toggle between `inline` (the compact import + call one-liner) and `full` (a complete, copy-paste-runnable program with imports and output); both the displayed code and the copied text follow the toggle.
 - Copy-to-clipboard with micro-interaction feedback plus a timestamped download action guarded against oversized files.
 - Insight cards summarizing current options (version, batch size, characters per UUID) placed directly above the list for quick scanning.
 - Responsive layout with gradients, keyboard-friendly control handling, and pointer event throttling to avoid jank.
@@ -31,6 +32,8 @@ Press **Shift + ?** in the app for the context-aware overlay. Verb keys dispatch
 - ⌥/Alt + 1 … 8 — Switch generators: v4, v1, v6, v7, v3, v5, nil, max.
 - ⌥/Alt + U / H / B — Toggle uppercase, remove hyphens, wrap braces.
 - ⌥/Alt + C — Cycle export format: txt, json, csv, sql, env.
+- ⌥/Alt + F — Flip the code snippets between inline and full.
+- ⌥/Alt + S — Copy the JavaScript code snippet for this version.
 - ⌘/Ctrl + Alt + S — Download the batch in the selected export format.
 - ⌘/Ctrl + Shift + C — Copy the first UUID in the batch.
 - ⌥/Alt + Shift + C — Copy the whole visible batch.

@@ -18,6 +18,8 @@ describe("useKeyboardShortcuts", () => {
       setBatchSizeAndCommit: vi.fn(),
       handleCopy: vi.fn(),
       cycleExportFormat: vi.fn(),
+      toggleSnippetFull: vi.fn(),
+      copySnippet: vi.fn(),
       setActiveTab: vi.fn(),
       activeTab: "generator",
       tabActions: {
@@ -327,6 +329,51 @@ describe("useKeyboardShortcuts", () => {
       window.dispatchEvent(event);
 
       expect(mockProps.cycleExportFormat).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("code snippet shortcuts", () => {
+    it("flips inline/full with Alt + F on the generator tab", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "f", code: "KeyF", altKey: true })
+      );
+
+      expect(mockProps.toggleSnippetFull).toHaveBeenCalled();
+    });
+
+    it("copies the default snippet with Alt + S on the generator tab", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "s", code: "KeyS", altKey: true })
+      );
+
+      expect(mockProps.copySnippet).toHaveBeenCalled();
+      expect(mockProps.downloadList).not.toHaveBeenCalled();
+    });
+
+    it("downloads (not copy-snippet) with Cmd/Ctrl + Alt + S", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "s", code: "KeyS", altKey: true, metaKey: true })
+      );
+
+      expect(mockProps.downloadList).toHaveBeenCalled();
+      expect(mockProps.copySnippet).not.toHaveBeenCalled();
+    });
+
+    it("does not fire snippet keys off the generator tab", () => {
+      mockProps.activeTab = "validator";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "f", code: "KeyF", altKey: true })
+      );
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "s", code: "KeyS", altKey: true })
+      );
+
+      expect(mockProps.toggleSnippetFull).not.toHaveBeenCalled();
+      expect(mockProps.copySnippet).not.toHaveBeenCalled();
     });
   });
 
