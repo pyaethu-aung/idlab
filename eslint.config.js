@@ -29,4 +29,10 @@ export default [
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  {
+    // Node-context files: the Playwright config and E2E specs run under Node,
+    // not the browser, so they use `process` and other Node globals.
+    files: ['playwright.config.js', 'e2e/**/*.{js,jsx}'],
+    languageOptions: { globals: { ...globals.node } },
+  },
 ]
