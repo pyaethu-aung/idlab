@@ -55,6 +55,14 @@ const SHORTCUTS = [
         description: "Cycle export format: txt, json, csv, sql, env",
       },
       {
+        combo: "⌥/Alt + F",
+        description: "Flip the code snippets between inline and full",
+      },
+      {
+        combo: "⌥/Alt + S",
+        description: "Copy the JavaScript code snippet for this version",
+      },
+      {
         combo: "⌘/Ctrl + Alt + S",
         description: "Download the batch in the selected export format",
       },

@@ -23,6 +23,7 @@ import useUuidConverter from "./hooks/useUuidConverter";
 import useUuidValidator from "./hooks/useUuidValidator";
 import useUlid from "./hooks/useUlid";
 import useNanoId from "./hooks/useNanoId";
+import useCodeSnippets from "./hooks/useCodeSnippets";
 
 function BrandIcon() {
   return (
@@ -79,6 +80,7 @@ function App() {
   const converter = useUuidConverter();
   const ulid = useUlid();
   const nanoid = useNanoId();
+  const snippets = useCodeSnippets(selectedVersion);
 
   // One keyboard model across screens: the same verb key dispatches to the
   // active tab's action. A missing slot makes the verb a no-op on that tab.
@@ -117,6 +119,8 @@ function App() {
     cycleExportFormat,
     setActiveTab,
     tabActions,
+    toggleSnippetFull: snippets.toggleFull,
+    copySnippet: snippets.copyDefault,
   });
 
   return (
@@ -195,7 +199,7 @@ function App() {
             />
           </section>
 
-          <CodeSnippets version={selectedVersion} />
+          <CodeSnippets version={selectedVersion} snippets={snippets} />
         </div>
 
         <div style={{ display: activeTab === "validator" ? "" : "none" }}>

@@ -1,26 +1,15 @@
-import { useState } from "react";
-import { snippetsFor } from "../data/codeSnippets";
-
 // Generator-side "Copy as code" panel: for the version selected in the rail,
 // show how to produce it in each language. A header toggle switches between
 // "inline" (the compact import + call one-liner) and "full" (the complete,
 // copy-paste-runnable program). Both the displayed code and the copied text
-// follow the toggle, so what you copy is always what you see. Copy feedback
-// and the toggle are transient view state, so they live here rather than in a
-// hook (no business logic to own).
-function CodeSnippets({ version }) {
-  const [copiedLang, setCopiedLang] = useState(null);
-  const [full, setFull] = useState(false);
-  const rows = snippetsFor(version);
+// follow the toggle, so what you copy is always what you see.
+//
+// All view state lives in `useCodeSnippets` (passed in as `snippets`) so the
+// same toggle/copy actions are driven by both these buttons and the keyboard
+// map (⌥F flip, ⌥S copy). This component only renders.
+function CodeSnippets({ version, snippets }) {
+  const { rows, full, toggleFull, copiedLang, clipboardError, copy } = snippets;
   if (!rows) return null;
-
-  const copy = (lang, code) => {
-    if (!navigator.clipboard?.writeText) return;
-    navigator.clipboard.writeText(code).then(() => {
-      setCopiedLang(lang);
-      setTimeout(() => setCopiedLang(null), 1500);
-    });
-  };
 
   return (
     <section className="panel snip-panel" aria-label="Copy as code">
@@ -28,15 +17,13 @@ function CodeSnippets({ version }) {
         <div className="panel-meta">
           <span className="panel-bar" aria-hidden="true" />
           <span className="panel-title mono">/ snippets · {version}</span>
-          <span className="panel-sep">|</span>
-          <span className="panel-flag mono">copy as code</span>
         </div>
         <div className="snip-toggle" role="group" aria-label="Snippet detail">
           <button
             type="button"
             className={`mode-btn mono${full ? "" : " mode-btn--active"}`}
             aria-pressed={!full}
-            onClick={() => setFull(false)}
+            onClick={() => full && toggleFull()}
           >
             inline
           </button>
@@ -44,7 +31,7 @@ function CodeSnippets({ version }) {
             type="button"
             className={`mode-btn mono${full ? " mode-btn--active" : ""}`}
             aria-pressed={full}
-            onClick={() => setFull(true)}
+            onClick={() => !full && toggleFull()}
           >
             full
           </button>
@@ -69,7 +56,7 @@ function CodeSnippets({ version }) {
                 type="button"
                 className={`cx-copy mono${copiedLang === lang ? " is-copied" : ""}`}
                 onClick={() => copy(lang, snippet)}
-                aria-label={copiedLang === lang ? "Copied" : `Copy ${lang} snippet`}
+                aria-label={copiedLang === lang ? "Copied" : `Copy ${lang} ${full ? "program" : "snippet"}`}
               >
                 {copiedLang === lang ? "✓ copied" : "copy"}
               </button>
@@ -77,6 +64,11 @@ function CodeSnippets({ version }) {
           );
         })}
       </div>
+      {clipboardError && (
+        <p className="snip-clip-error mono" role="status">
+          clipboard unavailable — select the code and copy manually
+        </p>
+      )}
     </section>
   );
 }
