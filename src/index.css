@@ -325,6 +325,15 @@ kbd {
   tab-size: 4;
 }
 
+/* Syntax-highlight token colours for the snippet code (js/py/go/java/sql).
+   Plain text and comments stay on the neutral ramp; keyword/string/fn/number
+   carry the dedicated --syn-* hues. The default cx-value colour covers .tok-plain. */
+.tok-comment { color: var(--ink-3); font-style: italic; }
+.tok-keyword { color: var(--syn-keyword); }
+.tok-string { color: var(--syn-string); }
+.tok-function { color: var(--syn-fn); }
+.tok-number { color: var(--syn-number); }
+
 /* Shown only when navigator.clipboard is unavailable (non-secure context or
    older browser): the copy click can't write, so name the fallback instead of
    failing silently. Sits below the rows on its own seam. */

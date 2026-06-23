@@ -106,6 +106,14 @@
   --on-error: oklch(0.15 0.02 25);
   --scrim:    color-mix(in oklch, var(--bg), transparent 30%);
   --shadow-modal: 0 20px 60px rgba(0,0,0,0.4);
+  /* Syntax-highlight palette for the "Copy as code" panel. A deliberate
+     exception to the one-accent rule (code reads as code), held to the
+     warm-void ramp's lightness band so it stays calm, not neon. Comments
+     reuse --ink-3; keyword/string/fn/number carry distinct hues. */
+  --syn-keyword: oklch(0.78 0.13 305);
+  --syn-string:  oklch(0.82 0.13 145);
+  --syn-fn:      oklch(0.80 0.12 245);
+  --syn-number:  oklch(0.83 0.11 75);
 }
 
 /* Light theme ─────────────────────────────── */
@@ -123,6 +131,11 @@
   --on-error: oklch(0.97 0.004 60);
   --scrim:    color-mix(in oklch, var(--bg), transparent 30%);
   --shadow-modal: 0 20px 60px rgba(0,0,0,0.15);
+  /* Darker, more saturated for legibility on the near-white light surface. */
+  --syn-keyword: oklch(0.48 0.19 305);
+  --syn-string:  oklch(0.46 0.16 150);
+  --syn-fn:      oklch(0.48 0.16 250);
+  --syn-number:  oklch(0.52 0.14 70);
 }
 
 /* Accent palettes — set on :root or any ancestor */
