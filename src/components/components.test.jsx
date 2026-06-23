@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import CodeSnippets from "./CodeSnippets";
 import ControlPanel from "./ControlPanel";
 import ConvertPanel from "./ConvertPanel";
 import Hero from "./Hero";
@@ -1031,5 +1032,36 @@ describe("ValidatorPanel file upload", () => {
 
     expect(screen.getByRole("alert")).toHaveTextContent("huge.txt exceeds 1 MB");
     await waitFor(() => expect(setRawInput).toHaveBeenCalledWith("uuid-ok"));
+  });
+});
+
+describe("CodeSnippets", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("renders the version header and one row per language", () => {
+    render(<CodeSnippets version="v4" />);
+    expect(screen.getByText("/ snippets · v4")).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem")).toHaveLength(5);
+    expect(screen.getByText("js")).toBeInTheDocument();
+    expect(screen.getByText("import uuid; uuid.uuid4()")).toBeInTheDocument();
+  });
+
+  it("renders nothing for the nil and max sentinels", () => {
+    const { container, rerender } = render(<CodeSnippets version="nil" />);
+    expect(container.firstChild).toBeNull();
+    rerender(<CodeSnippets version="max" />);
+    expect(container.firstChild).toBeNull();
+  });
+
+  it("copies the snippet and reflects the copied state", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("navigator", { clipboard: { writeText } });
+
+    render(<CodeSnippets version="v4" />);
+    fireEvent.click(screen.getByRole("button", { name: "Copy py snippet" }));
+    expect(writeText).toHaveBeenCalledWith("import uuid; uuid.uuid4()");
+    expect(
+      await screen.findByRole("button", { name: "Copied" })
+    ).toHaveTextContent("✓ copied");
   });
 });

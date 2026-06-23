@@ -8,6 +8,7 @@ import TabAnnouncer from "./components/TabAnnouncer";
 import ThemeToggle from "./components/ThemeToggle";
 import ToolbarNav from "./components/ToolbarNav";
 import UuidList from "./components/UuidList";
+import CodeSnippets from "./components/CodeSnippets";
 import ConvertPanel from "./components/ConvertPanel";
 import ValidatorPanel from "./components/ValidatorPanel";
 import UlidPanel from "./components/UlidPanel";
@@ -193,6 +194,8 @@ function App() {
               refreshing={isRefreshing}
             />
           </section>
+
+          <CodeSnippets version={selectedVersion} />
         </div>
 
         <div style={{ display: activeTab === "validator" ? "" : "none" }}>

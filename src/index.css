@@ -276,6 +276,23 @@ kbd {
   background: var(--bg-2);
 }
 
+/* "Copy as code" snippets sit below the bench, so the panel carries its own
+   card border (the bench supplies its own). Rows reuse the .cx-row layout. */
+.snip-panel {
+  margin-top: var(--sp-10);
+  border: 1px solid var(--seam);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* Code is a single token-run: scroll it sideways rather than wrap mid-token
+   the way .cx-value does for free-form UUID strings. */
+.snip-code {
+  overflow-wrap: normal;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
 /* ─── Rail ───────────────────────────────────────────────────────────────── */
 .rail {
   border-right: 1px solid var(--seam);
