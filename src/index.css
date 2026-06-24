@@ -291,6 +291,10 @@ kbd {
   overflow-wrap: normal;
   white-space: nowrap;
   overflow-x: auto;
+  /* overflow-x:auto forces overflow-y to compute as `auto` (the spec
+     coerces a `visible` cross-axis next to a scroll axis), which then shows
+     a spurious vertical scrollbar over ~2px of line-box leading. Clip it. */
+  overflow-y: hidden;
 }
 
 /* inline | full detail toggle in the panel head. Borrows the mode-switcher
@@ -317,14 +321,16 @@ kbd {
   align-items: start;
 }
 
-/* Full mode grows the panel and the PAGE scrolls. Deliberately no
-   max-height/overflow-y here: an inner vertical scrollbar on a short reference
-   list traps content and hurts more than a slightly long page. Long lines
-   still scroll sideways via overflow-x. */
+/* Full mode grows the panel and the PAGE scrolls — no inner vertical scroll on
+   the snippet itself. overflow-x:auto for long lines forces overflow-y to
+   compute as `auto`, which otherwise shows a spurious vertical scrollbar over
+   ~2px of line-box leading; overflow-y:hidden clips that without affecting the
+   sideways scroll. */
 .snip-full {
   margin: 0;
   white-space: pre;
   overflow-x: auto;
+  overflow-y: hidden;
   line-height: var(--lh-snug);
   tab-size: 4;
 }
