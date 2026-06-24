@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { snippetsFor, ULID_SNIPPETS, nanoIdSnippets } from "./data/codeSnippets";
 import ControlPanel from "./components/ControlPanel";
 import Hero from "./components/Hero";
 import ModeSwitcher from "./components/ModeSwitcher";
@@ -80,27 +81,59 @@ function App() {
   const converter = useUuidConverter();
   const ulid = useUlid();
   const nanoid = useNanoId();
-  const snippets = useCodeSnippets(selectedVersion);
+  const snippets = useCodeSnippets(snippetsFor(selectedVersion));
+  const ulidSnippets = useCodeSnippets(ULID_SNIPPETS);
+  const nanoidSnippetRows = useMemo(
+    () => nanoIdSnippets(nanoid.size, nanoid.alphabetId),
+    [nanoid.size, nanoid.alphabetId]
+  );
+  const nanoidSnippets = useCodeSnippets(nanoidSnippetRows);
 
   // One keyboard model across screens: the same verb key dispatches to the
   // active tab's action. A missing slot makes the verb a no-op on that tab.
+  // toggleFull / copySnippet are also per-tab so ⌥F and ⌥S work on generator,
+  // ulid, and nanoid without any tab-specific branching in the shortcut handler.
   const tabActions = useMemo(
     () => ({
-      generator: { generate: regenerate, copyAll, clear: null },
+      generator: {
+        generate: regenerate,
+        copyAll,
+        clear: null,
+        toggleFull: snippets.toggleFull,
+        copySnippet: snippets.copyDefault,
+      },
       validator: { generate: null, copyAll: null, clear: validator.clearInput },
       converter: { generate: null, copyAll: null, clear: converter.clearInput },
-      ulid: { generate: ulid.generate, copyAll: null, clear: ulid.clearInput },
-      nanoid: { generate: nanoid.regenerate, copyAll: nanoid.copyAll, clear: null },
+      ulid: {
+        generate: ulid.generate,
+        copyAll: null,
+        clear: ulid.clearInput,
+        toggleFull: ulidSnippets.toggleFull,
+        copySnippet: ulidSnippets.copyDefault,
+      },
+      nanoid: {
+        generate: nanoid.regenerate,
+        copyAll: nanoid.copyAll,
+        clear: null,
+        toggleFull: nanoidSnippets.toggleFull,
+        copySnippet: nanoidSnippets.copyDefault,
+      },
     }),
     [
       regenerate,
       copyAll,
+      snippets.toggleFull,
+      snippets.copyDefault,
       validator.clearInput,
       converter.clearInput,
       ulid.generate,
       ulid.clearInput,
+      ulidSnippets.toggleFull,
+      ulidSnippets.copyDefault,
       nanoid.regenerate,
       nanoid.copyAll,
+      nanoidSnippets.toggleFull,
+      nanoidSnippets.copyDefault,
     ]
   );
 
@@ -119,8 +152,6 @@ function App() {
     cycleExportFormat,
     setActiveTab,
     tabActions,
-    toggleSnippetFull: snippets.toggleFull,
-    copySnippet: snippets.copyDefault,
   });
 
   return (
@@ -212,10 +243,12 @@ function App() {
 
         <div style={{ display: activeTab === "ulid" ? "" : "none" }}>
           <UlidPanel ulid={ulid} />
+          <CodeSnippets version="ulid" snippets={ulidSnippets} />
         </div>
 
         <div style={{ display: activeTab === "nanoid" ? "" : "none" }}>
           <NanoIdPanel nanoid={nanoid} />
+          <CodeSnippets version="nanoid" snippets={nanoidSnippets} />
         </div>
       </main>
 
