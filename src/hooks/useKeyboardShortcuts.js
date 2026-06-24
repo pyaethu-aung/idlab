@@ -72,12 +72,11 @@ function useKeyboardShortcuts({
   cycleExportFormat,
   setActiveTab,
   activeTab,
-  // Per-tab dispatch for the shared verbs: { [tab]: { generate, copyAll, clear } }.
-  // A missing entry means the verb is a no-op on that tab.
+  // Per-tab dispatch for shared verbs: { [tab]: { generate, copyAll, clear,
+  // toggleFull, copySnippet } }. A missing slot is a no-op on that tab.
+  // toggleFull (⌥F) and copySnippet (⌥S) live here so the snippet shortcuts
+  // work on generator, ulid, and nanoid without generator-specific branching.
   tabActions = {},
-  // Generator "Copy as code" panel accelerators (⌥F flip, ⌥S copy default lang).
-  toggleSnippetFull,
-  copySnippet,
 }) {
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -169,6 +168,23 @@ function useKeyboardShortcuts({
           }
           return;
         }
+        // ⌥F → flip the snippet panel between inline and full (generator, ulid, nanoid).
+        if (code === "KeyF") {
+          if (actions.toggleFull) {
+            event.preventDefault();
+            actions.toggleFull();
+          }
+          return;
+        }
+        // ⌥S → copy the default-language snippet (generator, ulid, nanoid).
+        // Checked after ⌘⌥S (download) so the meta-chord wins.
+        if (code === "KeyS") {
+          if (actions.copySnippet) {
+            event.preventDefault();
+            actions.copySnippet();
+          }
+          return;
+        }
 
         // ── Generator-only ⌥ keys ──────────────────────────────────────────
         // Scoped so they never mutate generator state from another tab.
@@ -198,22 +214,6 @@ function useKeyboardShortcuts({
           if (code === "KeyC") {
             event.preventDefault();
             cycleExportFormat?.();
-            return;
-          }
-          // ⌥F → flip the snippet panel between inline and full.
-          if (code === "KeyF") {
-            if (toggleSnippetFull) {
-              event.preventDefault();
-              toggleSnippetFull();
-            }
-            return;
-          }
-          // ⌥S → copy the default-language snippet for the current version.
-          if (code === "KeyS") {
-            if (copySnippet) {
-              event.preventDefault();
-              copySnippet();
-            }
             return;
           }
         }
@@ -247,8 +247,6 @@ function useKeyboardShortcuts({
     tabActions,
     toggleOption,
     toggleValidatorOption,
-    toggleSnippetFull,
-    copySnippet,
   ]);
 }
 

@@ -18,16 +18,14 @@ describe("useKeyboardShortcuts", () => {
       setBatchSizeAndCommit: vi.fn(),
       handleCopy: vi.fn(),
       cycleExportFormat: vi.fn(),
-      toggleSnippetFull: vi.fn(),
-      copySnippet: vi.fn(),
       setActiveTab: vi.fn(),
       activeTab: "generator",
       tabActions: {
-        generator: { generate: vi.fn(), copyAll: vi.fn(), clear: null },
+        generator: { generate: vi.fn(), copyAll: vi.fn(), clear: null, toggleFull: vi.fn(), copySnippet: vi.fn() },
         validator: { generate: null, copyAll: null, clear: vi.fn() },
         converter: { generate: null, copyAll: null, clear: vi.fn() },
-        ulid: { generate: vi.fn(), copyAll: null, clear: vi.fn() },
-        nanoid: { generate: vi.fn(), copyAll: vi.fn(), clear: null },
+        ulid: { generate: vi.fn(), copyAll: null, clear: vi.fn(), toggleFull: vi.fn(), copySnippet: vi.fn() },
+        nanoid: { generate: vi.fn(), copyAll: vi.fn(), clear: null, toggleFull: vi.fn(), copySnippet: vi.fn() },
       },
     };
   });
@@ -339,7 +337,7 @@ describe("useKeyboardShortcuts", () => {
         createKeyboardEvent({ key: "f", code: "KeyF", altKey: true })
       );
 
-      expect(mockProps.toggleSnippetFull).toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.toggleFull).toHaveBeenCalled();
     });
 
     it("copies the default snippet with Alt + S on the generator tab", () => {
@@ -348,7 +346,7 @@ describe("useKeyboardShortcuts", () => {
         createKeyboardEvent({ key: "s", code: "KeyS", altKey: true })
       );
 
-      expect(mockProps.copySnippet).toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.copySnippet).toHaveBeenCalled();
       expect(mockProps.downloadList).not.toHaveBeenCalled();
     });
 
@@ -359,10 +357,10 @@ describe("useKeyboardShortcuts", () => {
       );
 
       expect(mockProps.downloadList).toHaveBeenCalled();
-      expect(mockProps.copySnippet).not.toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.copySnippet).not.toHaveBeenCalled();
     });
 
-    it("does not fire snippet keys off the generator tab", () => {
+    it("does not fire snippet keys on tabs without snippet panels (validator, converter)", () => {
       mockProps.activeTab = "validator";
       renderHook(() => useKeyboardShortcuts(mockProps));
       window.dispatchEvent(
@@ -372,8 +370,37 @@ describe("useKeyboardShortcuts", () => {
         createKeyboardEvent({ key: "s", code: "KeyS", altKey: true })
       );
 
-      expect(mockProps.toggleSnippetFull).not.toHaveBeenCalled();
-      expect(mockProps.copySnippet).not.toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.toggleFull).not.toHaveBeenCalled();
+      expect(mockProps.tabActions.generator.copySnippet).not.toHaveBeenCalled();
+      expect(mockProps.tabActions.validator).not.toHaveProperty("toggleFull");
+    });
+
+    it("fires snippet keys on the ulid tab", () => {
+      mockProps.activeTab = "ulid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "f", code: "KeyF", altKey: true })
+      );
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "s", code: "KeyS", altKey: true })
+      );
+
+      expect(mockProps.tabActions.ulid.toggleFull).toHaveBeenCalled();
+      expect(mockProps.tabActions.ulid.copySnippet).toHaveBeenCalled();
+    });
+
+    it("fires snippet keys on the nanoid tab", () => {
+      mockProps.activeTab = "nanoid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "f", code: "KeyF", altKey: true })
+      );
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "s", code: "KeyS", altKey: true })
+      );
+
+      expect(mockProps.tabActions.nanoid.toggleFull).toHaveBeenCalled();
+      expect(mockProps.tabActions.nanoid.copySnippet).toHaveBeenCalled();
     });
   });
 

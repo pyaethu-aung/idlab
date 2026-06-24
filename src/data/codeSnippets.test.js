@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import CODE_SNIPPETS, { snippetsFor } from "./codeSnippets";
+import CODE_SNIPPETS, { snippetsFor, ULID_SNIPPETS, nanoIdSnippets } from "./codeSnippets";
 
 const GENERATABLE = ["v1", "v3", "v4", "v5", "v6", "v7"];
 
@@ -74,5 +74,67 @@ describe("CODE_SNIPPETS matrix", () => {
       const langs = rows.map((r) => r.lang);
       expect(new Set(langs).size).toBe(langs.length);
     }
+  });
+});
+
+describe("ULID_SNIPPETS", () => {
+  it("provides three language rows: js, py, go", () => {
+    expect(ULID_SNIPPETS.map((r) => r.lang)).toEqual(["js", "py", "go"]);
+  });
+
+  it("gives every row a non-empty code and full string", () => {
+    for (const row of ULID_SNIPPETS) {
+      expect(row.code.trim().length).toBeGreaterThan(0);
+      expect(row.full.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it("scaffolds a runnable go program in full mode", () => {
+    const go = ULID_SNIPPETS.find((r) => r.lang === "go");
+    expect(go.full).toContain("package main");
+    expect(go.full).toContain("func main()");
+    expect(go.full).toContain("github.com/oklog/ulid");
+  });
+});
+
+describe("nanoIdSnippets", () => {
+  it("returns three language rows for every alphabet", () => {
+    for (const id of ["url-safe", "alphanumeric", "lowercase", "hex", "numbers"]) {
+      const rows = nanoIdSnippets(21, id);
+      expect(rows.map((r) => r.lang)).toEqual(["js", "py", "go"]);
+    }
+  });
+
+  it("uses the simple nanoid(size) form for the url-safe default", () => {
+    const rows = nanoIdSnippets(21, "url-safe");
+    const js = rows.find((r) => r.lang === "js");
+    expect(js.code).toContain("nanoid(21)");
+    expect(js.code).not.toContain("customAlphabet");
+  });
+
+  it("uses customAlphabet for non-default alphabets", () => {
+    const rows = nanoIdSnippets(10, "hex");
+    const js = rows.find((r) => r.lang === "js");
+    expect(js.code).toContain("customAlphabet");
+    expect(js.full).toContain("customAlphabet");
+  });
+
+  it("embeds the size in every row for every alphabet", () => {
+    const size = 15;
+    for (const id of ["url-safe", "hex"]) {
+      const rows = nanoIdSnippets(size, id);
+      for (const row of rows) {
+        expect(row.code).toContain(String(size));
+        expect(row.full).toContain(String(size));
+      }
+    }
+  });
+
+  it("scaffolds a runnable go program in full mode", () => {
+    const rows = nanoIdSnippets(21, "url-safe");
+    const go = rows.find((r) => r.lang === "go");
+    expect(go.full).toContain("package main");
+    expect(go.full).toContain("func main()");
+    expect(go.full).toContain("go-nanoid");
   });
 });

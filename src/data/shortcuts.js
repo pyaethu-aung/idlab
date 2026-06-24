@@ -120,6 +120,14 @@ const SHORTCUTS = [
         combo: "⌥/Alt + Backspace",
         description: "Clear the input",
       },
+      {
+        combo: "⌥/Alt + F",
+        description: "Flip the code snippets between inline and full",
+      },
+      {
+        combo: "⌥/Alt + S",
+        description: "Copy the JavaScript code snippet for minting a ULID",
+      },
     ],
   },
   {
@@ -133,6 +141,14 @@ const SHORTCUTS = [
       {
         combo: "⌥/Alt + Shift + C",
         description: "Copy the whole batch",
+      },
+      {
+        combo: "⌥/Alt + F",
+        description: "Flip the code snippets between inline and full",
+      },
+      {
+        combo: "⌥/Alt + S",
+        description: "Copy the JavaScript code snippet for minting a NanoID",
       },
     ],
   },

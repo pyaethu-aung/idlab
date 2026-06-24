@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import CodeSnippets from "./CodeSnippets";
 import useCodeSnippets from "../hooks/useCodeSnippets";
+import { snippetsFor } from "../data/codeSnippets";
 import ControlPanel from "./ControlPanel";
 import ConvertPanel from "./ConvertPanel";
 import Hero from "./Hero";
@@ -1042,7 +1043,7 @@ describe("CodeSnippets", () => {
   // CodeSnippets is a pure renderer of useCodeSnippets; the harness supplies
   // real hook state so the tests exercise the component as App wires it.
   function Harness({ version }) {
-    const snippets = useCodeSnippets(version);
+    const snippets = useCodeSnippets(snippetsFor(version));
     return <CodeSnippets version={version} snippets={snippets} />;
   }
 

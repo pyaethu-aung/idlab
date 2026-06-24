@@ -136,8 +136,6 @@ describe("App", () => {
       cycleExportFormat: state.cycleExportFormat,
       setActiveTab: expect.any(Function),
       tabActions: expect.any(Object),
-      toggleSnippetFull: expect.any(Function),
-      copySnippet: expect.any(Function),
     });
   });
 
