@@ -317,6 +317,10 @@ kbd {
   align-items: start;
 }
 
+/* Full mode grows the panel and the PAGE scrolls. Deliberately no
+   max-height/overflow-y here: an inner vertical scrollbar on a short reference
+   list traps content and hurts more than a slightly long page. Long lines
+   still scroll sideways via overflow-x. */
 .snip-full {
   margin: 0;
   white-space: pre;
