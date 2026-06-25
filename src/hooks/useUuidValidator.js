@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { parseUuidList } from "../utils/uuidBulk";
 import { convertTimeUuid, uuidGenerators } from "../utils/uuid";
+import { versionLabel } from "../utils/uuidDecoder";
 
 const SAMPLES = {
   nil: "00000000-0000-0000-0000-000000000000",
@@ -40,6 +41,8 @@ function useUuidValidator() {
   const [copiedLine, setCopiedLine] = useState(null);
   const [copiedAll, setCopiedAll] = useState(false);
   const [conversionCopied, setConversionCopied] = useState(false);
+  const [assertVersion, setAssertVersionState] = useState(null);
+  const [tableFilter, setTableFilter] = useState("all");
   const prevValidRef = useRef(0);
 
   const parsed = useMemo(
@@ -75,6 +78,23 @@ function useUuidValidator() {
     if (!value) return null;
     return { from: r.version, to: r.version === 1 ? 6 : 1, value };
   }, [expandedResult]);
+
+  const assertSummary = useMemo(() => {
+    if (!assertVersion || !rows.length) return null;
+    let pass = 0;
+    for (const row of rows) {
+      if (row.result.valid && versionLabel(row.result) === assertVersion) pass++;
+    }
+    return { pass, fail: rows.length - pass };
+  }, [rows, assertVersion]);
+
+  const filteredRows = useMemo(() => {
+    if (!assertVersion || tableFilter === "all") return rows;
+    return rows.filter((row) => {
+      const passes = row.result.valid && versionLabel(row.result) === assertVersion;
+      return tableFilter === "pass" ? passes : !passes;
+    });
+  }, [rows, assertVersion, tableFilter]);
 
   // Count a "check" each time the valid set grows from empty, so the status bar
   // tally tracks deliberate validations rather than every keystroke.
@@ -127,17 +147,26 @@ function useUuidValidator() {
     });
   }, []);
 
+  const setAssertVersion = useCallback((v) => {
+    setAssertVersionState(v);
+    setTableFilter("all");
+  }, []);
+
   const copyValid = useCallback(() => {
     if (!parsed || !navigator.clipboard?.writeText) return;
     const valids = parsed.rows
-      .filter((row) => row.result.valid)
+      .filter((row) => {
+        if (!row.result.valid) return false;
+        if (assertVersion) return versionLabel(row.result) === assertVersion;
+        return true;
+      })
       .map((row) => row.result.raw);
     if (!valids.length) return;
     navigator.clipboard.writeText(valids.join("\n")).then(() => {
       setCopiedAll(true);
       setTimeout(() => setCopiedAll(false), 1500);
     });
-  }, [parsed]);
+  }, [parsed, assertVersion]);
 
   const copyConversion = useCallback(() => {
     if (!conversion?.value || !navigator.clipboard?.writeText) return;
@@ -170,6 +199,12 @@ function useUuidValidator() {
     loadSampleList,
     activeSample,
     checkCount,
+    assertVersion,
+    setAssertVersion,
+    assertSummary,
+    tableFilter,
+    setTableFilter,
+    filteredRows,
   };
 }
 
