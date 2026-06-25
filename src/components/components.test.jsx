@@ -854,6 +854,7 @@ const makeValidator = (overrides = {}) => ({
   parsed: null,
   summary: null,
   validCount: 0,
+  filteredRows: [],
   expandedLine: null,
   toggleRow: vi.fn(),
   conversion: null,
@@ -867,6 +868,11 @@ const makeValidator = (overrides = {}) => ({
   loadSample: vi.fn(),
   loadSampleList: vi.fn(),
   activeSample: null,
+  assertVersion: null,
+  setAssertVersion: vi.fn(),
+  assertSummary: null,
+  tableFilter: "all",
+  setTableFilter: vi.fn(),
   ...overrides,
 });
 
@@ -877,6 +883,7 @@ const withList = (text, overrides = {}) => {
     parsed,
     summary: parsed.summary,
     validCount: parsed.summary.valid,
+    filteredRows: parsed.rows,
     ...overrides,
   });
 };

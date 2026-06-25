@@ -2031,6 +2031,7 @@ input.name-input.ts-field[type="time"] {
 .bulk-count--ok .bulk-count-num { color: var(--accent); }
 .bulk-count--bad .bulk-count-num { color: var(--error); }
 .bulk-count--total .bulk-count-num { color: var(--ink); }
+.bulk-count--warn-val .bulk-count-num { color: var(--warn); }
 
 .bulk-count--warn {
   color: var(--error);
@@ -2048,6 +2049,35 @@ input.name-input.ts-field[type="time"] {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--on-accent);
+}
+
+.v-filter-tabs {
+  display: flex;
+  gap: var(--sp-2);
+  padding: var(--sp-5) var(--sp-10);
+  border-bottom: 1px solid var(--seam);
+}
+
+.v-filter-tab {
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--seam);
+  background: transparent;
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: border-color var(--d-swap), color var(--d-swap), background var(--d-swap);
+}
+
+.v-filter-tab:hover {
+  border-color: var(--seam-2);
+  color: var(--ink);
+}
+
+.v-filter-tab--active {
+  background: var(--bg-3);
+  border-color: var(--seam-2);
+  color: var(--ink);
 }
 
 .bulk-table-wrap {
@@ -2095,6 +2125,14 @@ input.name-input.ts-field[type="time"] {
   background: color-mix(in oklch, var(--error) 10%, var(--bg-2));
 }
 
+.bulk-row--mismatch td {
+  background: color-mix(in oklch, var(--warn) 7%, var(--bg-2));
+}
+
+.bulk-row--mismatch:hover td {
+  background: color-mix(in oklch, var(--warn) 11%, var(--bg-2));
+}
+
 .bulk-col-num {
   width: 1%;
   white-space: nowrap;
@@ -2137,6 +2175,9 @@ input.name-input.ts-field[type="time"] {
 
 .bulk-status--bad { color: var(--error); }
 .bulk-status--bad .bulk-status-pip { color: var(--error); }
+
+.bulk-status--warn { color: var(--warn); }
+.bulk-status--warn .bulk-status-pip { color: var(--warn); }
 
 .bulk-status-reason {
   color: var(--ink-3);
