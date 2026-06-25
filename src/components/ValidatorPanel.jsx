@@ -23,7 +23,16 @@ function ValidatorPanel({ validator }) {
     loadSample,
     loadSampleList,
     activeSample,
+    assertVersion,
+    setAssertVersion,
+    assertSummary,
+    tableFilter,
+    setTableFilter,
+    filteredRows,
   } = validator;
+
+  const copyCount = assertVersion ? (assertSummary?.pass ?? 0) : validCount;
+  const copyLabel = assertVersion ? "matching" : "valid";
 
   return (
     <section className="validator-panel">
@@ -37,6 +46,8 @@ function ValidatorPanel({ validator }) {
           onLoadSample={loadSample}
           onLoadSampleList={loadSampleList}
           activeSample={activeSample}
+          assertVersion={assertVersion}
+          onSetAssertVersion={setAssertVersion}
         />
 
         <div className="v-panel-view">
@@ -54,6 +65,16 @@ function ValidatorPanel({ validator }) {
                     <span className="bulk-count bulk-count--total mono">
                       <span className="bulk-count-num">{summary.total}</span> total
                     </span>
+                    {assertSummary && (
+                      <>
+                        <span className="bulk-count bulk-count--ok mono">
+                          <span className="bulk-count-num">{assertSummary.pass}</span> pass
+                        </span>
+                        <span className="bulk-count bulk-count--warn-val mono">
+                          <span className="bulk-count-num">{assertSummary.fail}</span> fail
+                        </span>
+                      </>
+                    )}
                     {summary.truncated && (
                       <span className="bulk-count bulk-count--warn mono">
                         capped at 1000
@@ -64,14 +85,33 @@ function ValidatorPanel({ validator }) {
                     type="button"
                     className={`v-input-btn v-input-btn--secondary bulk-copy-btn mono${copiedAll ? " is-copied" : ""}`}
                     onClick={copyValid}
-                    disabled={validCount === 0}
-                    aria-label="Copy all valid UUIDs"
+                    disabled={copyCount === 0}
+                    aria-label={`Copy all ${copyLabel} UUIDs`}
                   >
-                    {copiedAll ? "✓ copied" : `copy ${validCount} valid`}
+                    {copiedAll ? "✓ copied" : `copy ${copyCount} ${copyLabel}`}
                   </button>
                 </div>
+                {assertVersion && summary.total > 0 && (
+                  <div className="v-filter-tabs">
+                    {["all", "pass", "fail"].map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        className={`v-filter-tab mono${tableFilter === f ? " v-filter-tab--active" : ""}`}
+                        onClick={() => setTableFilter(f)}
+                        aria-pressed={tableFilter === f}
+                      >
+                        {f === "pass"
+                          ? `pass (${assertSummary?.pass ?? 0})`
+                          : f === "fail"
+                          ? `fail (${assertSummary?.fail ?? 0})`
+                          : "all"}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 <ValidatorResultsTable
-                  rows={parsed.rows}
+                  rows={filteredRows}
                   expandedLine={expandedLine}
                   onToggleRow={toggleRow}
                   conversion={conversion}
@@ -79,6 +119,7 @@ function ValidatorPanel({ validator }) {
                   onCopyConversion={copyConversion}
                   copyOne={copyOne}
                   copiedLine={copiedLine}
+                  assertVersion={assertVersion}
                 />
               </>
             ) : (

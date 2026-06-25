@@ -8,6 +8,12 @@ const SAMPLE_ROWS = [
   ["v7", "v3", "v4", "v5"],
 ];
 
+const ASSERT_ROWS = [
+  [null, "v1", "v3"],
+  ["v4", "v5", "v6"],
+  ["v7", "nil", "max"],
+];
+
 const OPTIONS_CONFIG = [
   { key: "strictRfc",       label: "strict RFC 4122",   desc: "reject reserved variants" },
   { key: "allowBraces",     label: "allow braces { }",  desc: "accept {xxxxxxxx-...} form" },
@@ -40,6 +46,8 @@ function ValidatorRail({
   onLoadSample,
   onLoadSampleList,
   activeSample,
+  assertVersion,
+  onSetAssertVersion,
 }) {
   const fileInputRef = useRef(null);
   const [fileError, setFileError] = useState(null);
@@ -186,6 +194,30 @@ function ValidatorRail({
                 aria-pressed={activeSample === ver}
               >
                 {ver}
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {/* Assert Version Section */}
+      <div className="v-rail-section">
+        <div className="v-rail-head">
+          <span className="v-rail-key mono">assert version</span>
+          <span className="v-rail-hint mono">must be…</span>
+        </div>
+        {ASSERT_ROWS.map((row, ri) => (
+          <div key={ri} className="v-sample-row">
+            {row.map((ver) => (
+              <button
+                key={ver ?? "any"}
+                type="button"
+                className={`v-sample-pill mono${assertVersion === ver ? " v-sample-pill--active" : ""}`}
+                onClick={() => onSetAssertVersion(assertVersion === ver ? null : ver)}
+                aria-label={ver ? `Assert version ${ver}` : "No version assertion"}
+                aria-pressed={assertVersion === ver}
+              >
+                {ver ?? "any"}
               </button>
             ))}
           </div>

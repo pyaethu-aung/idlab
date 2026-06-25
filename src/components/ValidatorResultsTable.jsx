@@ -5,12 +5,20 @@ import ValidatorPropsGrid from "./ValidatorPropsGrid";
 import ValidatorSegCard from "./ValidatorSegCard";
 import { versionLabel } from "../utils/uuidDecoder";
 
-function StatusCell({ result }) {
-  if (result.valid) {
+function StatusCell({ result, mismatch }) {
+  if (result.valid && !mismatch) {
     return (
       <span className="bulk-status bulk-status--ok">
         <span className="bulk-status-pip" aria-hidden="true">✓</span>
         <span className="mono">valid</span>
+      </span>
+    );
+  }
+  if (result.valid && mismatch) {
+    return (
+      <span className="bulk-status bulk-status--warn" title="wrong version">
+        <span className="bulk-status-pip" aria-hidden="true">≠</span>
+        <span className="mono bulk-status-reason">wrong version</span>
       </span>
     );
   }
@@ -82,6 +90,7 @@ function ValidatorResultsTable({
   onCopyConversion,
   copyOne,
   copiedLine,
+  assertVersion,
 }) {
   return (
     <div className="bulk-table-wrap">
@@ -102,17 +111,23 @@ function ValidatorResultsTable({
         <tbody>
           {rows.map((row) => {
             const isOpen = row.line === expandedLine;
+            const mismatch = assertVersion
+              ? row.result.valid && versionLabel(row.result) !== assertVersion
+              : false;
+            const rowMod = !row.result.valid
+              ? " bulk-row--invalid"
+              : mismatch
+              ? " bulk-row--mismatch"
+              : "";
             return (
               <Fragment key={`${row.line}-${row.input}`}>
-                <tr
-                  className={`bulk-row${row.result.valid ? "" : " bulk-row--invalid"}${isOpen ? " v-row--open" : ""}`}
-                >
+                <tr className={`bulk-row${rowMod}${isOpen ? " v-row--open" : ""}`}>
                   <td className="mono bulk-col-num">{row.line}</td>
                   <td className="mono bulk-col-uuid">
                     <code className="bulk-uuid">{row.input}</code>
                   </td>
                   <td className="bulk-col-status">
-                    <StatusCell result={row.result} />
+                    <StatusCell result={row.result} mismatch={mismatch} />
                   </td>
                   <td className="bulk-col-ver">
                     <VersionCell result={row.result} />

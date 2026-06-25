@@ -216,4 +216,85 @@ describe("useUuidValidator", () => {
     act(() => result.current.copyOne(2, V1));
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(V1);
   });
+
+  // ── Assert-version ────────────────────────────────────────────────────────
+  it("assertVersion defaults to null with no assertSummary", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    expect(result.current.assertVersion).toBeNull();
+    expect(result.current.assertSummary).toBeNull();
+  });
+
+  it("setAssertVersion sets the assertion and computes assertSummary", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([V4, V1, "not-a-uuid"].join("\n")));
+    act(() => result.current.setAssertVersion("v4"));
+    expect(result.current.assertVersion).toBe("v4");
+    expect(result.current.assertSummary).toMatchObject({ pass: 1, fail: 2 });
+  });
+
+  it("setAssertVersion(null) clears assertion and assertSummary", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput(V4));
+    act(() => result.current.setAssertVersion("v4"));
+    expect(result.current.assertSummary).not.toBeNull();
+    act(() => result.current.setAssertVersion(null));
+    expect(result.current.assertVersion).toBeNull();
+    expect(result.current.assertSummary).toBeNull();
+  });
+
+  it("setAssertVersion resets tableFilter to 'all'", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([V4, V1].join("\n")));
+    act(() => result.current.setAssertVersion("v4"));
+    act(() => result.current.setTableFilter("pass"));
+    expect(result.current.tableFilter).toBe("pass");
+    act(() => result.current.setAssertVersion("v7"));
+    expect(result.current.tableFilter).toBe("all");
+  });
+
+  it("filteredRows with tableFilter 'pass' returns only passing rows", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([V4, V1, "not-a-uuid"].join("\n")));
+    act(() => result.current.setAssertVersion("v4"));
+    act(() => result.current.setTableFilter("pass"));
+    expect(result.current.filteredRows).toHaveLength(1);
+    expect(result.current.filteredRows[0].result.version).toBe(4);
+  });
+
+  it("filteredRows with tableFilter 'fail' returns invalid and wrong-version rows", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([V4, V1, "not-a-uuid"].join("\n")));
+    act(() => result.current.setAssertVersion("v4"));
+    act(() => result.current.setTableFilter("fail"));
+    expect(result.current.filteredRows).toHaveLength(2);
+  });
+
+  it("filteredRows with tableFilter 'all' returns all rows", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([V4, V1, "not-a-uuid"].join("\n")));
+    act(() => result.current.setAssertVersion("v4"));
+    act(() => result.current.setTableFilter("all"));
+    expect(result.current.filteredRows).toHaveLength(3);
+  });
+
+  it("filteredRows equals all rows when no assertion is set", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([V4, V1].join("\n")));
+    expect(result.current.filteredRows).toHaveLength(2);
+  });
+
+  it("copyValid with assertion copies only version-matching rows", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([V4, V1, "not-a-uuid"].join("\n")));
+    act(() => result.current.setAssertVersion("v4"));
+    act(() => result.current.copyValid());
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(V4);
+  });
+
+  it("assertSummary counts nil UUID as passing 'nil' assertion", () => {
+    const { result } = renderHook(() => useUuidValidator());
+    act(() => result.current.setRawInput([NIL, V4].join("\n")));
+    act(() => result.current.setAssertVersion("nil"));
+    expect(result.current.assertSummary).toMatchObject({ pass: 1, fail: 1 });
+  });
 });
