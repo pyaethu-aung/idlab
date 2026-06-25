@@ -16,9 +16,9 @@ function StatusCell({ result, mismatch }) {
   }
   if (result.valid && mismatch) {
     return (
-      <span className="bulk-status bulk-status--warn" title="wrong version">
+      <span className="bulk-status bulk-status--warn" title={`wrong version: is ${versionLabel(result)}`}>
         <span className="bulk-status-pip" aria-hidden="true">≠</span>
-        <span className="mono bulk-status-reason">wrong version</span>
+        <span className="mono bulk-status-reason">≠ {versionLabel(result)}</span>
       </span>
     );
   }
