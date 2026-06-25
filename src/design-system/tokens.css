@@ -130,7 +130,7 @@
   --ink-4:    oklch(0.49 0.006 60);
   --error:    oklch(0.50 0.20 25);
   --on-error: oklch(0.97 0.004 60);
-  --warn:     oklch(0.55 0.17 70);
+  --warn:     oklch(0.48 0.18 68);
   --scrim:    color-mix(in oklch, var(--bg), transparent 30%);
   --shadow-modal: 0 20px 60px rgba(0,0,0,0.15);
   /* Darker, more saturated for legibility on the near-white light surface. */
