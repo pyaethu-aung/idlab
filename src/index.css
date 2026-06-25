@@ -2060,6 +2060,7 @@ input.name-input.ts-field[type="time"] {
 
 .v-filter-tab {
   padding: 3px 10px;
+  min-height: 28px;
   border-radius: var(--r-pill);
   border: 1px solid var(--seam);
   background: transparent;
