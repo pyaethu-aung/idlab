@@ -92,14 +92,15 @@ function ValidatorPanel({ validator }) {
                   </button>
                 </div>
                 {assertVersion && summary.total > 0 && (
-                  <div className="v-filter-tabs">
+                  <div className="v-filter-tabs" role="radiogroup" aria-label="Filter results">
                     {["all", "pass", "fail"].map((f) => (
                       <button
                         key={f}
                         type="button"
+                        role="radio"
                         className={`v-filter-tab mono${tableFilter === f ? " v-filter-tab--active" : ""}`}
                         onClick={() => setTableFilter(f)}
-                        aria-pressed={tableFilter === f}
+                        aria-checked={tableFilter === f}
                       >
                         {f === "pass"
                           ? `pass (${assertSummary?.pass ?? 0})`
