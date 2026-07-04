@@ -3,7 +3,7 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 export default [
-  { ignores: ['dist', '.agent', '.agents', 'coverage', 'node_modules', '.claude'] },
+  { ignores: ['dist', '.agent', '.agents', 'coverage', 'node_modules', '.claude', '.github/hooks', '.github/skills'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
