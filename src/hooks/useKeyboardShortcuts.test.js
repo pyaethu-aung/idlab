@@ -26,6 +26,7 @@ describe("useKeyboardShortcuts", () => {
         converter: { generate: null, copyAll: null, clear: vi.fn() },
         ulid: { generate: vi.fn(), copyAll: null, clear: vi.fn(), toggleFull: vi.fn(), copySnippet: vi.fn() },
         nanoid: { generate: vi.fn(), copyAll: vi.fn(), clear: null, toggleFull: vi.fn(), copySnippet: vi.fn() },
+        ksuid: { generate: vi.fn(), copyAll: null, clear: vi.fn(), toggleFull: vi.fn(), copySnippet: vi.fn() },
       },
     };
   });
@@ -206,6 +207,14 @@ describe("useKeyboardShortcuts", () => {
       window.dispatchEvent(createKeyboardEvent({ key: "Enter", metaKey: true }));
 
       expect(mockProps.tabActions.nanoid.generate).toHaveBeenCalled();
+    });
+
+    it("should mint a KSUID on the ksuid tab with Cmd + Enter", () => {
+      mockProps.activeTab = "ksuid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(createKeyboardEvent({ key: "Enter", metaKey: true }));
+
+      expect(mockProps.tabActions.ksuid.generate).toHaveBeenCalled();
     });
 
     it("should be a no-op on a tab with no generate action", () => {
@@ -402,6 +411,20 @@ describe("useKeyboardShortcuts", () => {
       expect(mockProps.tabActions.nanoid.toggleFull).toHaveBeenCalled();
       expect(mockProps.tabActions.nanoid.copySnippet).toHaveBeenCalled();
     });
+
+    it("fires snippet keys on the ksuid tab", () => {
+      mockProps.activeTab = "ksuid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "f", code: "KeyF", altKey: true })
+      );
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "s", code: "KeyS", altKey: true })
+      );
+
+      expect(mockProps.tabActions.ksuid.toggleFull).toHaveBeenCalled();
+      expect(mockProps.tabActions.ksuid.copySnippet).toHaveBeenCalled();
+    });
   });
 
   describe("clear shortcut (Alt + Backspace)", () => {
@@ -423,6 +446,16 @@ describe("useKeyboardShortcuts", () => {
       );
 
       expect(mockProps.tabActions.ulid.clear).toHaveBeenCalled();
+    });
+
+    it("clears the input on the ksuid tab", () => {
+      mockProps.activeTab = "ksuid";
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      window.dispatchEvent(
+        createKeyboardEvent({ key: "Backspace", code: "Backspace", altKey: true })
+      );
+
+      expect(mockProps.tabActions.ksuid.clear).toHaveBeenCalled();
     });
 
     it("is a no-op on a tab with no clear action", () => {
@@ -452,6 +485,19 @@ describe("useKeyboardShortcuts", () => {
       window.dispatchEvent(event);
 
       expect(mockProps.setActiveTab).toHaveBeenCalledWith("validator");
+    });
+
+    it("jumps to the ksuid tab with Alt + Shift + 6", () => {
+      renderHook(() => useKeyboardShortcuts(mockProps));
+      const event = createKeyboardEvent({
+        key: "6",
+        code: "Digit6",
+        altKey: true,
+        shiftKey: true,
+      });
+      window.dispatchEvent(event);
+
+      expect(mockProps.setActiveTab).toHaveBeenCalledWith("ksuid");
     });
 
     it("does not switch versions for Alt + Shift + digit", () => {
@@ -491,7 +537,7 @@ describe("useKeyboardShortcuts", () => {
       });
       window.dispatchEvent(event);
 
-      expect(mockProps.setActiveTab).toHaveBeenCalledWith("nanoid");
+      expect(mockProps.setActiveTab).toHaveBeenCalledWith("ksuid");
     });
   });
 

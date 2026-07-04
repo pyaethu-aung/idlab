@@ -1,13 +1,13 @@
-// idlab groups its tools by ID family first, operation second. The five
-// internal "leaf" ids (generator / validator / converter / ulid / nanoid)
-// remain the source of truth that drives panel rendering (App.jsx) and the
-// keyboard map (useKeyboardShortcuts). This file is the presentation layer that
-// groups those leaves under their ID family and owns the URL <-> leaf routing
-// for the family/mode scheme. ToolbarNav renders the families, ModeSwitcher
-// renders a family's modes, TabAnnouncer reads the announce labels, and
-// useActiveTab consumes the routing helpers.
+// idlab groups its tools by ID family first, operation second. The six
+// internal "leaf" ids (generator / validator / converter / ulid / nanoid /
+// ksuid) remain the source of truth that drives panel rendering (App.jsx) and
+// the keyboard map (useKeyboardShortcuts). This file is the presentation layer
+// that groups those leaves under their ID family and owns the URL <-> leaf
+// routing for the family/mode scheme. ToolbarNav renders the families,
+// ModeSwitcher renders a family's modes, TabAnnouncer reads the announce
+// labels, and useActiveTab consumes the routing helpers.
 //
-// Keep the leaf order (LEAF_ORDER) aligned with the ⌥⇧1…5 jump keys and
+// Keep the leaf order (LEAF_ORDER) aligned with the ⌥⇧1…6 jump keys and
 // TAB_ORDER in useKeyboardShortcuts.
 export const FAMILIES = [
   {
@@ -28,6 +28,11 @@ export const FAMILIES = [
     id: "nanoid",
     label: "NanoID",
     modes: [{ leaf: "nanoid", id: "nanoid", label: "NanoID", path: "/nanoid" }],
+  },
+  {
+    id: "ksuid",
+    label: "KSUID",
+    modes: [{ leaf: "ksuid", id: "ksuid", label: "KSUID", path: "/ksuid" }],
   },
 ];
 
@@ -86,6 +91,7 @@ export function leafForPath(pathname) {
   }
   if (pathname.startsWith("/ulid")) return "ulid";
   if (pathname.startsWith("/nanoid")) return "nanoid";
+  if (pathname.startsWith("/ksuid")) return "ksuid";
   for (const [prefix, leaf] of Object.entries(LEGACY_PATHS)) {
     if (pathname.startsWith(prefix)) return leaf;
   }

@@ -1,6 +1,7 @@
-// Code that produces each UUID version / ULID / NanoID in popular languages,
-// surfaced by the "Copy as code" panel on the Generator, ULID, and NanoID
-// tabs. Pure data: a per-version (or per-family) list of { lang, code, full }.
+// Code that produces each UUID version / ULID / NanoID / KSUID in popular
+// languages, surfaced by the "Copy as code" panel on the Generator, ULID,
+// NanoID, and KSUID tabs. Pure data: a per-version (or per-family) list of
+// { lang, code, full }.
 //   - `lang` is the short mono label shown in the panel.
 //   - `code` is the compact one-liner (import + call) shown in "inline" mode.
 //   - `full` is the complete, copy-paste-runnable program shown in "full" mode.
@@ -19,6 +20,10 @@
 // NanoID: dynamic row-set (js, py, go) computed from the active size and
 // alphabet. `nanoIdSnippets(size, alphabetId)` returns fresh rows on each
 // control change so the snippet always matches the panel output.
+//
+// KSUID: one static row-set (js, py, go). SQL and Java omitted for the same
+// reason as ULID — no standard-library primitive; `ksuid` npm / `ksuid-python`
+// / `github.com/segmentio/ksuid` (the reference implementation) cover it.
 import { alphabetById, NANOID_DEFAULT_ALPHABET } from "../utils/nanoid";
 
 // Go and Java carry identical program scaffolding around a single call/import,
@@ -234,6 +239,29 @@ export const ULID_SNIPPETS = [
     lang: "go",
     code: "ulid.Make()  // github.com/oklog/ulid/v2",
     full: goUlidProgram,
+  },
+];
+
+// ── KSUID snippets (static) ──────────────────────────────────────────────────
+
+const goKsuidProgram =
+  `package main\n\nimport (\n\t"fmt"\n\n\t"github.com/segmentio/ksuid"\n)\n\nfunc main() {\n\tfmt.Println(ksuid.New())\n}`;
+
+export const KSUID_SNIPPETS = [
+  {
+    lang: "js",
+    code: "import KSUID from 'ksuid'; (await KSUID.random()).string;",
+    full: "import KSUID from 'ksuid';\n\nconst id = await KSUID.random();\nconsole.log(id.string);",
+  },
+  {
+    lang: "py",
+    code: "import ksuid; str(ksuid.Ksuid())  # pip install ksuid-python",
+    full: "# pip install ksuid-python\nimport ksuid\n\nprint(ksuid.Ksuid())",
+  },
+  {
+    lang: "go",
+    code: "ksuid.New()  // github.com/segmentio/ksuid",
+    full: goKsuidProgram,
   },
 ];
 

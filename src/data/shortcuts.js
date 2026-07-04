@@ -5,16 +5,16 @@
 // IMPORTANT: keep this in sync with useKeyboardShortcuts.js by hand.
 //
 // Unified verb keys, dispatched per active tab:
-//   ⌘Enter  → generate / mint   (generator, ulid, nanoid)
+//   ⌘Enter  → generate / mint   (generator, ulid, nanoid, ksuid)
 //   ⌥⇧C     → copy all output    (generator, nanoid)
-//   ⌥⌫      → clear the input    (validator, converter, ulid)
+//   ⌥⌫      → clear the input    (validator, converter, ulid, ksuid)
 const SHORTCUTS = [
   {
     group: "Global",
     items: [
       {
-        combo: "⌥/Alt + Shift + 1 … 5",
-        description: "Jump to a tool: UUID Generate, Validate, Convert, ULID, NanoID",
+        combo: "⌥/Alt + Shift + 1 … 6",
+        description: "Jump to a tool: UUID Generate, Validate, Convert, ULID, NanoID, KSUID",
       },
       {
         combo: "⌥/Alt + Shift + ← / →",
@@ -149,6 +149,28 @@ const SHORTCUTS = [
       {
         combo: "⌥/Alt + S",
         description: "Copy the JavaScript code snippet for minting a NanoID",
+      },
+    ],
+  },
+  {
+    group: "KSUID",
+    tab: "ksuid",
+    items: [
+      {
+        combo: "⌘/Ctrl + Enter",
+        description: "Mint a new KSUID",
+      },
+      {
+        combo: "⌥/Alt + Backspace",
+        description: "Clear the input",
+      },
+      {
+        combo: "⌥/Alt + F",
+        description: "Flip the code snippets between inline and full",
+      },
+      {
+        combo: "⌥/Alt + S",
+        description: "Copy the JavaScript code snippet for minting a KSUID",
       },
     ],
   },

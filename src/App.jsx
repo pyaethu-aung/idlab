@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { snippetsFor, ULID_SNIPPETS, nanoIdSnippets } from "./data/codeSnippets";
+import { snippetsFor, ULID_SNIPPETS, KSUID_SNIPPETS, nanoIdSnippets } from "./data/codeSnippets";
 import ControlPanel from "./components/ControlPanel";
 import Hero from "./components/Hero";
 import ModeSwitcher from "./components/ModeSwitcher";
@@ -14,6 +14,7 @@ import ConvertPanel from "./components/ConvertPanel";
 import ValidatorPanel from "./components/ValidatorPanel";
 import UlidPanel from "./components/UlidPanel";
 import NanoIdPanel from "./components/NanoIdPanel";
+import KsuidPanel from "./components/KsuidPanel";
 import SHORTCUTS from "./data/shortcuts";
 import useActiveTab from "./hooks/useActiveTab";
 import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
@@ -24,6 +25,7 @@ import useUuidConverter from "./hooks/useUuidConverter";
 import useUuidValidator from "./hooks/useUuidValidator";
 import useUlid from "./hooks/useUlid";
 import useNanoId from "./hooks/useNanoId";
+import useKsuid from "./hooks/useKsuid";
 import useCodeSnippets from "./hooks/useCodeSnippets";
 
 function BrandIcon() {
@@ -81,6 +83,7 @@ function App() {
   const converter = useUuidConverter();
   const ulid = useUlid();
   const nanoid = useNanoId();
+  const ksuid = useKsuid();
   const snippets = useCodeSnippets(snippetsFor(selectedVersion));
   const ulidSnippets = useCodeSnippets(ULID_SNIPPETS);
   const nanoidSnippetRows = useMemo(
@@ -88,6 +91,7 @@ function App() {
     [nanoid.size, nanoid.alphabetId]
   );
   const nanoidSnippets = useCodeSnippets(nanoidSnippetRows);
+  const ksuidSnippets = useCodeSnippets(KSUID_SNIPPETS);
 
   // One keyboard model across screens: the same verb key dispatches to the
   // active tab's action. A missing slot makes the verb a no-op on that tab.
@@ -118,6 +122,13 @@ function App() {
         toggleFull: nanoidSnippets.toggleFull,
         copySnippet: nanoidSnippets.copyDefault,
       },
+      ksuid: {
+        generate: ksuid.generate,
+        copyAll: null,
+        clear: ksuid.clearInput,
+        toggleFull: ksuidSnippets.toggleFull,
+        copySnippet: ksuidSnippets.copyDefault,
+      },
     }),
     [
       regenerate,
@@ -134,6 +145,10 @@ function App() {
       nanoid.copyAll,
       nanoidSnippets.toggleFull,
       nanoidSnippets.copyDefault,
+      ksuid.generate,
+      ksuid.clearInput,
+      ksuidSnippets.toggleFull,
+      ksuidSnippets.copyDefault,
     ]
   );
 
@@ -250,6 +265,11 @@ function App() {
           <NanoIdPanel nanoid={nanoid} />
           <CodeSnippets version="nanoid" snippets={nanoidSnippets} />
         </div>
+
+        <div style={{ display: activeTab === "ksuid" ? "" : "none" }}>
+          <KsuidPanel ksuid={ksuid} />
+          <CodeSnippets version="ksuid" snippets={ksuidSnippets} />
+        </div>
       </main>
 
       <StatusBar
@@ -265,6 +285,7 @@ function App() {
         ulidResult={ulid.result}
         nanoidStats={nanoid.stats}
         nanoidCount={nanoid.ids.length}
+        ksuidResult={ksuid.result}
         onShortcuts={() => setShortcutHelpOpen(true)}
       />
 
