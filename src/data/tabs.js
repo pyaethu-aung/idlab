@@ -36,7 +36,7 @@ export const FAMILIES = [
   },
 ];
 
-// Flat leaf order — matches the ⌥⇧1…5 jump-key order in useKeyboardShortcuts.
+// Flat leaf order — matches the ⌥⇧1…6 jump-key order in useKeyboardShortcuts.
 export const LEAF_ORDER = FAMILIES.flatMap((family) =>
   family.modes.map((mode) => mode.leaf)
 );
