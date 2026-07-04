@@ -1,34 +1,4 @@
 {
   "version": 1,
-  "skills": {
-    "commit-message": {
-      "source": "pyaethu-aung/skills",
-      "sourceType": "github",
-      "skillPath": "skills/commit-message/SKILL.md",
-      "computedHash": "8bf5dcdcc6c07d54bc2e704467b435b2549ef3f5dcdafba5d903f2932f5182d7"
-    },
-    "create-pr": {
-      "source": "pyaethu-aung/skills",
-      "sourceType": "github",
-      "skillPath": "skills/create-pr/SKILL.md",
-      "computedHash": "f27c741469058a54c92561fed0bcbd9ffa6053652c65711fc12621a40b3a188d"
-    },
-    "develop-web-feature": {
-      "source": "/Users/pyaethuaung/go/src/github.com/pyaethu-aung/skills/skills",
-      "sourceType": "local",
-      "computedHash": "6c64c6a22badb0085aca60f368fe9d201366caa3fc3848e3e27d74c28f100a39"
-    },
-    "test-design": {
-      "source": "pyaethu-aung/skills",
-      "sourceType": "github",
-      "skillPath": "skills/test-design/SKILL.md",
-      "computedHash": "e75c773a68395ae2bdcc6a5224d82f6510dfc85ef3d5738e31909684b94db051"
-    },
-    "update-readme": {
-      "source": "pyaethu-aung/skills",
-      "sourceType": "github",
-      "skillPath": "skills/update-readme/SKILL.md",
-      "computedHash": "5af1d60733a8625b5341ff151eb5c7826c3ce010770321ab413562c4c37907b0"
-    }
-  }
+  "skills": {}
 }
