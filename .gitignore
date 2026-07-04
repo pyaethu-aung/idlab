@@ -34,3 +34,5 @@ playwright/.cache
 *.sln
 *.sw?
 .test-design/
+
+.cache/develop-web-feature/
