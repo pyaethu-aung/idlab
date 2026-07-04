@@ -9,17 +9,18 @@ import FAMILIES, {
 } from "./tabs";
 
 describe("tabs data model", () => {
-  it("exposes three ID families with UUID first", () => {
-    expect(FAMILIES.map((f) => f.id)).toEqual(["uuid", "ulid", "nanoid"]);
+  it("exposes four ID families with UUID first", () => {
+    expect(FAMILIES.map((f) => f.id)).toEqual(["uuid", "ulid", "nanoid", "ksuid"]);
   });
 
-  it("flattens to five leaves in the keyboard jump order", () => {
+  it("flattens to six leaves in the keyboard jump order", () => {
     expect(LEAF_ORDER).toEqual([
       "generator",
       "validator",
       "converter",
       "ulid",
       "nanoid",
+      "ksuid",
     ]);
   });
 
@@ -27,6 +28,7 @@ describe("tabs data model", () => {
     expect(FAMILIES[0].modes).toHaveLength(3);
     expect(FAMILIES[1].modes).toHaveLength(1);
     expect(FAMILIES[2].modes).toHaveLength(1);
+    expect(FAMILIES[3].modes).toHaveLength(1);
   });
 });
 
@@ -40,6 +42,7 @@ describe("familyOfLeaf / modeOfLeaf", () => {
   it("maps the standalone leaves to their own family", () => {
     expect(familyOfLeaf("ulid").id).toBe("ulid");
     expect(familyOfLeaf("nanoid").id).toBe("nanoid");
+    expect(familyOfLeaf("ksuid").id).toBe("ksuid");
   });
 
   it("returns the mode descriptor for a leaf", () => {
@@ -63,6 +66,7 @@ describe("announceLabel", () => {
   it("names only the family for single-mode families", () => {
     expect(announceLabel("ulid")).toBe("ULID");
     expect(announceLabel("nanoid")).toBe("NanoID");
+    expect(announceLabel("ksuid")).toBe("KSUID");
   });
 
   it("returns the raw value for an unknown leaf", () => {
@@ -77,6 +81,7 @@ describe("pathForLeaf", () => {
     expect(pathForLeaf("converter")).toBe("/uuid/convert");
     expect(pathForLeaf("ulid")).toBe("/ulid");
     expect(pathForLeaf("nanoid")).toBe("/nanoid");
+    expect(pathForLeaf("ksuid")).toBe("/ksuid");
   });
 });
 
@@ -87,6 +92,7 @@ describe("leafForPath", () => {
     expect(leafForPath("/uuid/convert")).toBe("converter");
     expect(leafForPath("/ulid")).toBe("ulid");
     expect(leafForPath("/nanoid")).toBe("nanoid");
+    expect(leafForPath("/ksuid")).toBe("ksuid");
   });
 
   it("resolves a bare /uuid to the first UUID mode", () => {

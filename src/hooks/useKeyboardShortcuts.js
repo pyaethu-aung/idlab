@@ -10,13 +10,14 @@ const TEXT_INPUT_TYPES = [
   "tel",
 ];
 
-const TAB_ORDER = ["generator", "validator", "converter", "ulid", "nanoid"];
+const TAB_ORDER = ["generator", "validator", "converter", "ulid", "nanoid", "ksuid"];
 const TAB_DIGITS = {
   Digit1: 0,
   Digit2: 1,
   Digit3: 2,
   Digit4: 3,
   Digit5: 4,
+  Digit6: 5,
 };
 
 // Generator version order behind ⌥1…8.

@@ -6,6 +6,7 @@ function StatusBar({
   validatorSummary, validatorExpanded, validatorCheckCount,
   ulidResult,
   nanoidStats, nanoidCount,
+  ksuidResult,
   onShortcuts,
 }) {
   if (activeTab === "validator") {
@@ -31,6 +32,10 @@ function StatusBar({
         onShortcuts={onShortcuts}
       />
     );
+  }
+
+  if (activeTab === "ksuid") {
+    return <KsuidStatusBar result={ksuidResult} onShortcuts={onShortcuts} />;
   }
 
   const flags = [];
@@ -122,6 +127,30 @@ function UlidStatusBar({ result, onShortcuts }) {
       {kind     && <span className="status-cell">{kind}</span>}
       {tsLabel  && <span className="status-cell status-hide-sm">{tsLabel}</span>}
       <span className="status-cell status-hide-sm">ulid · 26 chars</span>
+      <span className="status-spacer" />
+      <button className="status-btn shortcut-trigger" onClick={onShortcuts}>
+        press <kbd>?</kbd> for shortcuts
+      </button>
+    </footer>
+  );
+}
+
+function KsuidStatusBar({ result, onShortcuts }) {
+  const isValid = result?.valid ?? null;
+  const tsLabel = result?.valid
+    ? `ts · ${result.timestampIso.slice(0, 19).replace("T", " ")} UTC`
+    : null;
+
+  return (
+    <footer className="status mono">
+      {isValid !== null && (
+        <span className={`status-cell${isValid ? " status-cell--valid" : " status-cell--invalid"}`}>
+          <span className={`status-dot${isValid ? "" : " status-dot--invalid"}`} />
+          {isValid ? "VALID" : "INVALID"}
+        </span>
+      )}
+      {tsLabel && <span className="status-cell status-hide-sm">{tsLabel}</span>}
+      <span className="status-cell status-hide-sm">ksuid · 27 chars</span>
       <span className="status-spacer" />
       <button className="status-btn shortcut-trigger" onClick={onShortcuts}>
         press <kbd>?</kbd> for shortcuts

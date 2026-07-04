@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import CODE_SNIPPETS, { snippetsFor, ULID_SNIPPETS, nanoIdSnippets } from "./codeSnippets";
+import CODE_SNIPPETS, {
+  snippetsFor,
+  ULID_SNIPPETS,
+  KSUID_SNIPPETS,
+  nanoIdSnippets,
+} from "./codeSnippets";
 
 const GENERATABLE = ["v1", "v3", "v4", "v5", "v6", "v7"];
 
@@ -94,6 +99,26 @@ describe("ULID_SNIPPETS", () => {
     expect(go.full).toContain("package main");
     expect(go.full).toContain("func main()");
     expect(go.full).toContain("github.com/oklog/ulid");
+  });
+});
+
+describe("KSUID_SNIPPETS", () => {
+  it("provides three language rows: js, py, go", () => {
+    expect(KSUID_SNIPPETS.map((r) => r.lang)).toEqual(["js", "py", "go"]);
+  });
+
+  it("gives every row a non-empty code and full string", () => {
+    for (const row of KSUID_SNIPPETS) {
+      expect(row.code.trim().length).toBeGreaterThan(0);
+      expect(row.full.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it("scaffolds a runnable go program in full mode", () => {
+    const go = KSUID_SNIPPETS.find((r) => r.lang === "go");
+    expect(go.full).toContain("package main");
+    expect(go.full).toContain("func main()");
+    expect(go.full).toContain("github.com/segmentio/ksuid");
   });
 });
 
