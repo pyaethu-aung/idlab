@@ -2,9 +2,11 @@ import Hero from "./Hero";
 import { KEY_META, KEY_OPT } from "../utils/platform";
 import { KSUID_SAMPLES } from "../hooks/useKsuid";
 
+// payload is deliberately excluded here: it's already shown in the decoded
+// section above, and repeating it would duplicate a value rather than offer
+// an alternate full-value encoding (unlike ULID's ulid/uuid/compact trio).
 const REPR_ROWS = [
   { key: "ksuid", label: "ksuid" },
-  { key: "payload", label: "payload" },
   { key: "raw", label: "raw" },
 ];
 
@@ -110,7 +112,7 @@ function KsuidPanel({ ksuid }) {
     <section className="validator-panel">
       <Hero
         lead="Mint "
-        accent="k-sortable"
+        accent="second-sortable"
         trail=" ids"
         line2="ordered to the second."
         sub="Generate KSUIDs and decode any KSUID you already have. A 32-bit second-precision clock plus 128 bits of randomness, never leaving the browser."
