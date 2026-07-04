@@ -316,13 +316,13 @@ centered in the `1fr` column, utility controls on the right.
 
 ### Tab Navigation
 
-The nav is **ID-family first**: three top-bar tabs (UUID / ULID / NanoID), rendered inside a flex
-container that stretches to the topbar's full 44px height (`align-items: stretch`). Operations
-live one level down, inside the family (see Mode Switcher). The five internal leaves
-(UUID Generate/Validate/Convert, ULID, NanoID) stay the source of truth for routing and keyboard
-jumps; the bar just groups them. Clicking a family lands on its last-used mode. The Validator
-absorbed the former Bulk tool: it validates one UUID or a pasted list, with each row expandable
-into the full inspector.
+The nav is **ID-family first**: four top-bar tabs (UUID / ULID / NanoID / KSUID), rendered inside
+a flex container that stretches to the topbar's full 44px height (`align-items: stretch`).
+Operations live one level down, inside the family (see Mode Switcher). The six internal leaves
+(UUID Generate/Validate/Convert, ULID, NanoID, KSUID) stay the source of truth for routing and
+keyboard jumps; the bar just groups them. Clicking a family lands on its last-used mode. The
+Validator absorbed the former Bulk tool: it validates one UUID or a pasted list, with each row
+expandable into the full inspector.
 
 - **Default:** `--ink-3` text, 2px `transparent` bottom border, no border-radius (zero radius
   keeps the underline flush with the topbar's hairline without a gap). 0/12px padding.
@@ -348,7 +348,7 @@ double navigation chrome.
   tint — the same "selected" vocabulary as a checked format option, softer than the CTA fill so it
   doesn't double up full saturation with the family tab's accent underline. The filled background is
   the non-colour state cue; `aria-current="page"` carries the state to assistive tech.
-- **Modes map 1:1 to the `⌥⇧1…5` jump keys**, so each segment advertises its own `aria-keyshortcuts`.
+- **Modes map 1:1 to the `⌥⇧1…6` jump keys**, so each segment advertises its own `aria-keyshortcuts`.
 
 ### Status Bar
 
@@ -405,6 +405,21 @@ Reuses the validator workbench shell. Generation-first — no paste/decode flow.
   count and a copy-all button.
 - **Entropy section:** `v-props-grid` with alphabet size, length, and bit strength; prose note
   below quotes the 1%-birthday-bound collision threshold as `~10^N`.
+
+### KSUID Panel
+
+Reuses the validator workbench shell, generate-and-inspect like the ULID panel (no batch,
+unlike NanoID) — but KSUID has no sibling format, so it decodes to itself only.
+
+- **Rail:** three sections — generate ("mint a ksuid" primary CTA), paste input (text field
+  with live-valid indicator and char-count meta row; clear button), one sample pill (ksuid).
+- **Decoded view (valid):** validation banner (accent ✓), decoded section (`v-props-grid`:
+  timestamp UTC + relative, payload), representations section (two `cx-row` items: ksuid /
+  raw — each with inline row-copy button; payload is deliberately not repeated here since it's
+  already shown in the decoded section above). A prose note explains why there is no sibling
+  format to convert to or from.
+- **Empty / invalid state:** centered `v-empty-msg mono` text; `v-empty-msg--error` modifier on
+  invalid input shows the parse failure reason (identical to the ULID panel's pattern).
 
 ## 6. Do's and Don'ts
 

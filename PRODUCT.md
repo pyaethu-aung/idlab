@@ -15,11 +15,11 @@ the task.
 ## Product Purpose
 
 idlab removes every marginal step between "I need an ID" and having it ready. Organised by ID
-family (UUID, ULID, NanoID), it generates batches (UUID v1/v3/v4/v5/v6/v7 plus nil/max, 1–200
-entries; ULID; NanoID) with formatting options, validates and decodes existing UUIDs and ULIDs,
-converts between representations (including ULID↔UUIDv7), and exposes every action via keyboard
-shortcut. UUID is the anchor; the structure has room for more families (KSUID, Snowflake). Success
-means a developer never opens another tab for an ID.
+family (UUID, ULID, NanoID, KSUID), it generates batches (UUID v1/v3/v4/v5/v6/v7 plus nil/max,
+1–200 entries; ULID; NanoID; KSUID) with formatting options, validates and decodes existing
+UUIDs, ULIDs, and KSUIDs, converts between representations (including ULID↔UUIDv7), and exposes
+every action via keyboard shortcut. UUID is the anchor; the structure has room for more families
+(Snowflake). Success means a developer never opens another tab for an ID.
 
 ## Brand Personality
 
