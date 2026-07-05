@@ -1,8 +1,8 @@
 # idlab: ID workbench
 
-A keyboard-first ID workbench built with React 19 and Vite, organised by ID family. **UUID** is the anchor (generate v1/v3/v4/v5/v6/v7 plus nil/max, validate and decode, convert between representations), with **ULID** and **NanoID** alongside it. Generate, validate, decode, convert, and copy or download results without leaving the keyboard.
+A keyboard-first ID workbench built with React 19 and Vite, organised by ID family. **UUID** is the anchor (generate v1/v3/v4/v5/v6/v7 plus nil/max, validate and decode, convert between representations), with **ULID**, **NanoID**, and **KSUID** alongside it. Generate, validate, decode, convert, and copy or download results without leaving the keyboard.
 
-The top bar selects an ID family (UUID / ULID / NanoID); within UUID a mode switcher picks the operation (Generate / Validate / Convert). The canonical routes are `/uuid/generate`, `/uuid/validate`, `/uuid/convert`, `/ulid`, and `/nanoid`; the old `/generator`, `/validator`, `/converter`, and `/bulk` links redirect to their new homes.
+The top bar selects an ID family (UUID / ULID / NanoID / KSUID); within UUID a mode switcher picks the operation (Generate / Validate / Convert). The canonical routes are `/uuid/generate`, `/uuid/validate`, `/uuid/convert`, `/ulid`, `/nanoid`, and `/ksuid`; the old `/generator`, `/validator`, `/converter`, and `/bulk` links redirect to their new homes.
 
 ## Feature Highlights
 - Unified slider that drives both the on-screen preview count (capped at 20) and the downloadable batch size (1–200).
@@ -11,6 +11,7 @@ The top bar selects an ID family (UUID / ULID / NanoID); within UUID a mode swit
 - Validator tab handles one UUID or many: paste a single value or a list (one per line), or upload a `.txt` / `.csv` file — select multiple files to merge their contents. Every entry becomes a row in a triage table of status, version, variant, and timestamp, with a valid/invalid/total summary and one-click copy of every valid UUID. Click any row to expand the full inspector inline (parsed structure, properties, timestamp decode, and the v1↔v6 counterpart) — a lone UUID auto-expands. Assert a specific version (e.g. v4) to get a pass/fail tally and filter the table to passing or failing entries; the copy-all count follows the assertion. The retired `/bulk` deep link now lands here (`/uuid/validate`).
 - ULID tab mints ULIDs (crypto-random, no dependency) and decodes a pasted ULID into its timestamp, randomness, and equivalent UUID forms. Accepts a UUIDv7 in the same field to convert the other way, since ULID and UUIDv7 share the 48-bit millisecond timestamp.
 - NanoID tab generates batches of compact, URL-safe NanoIDs (crypto-random, no dependency) with an adjustable length (2–36) and alphabet preset (url-safe, alphanumeric, lowercase, hex, numbers); a live entropy readout reports the bit strength and the id count needed for a 1% collision chance.
+- KSUID tab mints KSUIDs (27-char base62, crypto-random, no dependency: a 32-bit second-precision timestamp plus a 128-bit random payload) and decodes a pasted KSUID into its timestamp and payload. Unlike ULID, KSUID has no sibling format to convert to or from.
 - Copy as code: for the selected UUID version, the Generator shows how to mint it in JavaScript, Python, Go, Java, and SQL. Toggle between `inline` (the compact import + call one-liner) and `full` (a complete, copy-paste-runnable program with imports and output); both the displayed code and the copied text follow the toggle.
 - Copy-to-clipboard with micro-interaction feedback plus a timestamped download action guarded against oversized files.
 - Insight cards summarizing current options (version, batch size, characters per UUID) placed directly above the list for quick scanning.
@@ -21,7 +22,7 @@ The top bar selects an ID family (UUID / ULID / NanoID); within UUID a mode swit
 Press **Shift + ?** in the app for the context-aware overlay. Verb keys dispatch to the active tool.
 
 **Global**
-- ⌥/Alt + Shift + 1 … 5 — Jump to a tool: UUID Generate, Validate, Convert, ULID, NanoID.
+- ⌥/Alt + Shift + 1 … 6 — Jump to a tool: UUID Generate, Validate, Convert, ULID, NanoID, KSUID.
 - ⌥/Alt + Shift + ← / → — Cycle to the previous / next tool (wraps at the ends).
 - Shift + ? — Open the shortcut reference overlay.
 - Esc — Close the shortcut reference overlay.
@@ -42,11 +43,11 @@ Press **Shift + ?** in the app for the context-aware overlay. Verb keys dispatch
 - ⌥/Alt + R / [ / − — Toggle strict RFC validation, allow braces, allow no-hyphens.
 - ⌥/Alt + Backspace — Clear the input.
 
-**UUID Convert / ULID**
+**UUID Convert / ULID / KSUID**
 - ⌥/Alt + Backspace — Clear the input.
 
-**ULID / NanoID**
-- ⌘/Ctrl + Enter — Mint a new ULID / fresh batch of NanoIDs.
+**ULID / NanoID / KSUID**
+- ⌘/Ctrl + Enter — Mint a new ULID / KSUID, or a fresh batch of NanoIDs.
 - ⌥/Alt + Shift + C — (NanoID) Copy the whole batch.
 
 ## Getting Started
