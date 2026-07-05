@@ -21,6 +21,40 @@ Run a single test file:
 npx vitest run src/hooks/useUuidGenerator.test.js
 ```
 
+## Claude Code Plugin Setup
+
+This project uses two plugins from the `pyaethu-aung/skills` marketplace to standardize
+AI-assisted contributions. Install them once per machine:
+
+```bash
+/plugin marketplace add pyaethu-aung/skills
+/plugin install git-workflow@pyaethu-aung-skills
+/plugin install web-dev@pyaethu-aung-skills
+/reload-plugins
+```
+
+- **`git-workflow`** provides `/commit-message` (atomic commits, Conventional Commits,
+  the 50/72 subject/body rule) and `/create-pr` (derives title/body from commits,
+  confirms before submitting). Both route `git commit` / `gh pr create` through the
+  skill rather than ad-hoc invocations.
+- **`web-dev`** provides `/develop-web-feature` (the shape → build → gate → audit →
+  critique → fix → PR loop used for feature work in this repo) and `/update-readme`
+  (keeps README.md in sync with feature changes).
+- **`impeccable`** is a separate hard dependency of `/develop-web-feature` (not part of
+  either plugin above): install it per-project with `npx impeccable skills install`,
+  then run `/impeccable init` once. It reads/writes `PRODUCT.md` and `DESIGN.md` at the
+  repo root and backs the `audit`/`critique`/`polish` commands.
+
+Installed plugins are recorded in `.claude/settings.json` (`enabledPlugins`), and the
+`impeccable` skill install (`.claude/skills/impeccable/`) is tracked too, so a fresh
+clone already declares the same plugins enabled and ships the skill files directly.
+The marketplace itself is still a machine-level registration, though: run
+`/plugin marketplace add pyaethu-aung/skills` once per machine even after cloning, so
+Claude Code can resolve `git-workflow`/`web-dev` from the ids already listed in
+`settings.json`. `.claude/settings.local.json` (personal permission grants) and
+`.claude/scheduled_tasks.lock` (runtime state) stay untracked — both are
+machine-specific, not something to share via git.
+
 ## Architecture
 
 This is a single-page React app with all state managed in custom hooks. `App.jsx` is a pure composition layer — it wires hooks together and passes values down to components; it contains no business logic of its own.

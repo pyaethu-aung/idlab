@@ -75,6 +75,28 @@ All design tokens — colour, typography, spacing, radius, and motion — live i
 
 ## Contributing
 
+### AI Coding Assistant Setup
+
+This project uses two Claude Code plugins from the `pyaethu-aung/skills` marketplace:
+`git-workflow` (`/commit-message` and `/create-pr` — Conventional Commits, a consistent
+PR format) and `web-dev` (`/develop-web-feature` — the shape → build → gate → audit →
+critique → fix → PR workflow, plus `/update-readme`). Both are enabled for this project
+via `.claude/settings.json`, which is tracked in the repo.
+
+If they are not already installed on your machine, add the marketplace and install them
+once:
+
+```
+/plugin marketplace add pyaethu-aung/skills
+/plugin install git-workflow@pyaethu-aung-skills
+/plugin install web-dev@pyaethu-aung-skills
+```
+
+Then run `/reload-plugins` and start a new session. `/develop-web-feature` additionally
+depends on the `impeccable` skill, tracked in `.claude/skills/impeccable/`; it reads and
+writes `PRODUCT.md` and `DESIGN.md` at the repo root and backs the `audit`/`critique`/
+`polish` commands.
+
 ### End-to-end Testing with Playwright
 
 Before opening a pull request, verify the UI using [Playwright](https://playwright.dev):
