@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { generateUlid, inspectIdentifier } from "../utils/ulid";
+import useCopyFlash from "./useCopyFlash";
 
 // Fixed samples that exercise both input paths: a canonical ULID (the spec
 // example) and a UUIDv7 to demonstrate the ULID <-> UUIDv7 conversion.
@@ -10,8 +11,8 @@ export const ULID_SAMPLES = [
 
 function useUlid() {
   const [rawInput, setRawInput] = useState(() => generateUlid());
-  const [copiedKey, setCopiedKey] = useState(null);
   const [activeSample, setActiveSample] = useState(null);
+  const { copiedKey, copyValue } = useCopyFlash();
 
   const result = useMemo(
     () => (rawInput.trim() ? inspectIdentifier(rawInput) : null),
@@ -43,14 +44,6 @@ function useUlid() {
     if (!sample) return;
     setRawInput(sample.value);
     setActiveSample(id);
-  }, []);
-
-  const copyValue = useCallback((key, value) => {
-    if (!value || !navigator.clipboard?.writeText) return;
-    navigator.clipboard.writeText(value).then(() => {
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 1500);
-    });
   }, []);
 
   return {
