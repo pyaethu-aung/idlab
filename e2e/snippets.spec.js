@@ -9,7 +9,10 @@ import { test, expect } from "@playwright/test";
 test("copy-as-code panel renders highlighted snippets", async ({ page }, testInfo) => {
   await page.goto("/");
 
-  const panel = page.locator(".snip-panel");
+  // All four CodeSnippets panels (generator/ulid/nanoid/ksuid) stay mounted
+  // for instant tab switching, hidden via display:none — scope to the one
+  // that's actually visible on the default (generator) tab.
+  const panel = page.locator(".snip-panel:visible");
   await expect(panel).toBeVisible();
 
   // Full programs are the default; the js block is the complete program.
