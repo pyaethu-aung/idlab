@@ -1,9 +1,10 @@
 import { useState, useMemo, useCallback } from "react";
 import { convertUuid } from "../utils/uuidConvert";
+import useCopyFlash from "./useCopyFlash";
 
 function useUuidConverter() {
   const [rawInput, setRawInput] = useState("");
-  const [copiedKey, setCopiedKey] = useState(null);
+  const { copiedKey, copyValue: copyRow } = useCopyFlash();
 
   const conversions = useMemo(
     () => (rawInput.trim() ? convertUuid(rawInput) : null),
@@ -11,14 +12,6 @@ function useUuidConverter() {
   );
 
   const hasInput = Boolean(rawInput.trim());
-
-  const copyRow = useCallback((key, value) => {
-    if (!navigator.clipboard?.writeText) return;
-    navigator.clipboard.writeText(value).then(() => {
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 1500);
-    });
-  }, []);
 
   const clearInput = useCallback(() => setRawInput(""), []);
 

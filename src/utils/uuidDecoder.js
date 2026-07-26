@@ -15,8 +15,7 @@ export function normalizeInput(raw) {
   return s;
 }
 
-export function extractFields(uuid) {
-  const hex = uuid.replace(/-/g, "").toLowerCase();
+export function extractFields(uuid, hex = uuid.replace(/-/g, "").toLowerCase()) {
   return {
     timeLow: hex.slice(0, 8),
     timeMid: hex.slice(8, 12),
@@ -42,8 +41,13 @@ export function buildVariantBits(hex) {
   return "Reserved · 111";
 }
 
-export function computeProperties(raw, normalized, version, variant) {
-  const hex = normalized.replace(/-/g, "").toLowerCase();
+export function computeProperties(
+  raw,
+  normalized,
+  version,
+  variant,
+  hex = normalized.replace(/-/g, "").toLowerCase()
+) {
   const isLowercase = normalized === normalized.toLowerCase();
   const hasHyphens = UUID_REGEX.test(normalized);
   const hasBraces = raw.trim().startsWith("{") && raw.trim().endsWith("}");
@@ -109,8 +113,8 @@ export function parseUuid(raw, options = {}) {
 
   if (strictRfc && variant !== "RFC 4122") return { valid: false, raw: stripped, reason: "non-RFC 4122 variant — disable 'strict RFC 4122'" };
 
-  const fields = extractFields(lower);
-  const props = computeProperties(trimmed, normalized, version, variant);
+  const fields = extractFields(lower, hex);
+  const props = computeProperties(trimmed, normalized, version, variant, hex);
 
   let decoded = null;
   let unixMs = null;

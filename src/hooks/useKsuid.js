@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { generateKsuid, decodeKsuid } from "../utils/ksuid";
+import useCopyFlash from "./useCopyFlash";
 
 // A fixed sample so the panel has something to inspect on first load and via
 // the sample pill (mirrors ULID_SAMPLES in useUlid.js).
@@ -9,8 +10,8 @@ export const KSUID_SAMPLES = [
 
 function useKsuid() {
   const [rawInput, setRawInput] = useState(() => generateKsuid());
-  const [copiedKey, setCopiedKey] = useState(null);
   const [activeSample, setActiveSample] = useState(null);
+  const { copiedKey, copyValue } = useCopyFlash();
 
   const result = useMemo(
     () => (rawInput.trim() ? decodeKsuid(rawInput) : null),
@@ -42,14 +43,6 @@ function useKsuid() {
     if (!sample) return;
     setRawInput(sample.value);
     setActiveSample(id);
-  }, []);
-
-  const copyValue = useCallback((key, value) => {
-    if (!value || !navigator.clipboard?.writeText) return;
-    navigator.clipboard.writeText(value).then(() => {
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 1500);
-    });
   }, []);
 
   return {

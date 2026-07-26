@@ -8,6 +8,7 @@ import {
   generateNanoId,
   idEntropyBits,
 } from "../utils/nanoid";
+import useCopyFlash from "./useCopyFlash";
 
 // Mint `count` ids of `size` chars from the given alphabet. Each id is a
 // `{ id, value }` pair so React keys stay stable per row across copies.
@@ -25,7 +26,7 @@ function useNanoId() {
   const [ids, setIds] = useState(() =>
     mintBatch(NANOID_DEFAULT_COUNT, NANOID_DEFAULT_SIZE, alphabetById(NANOID_DEFAULT_ALPHABET).chars)
   );
-  const [copiedKey, setCopiedKey] = useState(null);
+  const { copiedKey, copyValue } = useCopyFlash();
 
   const alphabet = useMemo(() => alphabetById(alphabetId), [alphabetId]);
 
@@ -71,14 +72,6 @@ function useNanoId() {
     },
     [regenerate]
   );
-
-  const copyValue = useCallback((key, value) => {
-    if (!value || !navigator.clipboard?.writeText) return;
-    navigator.clipboard.writeText(value).then(() => {
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 1500);
-    });
-  }, []);
 
   const copyAll = useCallback(() => {
     const joined = ids.map((row) => row.value).join("\n");
