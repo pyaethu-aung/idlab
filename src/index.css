@@ -1,4 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
+/* Geist / Geist Mono are linked from index.html, not @import-ed here: an
+   @import cannot start its request until this stylesheet has downloaded and
+   parsed, which serialises HTML -> CSS -> Google CSS -> woff2. The <link>
+   plus preconnect lets the browser open both font connections during HTML
+   parse instead. */
 @import "./design-system/tokens.css";
 @import "tailwindcss";
 
