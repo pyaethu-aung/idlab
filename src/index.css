@@ -4,11 +4,44 @@
    plus preconnect lets the browser open both font connections during HTML
    parse instead. */
 @import "./design-system/tokens.css";
-@import "tailwindcss";
 
 /* ─── Global base ────────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
+}
+
+/* This stylesheet used to sit on top of Tailwind's preflight, which is gone
+   along with the unused dependency. These are the only preflight rules the
+   system actually leaned on: form controls do not inherit typography by
+   default, and the block elements below ship UA margins the layout never
+   wanted. Everything else here is authored, not reset. */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote {
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+svg {
+  display: block;
 }
 
 html,
@@ -17,6 +50,10 @@ body {
   padding: 0;
   background: var(--bg);
   color: var(--ink);
+  /* Was inherited from Tailwind's preflight; the whole system was measured
+     against it, so it stays an explicit global rather than reverting to the
+     UA's `normal`. Components that need looser copy set --lh-body. */
+  line-height: 1.5;
 }
 
 body {

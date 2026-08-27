@@ -16,12 +16,10 @@
     "docker:run": "docker run --rm -p 8080:80 --name idlab-app --read-only --cap-drop ALL --tmpfs /var/cache/nginx:mode=1777 --tmpfs /var/run:mode=1777 --tmpfs /tmp:mode=1777 idlab:local"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
     "focus-trap-react": "^12.0.3",
     "prop-types": "^15.8.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "tailwindcss": "^4.3.3",
     "uuid": "^14.0.2"
   },
   "devDependencies": {
