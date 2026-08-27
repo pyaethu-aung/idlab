@@ -476,7 +476,7 @@ kbd {
 }
 
 .version-pip {
-  color: var(--accent);
+  color: var(--accent-ink);
   font-size: 8px;
 }
 
@@ -633,7 +633,7 @@ kbd {
 }
 
 .opt-row.is-on .opt-check {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .opt-text {
@@ -756,7 +756,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .ts-readout-ms {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .ts-readout-utc {
@@ -912,7 +912,7 @@ input.name-input.ts-field[type="time"] {
 
 .row:hover .row-idx,
 .row.is-copied .row-idx {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .row-uuid {
@@ -935,7 +935,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .row:hover .uuid-seg.seg-2 {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .row-len {
@@ -1023,7 +1023,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .status-arrow {
-  color: var(--accent);
+  color: var(--accent-ink);
   margin-right: 4px;
 }
 
@@ -1059,7 +1059,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .status-cell--valid {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .status-cell--invalid {
@@ -1216,7 +1216,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .tab-btn--active {
-  color: var(--accent);
+  color: var(--accent-ink);
   border-bottom-color: var(--accent);
 }
 
@@ -1262,7 +1262,7 @@ input.name-input.ts-field[type="time"] {
    the non-colour state cue; aria-current carries it to assistive tech. */
 .mode-btn--active,
 .mode-btn--active:hover {
-  color: var(--accent);
+  color: var(--accent-ink);
   background: color-mix(in oklch, var(--accent) 12%, var(--bg-2));
 }
 
@@ -1829,7 +1829,7 @@ input.name-input.ts-field[type="time"] {
 
 .v-prop-pill {
   font-size: var(--fs-xxs);
-  color: var(--accent);
+  color: var(--accent-ink);
   border: 1px solid color-mix(in oklch, var(--accent) 50%, transparent);
   border-radius: var(--r-xs);
   padding: 3px 8px;
@@ -1841,7 +1841,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .v-prop-icon--check {
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .v-prop-icon--minus {
@@ -2028,7 +2028,7 @@ input.name-input.ts-field[type="time"] {
   font-weight: var(--fw-semibold);
 }
 
-.bulk-count--ok .bulk-count-num { color: var(--accent); }
+.bulk-count--ok .bulk-count-num { color: var(--accent-ink); }
 .bulk-count--bad .bulk-count-num { color: var(--error); }
 .bulk-count--total .bulk-count-num { color: var(--ink); }
 .bulk-count--warn-val .bulk-count-num { color: var(--warn); }
@@ -2171,8 +2171,8 @@ input.name-input.ts-field[type="time"] {
   line-height: 1;
 }
 
-.bulk-status--ok { color: var(--accent); }
-.bulk-status--ok .bulk-status-pip { color: var(--accent); }
+.bulk-status--ok { color: var(--accent-ink); }
+.bulk-status--ok .bulk-status-pip { color: var(--accent-ink); }
 
 .bulk-status--bad { color: var(--error); }
 .bulk-status--bad .bulk-status-pip { color: var(--error); }

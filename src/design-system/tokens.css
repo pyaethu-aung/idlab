@@ -90,9 +90,18 @@
   --on-accent: oklch(0.18 0.01 130);
 }
 
+/* --accent fills, --accent-ink writes.
+   As a fill the accent carries its own on-accent text and is unconstrained.
+   As text it must clear 4.5:1 against whatever it sits on, and in light
+   theme every palette fails that on an accent tint (lime 3.93:1, amber
+   3.76:1) and amber fails even on plain --bg-2. Darkening 16% clears all
+   four palettes on every ground they appear on. Dark theme needs no
+   correction, so there --accent-ink is the accent itself. */
+
 /* Dark theme (default) ─────────────────────── */
 :root,
 [data-theme="dark"] {
+  --accent-ink: var(--accent);
   --bg:       oklch(0.16 0.005 60);
   --bg-2:     oklch(0.18 0.005 60);
   --bg-3:     oklch(0.21 0.006 60);
@@ -124,6 +133,7 @@
 
 /* Light theme ─────────────────────────────── */
 [data-theme="light"] {
+  --accent-ink: color-mix(in oklch, var(--accent), black 16%);
   --bg:       oklch(0.985 0.003 60);
   --bg-2:     oklch(0.965 0.004 60);
   --bg-3:     oklch(0.945 0.005 60);
