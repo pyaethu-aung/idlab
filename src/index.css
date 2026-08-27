@@ -2502,6 +2502,77 @@ input.name-input.ts-field[type="time"] {
   .cx-label { grid-area: label; }
   .cx-copy  { grid-area: copy;  }
   .cx-value { grid-area: value; }
+
+  /* A six-column table cannot reflow into a phone. Left as a table it gave
+     each uuid cell about three characters of width, wrapping a single id
+     down ~15 lines and pushing the time column off-screen. Restack every
+     row as a card: line number, then the id at full width, then the
+     decoded facts on one wrapping meta line. */
+  .bulk-table,
+  .bulk-table tbody,
+  .bulk-table tr,
+  .bulk-table td {
+    display: block;
+  }
+
+  .bulk-table thead {
+    display: none;
+  }
+
+  .bulk-row {
+    position: relative;
+    padding: var(--sp-6) var(--sp-7);
+    border-bottom: 1px solid var(--seam);
+  }
+
+  .bulk-table tbody td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .bulk-table tbody td.bulk-col-num {
+    width: auto;
+    text-align: left;
+    margin-bottom: var(--sp-2);
+  }
+
+  .bulk-table tbody td.bulk-col-uuid {
+    margin-bottom: var(--sp-4);
+    /* 44px keeps the id clear of the absolutely placed expand control */
+    padding-right: 44px;
+  }
+
+  .bulk-table tbody td.bulk-col-status,
+  .bulk-table tbody td.bulk-col-ver,
+  .bulk-table tbody td.bulk-col-variant {
+    display: inline-block;
+    margin-right: var(--sp-6);
+    vertical-align: middle;
+  }
+
+  .bulk-table tbody td.bulk-col-time {
+    display: inline-block;
+    margin-top: var(--sp-3);
+    vertical-align: middle;
+  }
+
+  .bulk-time-iso {
+    white-space: normal;
+  }
+
+  /* In a stacked card an absent field is obvious from its absence, so the
+     em-dash placeholders that hold empty table columns open become stray
+     marks on their own lines. Drop the cells that carry nothing else. */
+  .bulk-table tbody td:has(> .bulk-muted) {
+    display: none;
+  }
+
+  .bulk-table tbody td.v-col-expand {
+    position: absolute;
+    top: var(--sp-5);
+    right: var(--sp-5);
+    width: auto;
+  }
 }
 
 /* ─── 480px: hero scales down; modal becomes a bottom sheet ─────────────── */
