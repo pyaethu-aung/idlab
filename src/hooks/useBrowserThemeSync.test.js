@@ -43,6 +43,25 @@ describe("useBrowserThemeSync", () => {
     metaTag = created;
   });
 
+  // Regression: index.html used to ship a media-scoped pair of theme-color
+  // tags. querySelector('meta[name="theme-color"]') always matched the light
+  // one, so the dark --bg was written into a tag the browser only applies
+  // when the OS is in light mode, and the dark tag kept its stale literal.
+  it("ignores media-scoped tags and writes the unscoped one", () => {
+    const scoped = document.createElement("meta");
+    scoped.setAttribute("name", "theme-color");
+    scoped.setAttribute("media", "(prefers-color-scheme: light)");
+    scoped.setAttribute("content", "#f8fafc");
+    document.head.insertBefore(scoped, metaTag);
+
+    renderHook(() => useBrowserThemeSync("dark"));
+
+    expect(scoped.getAttribute("content")).toBe("#f8fafc");
+    expect(metaTag.getAttribute("content")).toBe("#1a1a1a");
+
+    document.head.removeChild(scoped);
+  });
+
   it("updates theme-color when theme changes", () => {
     const { rerender } = renderHook(
       ({ theme }) => useBrowserThemeSync(theme),
