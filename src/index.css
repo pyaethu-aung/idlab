@@ -2733,4 +2733,16 @@ input.name-input.ts-field[type="time"] {
   /* Restore deliberate opacity crossfades so panels don't hard-cut */
   .modal-scrim  { transition: opacity var(--d-scrim) ease !important; }
   .modal        { transition: opacity var(--d-modal) ease !important; }
+
+  /* The blanket rule above stops the regenerate spinner and the status
+     pulse mid-frame, which leaves both states carrying no signal at all.
+     Motion was the only cue, so substitute a static one: the busy button
+     dims, and the live dot holds a steady ring instead of pulsing. */
+  .cta-btn[aria-busy="true"] {
+    opacity: 0.65;
+  }
+
+  .status-dot {
+    box-shadow: 0 0 0 2px color-mix(in oklch, var(--accent) 35%, transparent);
+  }
 }
