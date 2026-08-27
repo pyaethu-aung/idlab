@@ -13,3 +13,11 @@ CVE-2026-27135
 # already runs `apk upgrade --no-cache` and explicitly installs libcrypto3/libssl3
 # so this will clear automatically once Alpine ships >=3.5.7-r0.
 CVE-2026-45447
+
+# OpenSSL DoS via unbounded memory growth in QUIC server — fixed in
+# libcrypto3/libssl3 3.5.8-r0. Suppressed because Alpine has not yet packaged
+# the fix; the Dockerfile already runs `apk upgrade --no-cache` and explicitly
+# installs libcrypto3/libssl3 so this will clear automatically once Alpine
+# ships >=3.5.8-r0. idlab serves static files over nginx and is not a QUIC
+# server, so the vulnerable code path is not reachable.
+CVE-2026-14456
