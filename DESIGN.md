@@ -15,7 +15,7 @@ colors:
   ink: "oklch(0.97 0.004 60)"
   ink-2: "oklch(0.78 0.005 60)"
   ink-3: "oklch(0.68 0.005 60)"
-  ink-4: "oklch(0.61 0.006 60)"
+  ink-4: "oklch(0.64 0.006 60)"
   error: "oklch(0.72 0.17 25)"
   on-error: "oklch(0.15 0.02 25)"
 typography:
@@ -182,7 +182,7 @@ Color values are authored in OKLCH throughout; all four accents share equivalent
 - **Warm White** (`oklch(0.97 0.004 60)`, token `--ink`): Primary content — headings, UUID values, primary labels.
 - **Body Ink** (`oklch(0.78 0.005 60)`, token `--ink-2`): Secondary content, ghost button labels.
 - **Muted Ink** (`oklch(0.68 0.005 60)`, token `--ink-3`): Metadata, hints, UUID length readout. Never actionable primary.
-- **Ghost Ink** (`oklch(0.61 0.006 60)`, token `--ink-4`): Index numbers, tertiary decoration. Absolute floor for informational text.
+- **Ghost Ink** (`oklch(0.64 0.006 60)`, token `--ink-4`): Index numbers, tertiary decoration. Absolute floor for informational text.
 - **Error Red** (`oklch(0.72 0.17 25)` dark / `oklch(0.50 0.20 25)` light, token `--error`): Invalid UUID state — used for text, borders, fills, and the status dot glow. Follows the same contract as `--accent`: one role, never decorative. On light theme, lightness drops to 0.50 for WCAG AA contrast against near-white surfaces.
 - **On-Error** (`oklch(0.15 0.02 25)` dark / `oklch(0.97 0.004 60)` light, token `--on-error`): Text on error-colored fills (validator banner icon). Inverts between themes to stay readable.
 
@@ -200,8 +200,8 @@ reading as generic dark-mode.
 is decorative. Never use a lighter value for actionable copy.
 
 The two dim steps are lightness-floored, not chosen by eye: against the darkest ground each is
-used on (`--bg-3` for `--ink-4`, the accent-10% row tint for `--ink-3`) anything below L 0.60 /
-0.61 falls under 4.5:1. That is why the bottom of the dark ramp is compressed — four AA-passing
+used on — for `--ink-4` the hovered version-mismatch row (warn 11% over `--bg-2`), for
+`--ink-3` the accent-10% active row — anything below L 0.624 / 0.614 falls under 4.5:1. That is why the bottom of the dark ramp is compressed — four AA-passing
 steps over a 0.16 canvas cannot also be widely spaced.
 
 **The Ink/Fill Rule.** `--accent` fills; `--accent-ink` writes. As a fill the accent carries its

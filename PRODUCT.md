@@ -53,7 +53,7 @@ being exactly right, not by performing effort.
 
 WCAG AA throughout, verified by measuring composited contrast in-browser rather than by
 inspection. All four accent palettes pass AA against their on-accent text values, and
-`--accent-ink` carries the accent wherever it is used as text. `--ink-4` (oklch ~0.61 in dark)
+`--accent-ink` carries the accent wherever it is used as text. `--ink-4` (oklch ~0.64 in dark)
 is the dimmest legible token; never use it for actionable copy. Color is never the sole carrier
 of state (active rows have a left bar and pip alongside accent tinting). Custom controls are
 built on native elements: real `<input>` for the sliders and text fields, and
