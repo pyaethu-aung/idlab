@@ -945,23 +945,30 @@ input.name-input.ts-field[type="time"] {
   font-variant-numeric: tabular-nums;
 }
 
+/* Recedes at rest, sharpens on hover — but via the ink ramp, not opacity.
+   A blanket opacity:0.4 dimmed the label to 2.48:1 (dark) / 2.14:1 (light),
+   which fails 1.4.3 for text that is on screen the whole time. Dropping the
+   border and stepping the label back to --ink-3 is more recessive than the
+   old faded state and matches the documented "no fill or border at rest". */
 .row-copy {
   padding: 6px 12px;
   min-height: 44px;
   background: transparent;
-  border: 1px solid var(--seam);
+  border: 1px solid transparent;
   border-radius: var(--r-sm);
-  color: var(--ink-2);
+  color: var(--ink-3);
   font-size: var(--fs-xs);
   letter-spacing: 0.02em;
-  opacity: 0.4;
-  transition: all var(--d-settle);
+  transition: background-color var(--d-settle), border-color var(--d-settle),
+    color var(--d-settle);
   justify-self: end;
   min-width: 80px;
 }
 
-.row:hover .row-copy {
-  opacity: 1;
+/* Hover is a pointer affordance; keyboard focus must promote the button too. */
+.row:hover .row-copy,
+.row:focus-within .row-copy,
+.row-copy:focus-visible {
   border-color: var(--seam-2);
   color: var(--ink);
 }
@@ -976,7 +983,6 @@ input.name-input.ts-field[type="time"] {
   background: var(--accent);
   color: var(--on-accent);
   border-color: var(--accent);
-  opacity: 1;
 }
 
 /* ─── Status bar ─────────────────────────────────────────────────────────── */
@@ -2482,10 +2488,8 @@ input.name-input.ts-field[type="time"] {
 .tab-btn    { min-height: 44px; }
 .status-btn { min-height: 44px; }
 
-/* Row copy buttons are opacity-hidden on desktop hover; reveal for touch */
-@media (hover: none) {
-  .row-copy { opacity: 1; }
-}
+/* Row copy buttons no longer fade at rest, so touch needs no override: the
+   label is legible unhovered and the border is the only hover-only cue. */
 
 /* Shortcut affordances need a physical keyboard, so gate them on input
    capability rather than viewport width: a narrow desktop window keeps its
