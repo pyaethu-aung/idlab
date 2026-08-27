@@ -55,10 +55,19 @@ function StatusBar({
       <span className="status-cell">
         flags [{flags.length ? flags.join(" ") : "none"}]
       </span>
-      <span className="status-cell status-feedback">
+      {/* The only confirmation that a copy or download happened. Shortcuts
+          fire it without moving focus, so without a live region a screen
+          reader user gets no feedback at all (WCAG 4.1.3). aria-atomic so
+          the verb is read with its arrow, not as a bare fragment. */}
+      <span
+        className="status-cell status-feedback"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {feedback ? (
           <>
-            <span className="status-arrow">→</span>
+            <span className="status-arrow" aria-hidden="true">→</span>
             <span>{feedback}</span>
           </>
         ) : (
