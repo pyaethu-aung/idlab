@@ -2491,6 +2491,41 @@ input.name-input.ts-field[type="time"] {
     min-width: 0;
   }
 
+  /* .panel-head was nowrap with a non-shrinking actions group, so at 390px
+     the actions measured 583px inside a 356px head: the export chips, the
+     download button and the regenerate CTA were clipped by .bench's
+     overflow: hidden and could not be reached at all. Give the actions
+     their own full-width row and let them wrap. */
+  .panel-head {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--sp-5);
+  }
+
+  .panel-actions {
+    width: 100%;
+    flex-shrink: 1;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .export-chips {
+    flex-wrap: wrap;
+  }
+
+  /* Every status cell is nowrap, so the trailing shortcut button pushed the
+     document wider than the viewport and the whole page scrolled sideways.
+     Let the bar scroll itself, the same way .topbar-nav does at 768px. */
+  .status {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .status::-webkit-scrollbar {
+    display: none;
+  }
+
   .cx-row {
     grid-template-columns: 1fr auto;
     grid-template-areas:
