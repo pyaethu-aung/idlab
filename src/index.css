@@ -132,7 +132,8 @@ kbd {
   border-radius: var(--r-md);
   font-size: var(--fs-sm);
   white-space: nowrap;
-  transition: all var(--d-swap);
+  transition: background-color var(--d-swap), border-color var(--d-swap),
+    color var(--d-swap);
 }
 
 .ghost-btn:hover {
@@ -420,7 +421,8 @@ kbd {
   border-radius: var(--r-md);
   text-align: left;
   color: var(--ink-2);
-  transition: all var(--d-swap);
+  transition: background-color var(--d-swap), border-color var(--d-swap),
+    color var(--d-swap);
 }
 
 .version-row:hover {
@@ -578,7 +580,8 @@ kbd {
   border-radius: var(--r-xs);
   font-size: var(--fs-xs);
   color: var(--ink-2);
-  transition: all var(--d-swap);
+  transition: background-color var(--d-swap), border-color var(--d-swap),
+    color var(--d-swap);
 }
 
 .preset-chip:hover {
@@ -613,7 +616,8 @@ kbd {
   border: 1px solid var(--seam);
   border-radius: var(--r-md);
   cursor: pointer;
-  transition: all var(--d-swap);
+  transition: background-color var(--d-swap), border-color var(--d-swap),
+    color var(--d-swap);
 }
 
 .opt-row:hover {
@@ -670,7 +674,8 @@ kbd {
   border-radius: var(--r-xs);
   font-size: var(--fs-xs);
   color: var(--ink-2);
-  transition: all var(--d-swap);
+  transition: background-color var(--d-swap), border-color var(--d-swap),
+    color var(--d-swap);
 }
 
 .ns-chip:hover {
@@ -846,7 +851,8 @@ input.name-input.ts-field[type="time"] {
   font-size: var(--fs-xs);
   color: var(--ink-2);
   white-space: nowrap;
-  transition: all var(--d-swap);
+  transition: background-color var(--d-swap), border-color var(--d-swap),
+    color var(--d-swap);
 }
 
 .export-chip:hover {
@@ -1901,7 +1907,8 @@ input.name-input.ts-field[type="time"] {
   font-size: var(--fs-xs);
   letter-spacing: 0.02em;
   cursor: pointer;
-  transition: all var(--d-settle);
+  transition: background-color var(--d-settle), border-color var(--d-settle),
+    color var(--d-settle);
 }
 
 .v-convert-copy:hover,
@@ -2245,7 +2252,8 @@ input.name-input.ts-field[type="time"] {
   border-radius: var(--r-sm);
   color: var(--ink-3);
   cursor: pointer;
-  transition: all var(--d-swap);
+  transition: background-color var(--d-swap), border-color var(--d-swap),
+    color var(--d-swap);
 }
 
 .v-row-toggle:hover {
