@@ -100,8 +100,13 @@
   --seam-2:   oklch(0.36 0.008 60);
   --ink:      oklch(0.97 0.004 60);
   --ink-2:    oklch(0.78 0.005 60);
-  --ink-3:    oklch(0.55 0.005 60);
-  --ink-4:    oklch(0.40 0.006 60);
+  /* The two dim steps are lightness-floored, not eyeballed: against the
+     darkest ground each is used on (--bg-3 for --ink-4, the accent-10% row
+     tint for --ink-3) anything below L 0.60 / 0.61 drops under 4.5:1. The
+     ramp is deliberately compressed at the bottom — four AA-passing steps
+     over a 0.16 canvas cannot also be widely spaced. */
+  --ink-3:    oklch(0.68 0.005 60);
+  --ink-4:    oklch(0.61 0.006 60);
   --error:    oklch(0.72 0.17 25);
   --on-error: oklch(0.15 0.02 25);
   --warn:     oklch(0.80 0.16 75);
