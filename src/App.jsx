@@ -172,6 +172,9 @@ function App() {
   return (
     <div className="root">
       <TabAnnouncer activeTab={activeTab} />
+      <a className="skip-link mono" href="#main">
+        skip to content
+      </a>
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark">
@@ -199,7 +202,7 @@ function App() {
         </div>
       </header>
 
-      <main className="main">
+      <main className="main" id="main" tabIndex={-1}>
         <ModeSwitcher activeLeaf={activeTab} onSelect={setActiveTab} />
 
         <div style={{ display: activeTab === "generator" ? "" : "none" }}>

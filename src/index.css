@@ -80,6 +80,34 @@ body {
   border: 0;
 }
 
+/* Offscreen until focused, then lands as a normal ghost button over the top
+   bar. Keyboard-only by nature, so it borrows the chrome vocabulary rather
+   than introducing a fourth button role. */
+.skip-link {
+  position: absolute;
+  top: var(--sp-4);
+  left: var(--sp-4);
+  z-index: calc(var(--z-modal) + 1);
+  transform: translateY(-200%);
+  padding: var(--sp-4) var(--sp-6);
+  background: var(--bg-2);
+  border: 1px solid var(--seam-2);
+  border-radius: var(--r-md);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition: transform var(--d-swap);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* The target takes focus programmatically; never ring it. */
+.main:focus {
+  outline: none;
+}
+
 button {
   font-family: inherit;
   cursor: pointer;
