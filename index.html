@@ -4,25 +4,6 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Loaded async: as a plain stylesheet this blocks first paint on a
-         third-party host, so a slow or unreachable fonts.googleapis.com holds
-         the whole app back. media="print" makes it non-blocking, and onload
-         promotes it once it arrives; the <noscript> covers scripting-off. The
-         stack in --font-sans/--font-mono renders meanwhile. -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
-      media="print"
-      onload="this.media='all';this.onload=null"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
-      />
-    </noscript>
     <meta
       name="description"
       content="Generate, validate, decode, and convert IDs in the browser: UUID (v1/v4/v6/v7), ULID, and NanoID. Batch, format, copy, and download, all keyboard-first."
