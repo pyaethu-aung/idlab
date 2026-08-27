@@ -22,7 +22,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -50,7 +50,7 @@
     "@eslint/config-array": "^0.23.2",
     "@eslint/eslintrc": "^3.3.1",
     "brace-expansion": "^5.0.7",
-    "js-yaml": "^4.3.0",
-    "undici": "^7.28.0"
+    "js-yaml": "^4.3.1",
+    "undici": "^7.29.0"
   }
 }
