@@ -2513,6 +2513,39 @@ input.name-input.ts-field[type="time"] {
     flex-wrap: wrap;
   }
 
+  /* The id is the product; ellipsising it to "c5bb94e4-02b2-471..." makes
+     the output unreadable on the one screen where you cannot widen the
+     window. Let it wrap at segment boundaries instead and give the copy
+     button its own row underneath. */
+  .row {
+    grid-template-columns: 38px 1fr;
+    grid-template-areas:
+      "idx uuid"
+      "idx copy";
+    row-gap: var(--sp-4);
+    column-gap: var(--sp-6);
+    align-items: start;
+  }
+
+  .row-idx {
+    grid-area: idx;
+    padding-top: 2px;
+  }
+
+  .row-uuid {
+    grid-area: uuid;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+  }
+
+  .row-copy {
+    grid-area: copy;
+    justify-self: start;
+  }
+
   /* Every status cell is nowrap, so the trailing shortcut button pushed the
      document wider than the viewport and the whole page scrolled sideways.
      Let the bar scroll itself, the same way .topbar-nav does at 768px. */
