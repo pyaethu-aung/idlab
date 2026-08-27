@@ -102,8 +102,14 @@ body {
   transition: transform var(--d-swap);
 }
 
+/* Restates the resting z-index because the global :focus-visible rule sets
+   z-index: 1 to lift focused controls over their siblings, and at equal
+   specificity that would win here -- dropping the focused link below the
+   sticky top bar (z-index 10), which then covered everything but the bottom
+   2px of its ring. This link needs to sit above the bar, not above a sibling. */
 .skip-link:focus-visible {
   transform: translateY(0);
+  z-index: calc(var(--z-modal) + 1);
 }
 
 /* The target takes focus programmatically; never ring it. */
