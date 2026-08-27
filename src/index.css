@@ -113,10 +113,28 @@ button {
   cursor: pointer;
 }
 
+/* The ring is painted at outline-offset 2px, entirely outside the border box,
+   which leaves it vulnerable in two ways.
+
+   Siblings: in a tight flex/grid group (chips and toggles sit 2px apart) the
+   next sibling's opaque background paints after this element and covers the
+   ring's whole right edge. z-index lifts the focused control above its
+   neighbours -- flex and grid children honour z-index without position, and
+   on anything else the declaration is simply ignored. */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--r-xs);
+  z-index: 1;
+}
+
+/* Edges: controls in the sticky bars are flush against the viewport -- the
+   top bar sits at y=0 and the status bar's last button at the bottom-right
+   corner -- so an outward ring is drawn off-screen. Ring those on the inside,
+   where there is always room. */
+.topbar :focus-visible,
+.status :focus-visible {
+  outline-offset: -2px;
 }
 
 kbd {
