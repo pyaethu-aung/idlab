@@ -1099,6 +1099,10 @@ input.name-input.ts-field[type="time"] {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  /* Matches .status-cell: the bar scrolls sideways when it runs out of room,
+     so the label must not wrap to a second line inside a 44px-tall bar. */
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .status-btn kbd {
