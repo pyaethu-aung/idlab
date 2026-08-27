@@ -205,7 +205,7 @@
   .space-row:last-child { border-bottom: 0; }
   .space-key { font-family: var(--font-mono); font-size: var(--fs-base); font-weight: 600; }
   .space-val { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); }
-  .space-bar { height: 12px; background: var(--accent); border-radius: 2px; }
+  .space-bar { height: 12px; background: var(--accent); border-radius: var(--r-xxs); }
 
   /* Radius ─────────────────────────── */
   .radius-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-4); }
@@ -241,7 +241,7 @@
   .motion-val { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px; }
   .motion-desc { font-size: var(--fs-xs); color: var(--ink-3); margin-top: var(--sp-5); line-height: 1.45; }
   .motion-track {
-    margin-top: var(--sp-7); height: 4px; background: var(--seam); border-radius: 2px;
+    margin-top: var(--sp-7); height: 4px; background: var(--seam); border-radius: var(--r-xxs);
     position: relative; overflow: hidden;
   }
   .motion-bead {
@@ -301,7 +301,8 @@
   .v-meta { display: flex; flex-direction: column; min-width: 0; }
   .v-title { font-size: var(--fs-base); font-weight: 600; color: var(--ink); }
   .v-desc { font-size: var(--fs-xs); color: var(--ink-3); margin-top: 2px; line-height: 1.4; }
-  .v-pip { color: var(--accent); font-size: 8px; }
+  .v-pip { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-ink); justify-self: center; opacity: 0; }
+  .v-row.is-active .v-pip { opacity: 1; }
 
   /* Panel */
   .demo-panel { background: var(--bg-2); display: flex; flex-direction: column; }
@@ -311,7 +312,7 @@
     border-bottom: 1px solid var(--seam); background: var(--bg);
   }
   .panel-meta { display: flex; align-items: center; gap: var(--sp-6); }
-  .panel-bar { width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .panel-bar { width: 3px; height: 14px; background: var(--accent); border-radius: var(--r-xxs); }
   .panel-title { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600; }
   .panel-sep { color: var(--ink-4); }
   .panel-flag { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
@@ -635,7 +636,7 @@
           <div class="swatch-tile" style="background: var(--bg-2); color: var(--ink-3); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:400;">Aa</div>
           <div class="swatch-meta">
             <div class="swatch-name">--ink-3 <span class="role">/3</span></div>
-            <div class="swatch-val">oklch(0.55 0.005 60)</div>
+            <div class="swatch-val">oklch(0.68 0.005 60)</div>
             <div class="swatch-desc">Meta, hints, dashed divider copy.</div>
           </div>
         </article>
@@ -643,7 +644,7 @@
           <div class="swatch-tile" style="background: var(--bg-2); color: var(--ink-4); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:400;">Aa</div>
           <div class="swatch-meta">
             <div class="swatch-name">--ink-4 <span class="role">/4</span></div>
-            <div class="swatch-val">oklch(0.40 0.006 60)</div>
+            <div class="swatch-val">oklch(0.61 0.006 60)</div>
             <div class="swatch-desc">Tertiary — index numbers, dashes, ellipses.</div>
           </div>
         </article>
@@ -837,7 +838,7 @@
                 <div class="v-row is-active">
                   <span class="v-tag">v1</span>
                   <span class="v-meta"><span class="v-title">Time + Node</span><span class="v-desc">Timestamp-first, sortable for logs and traces.</span></span>
-                  <span class="v-pip">●</span>
+                  <span class="v-pip"></span>
                 </div>
                 <div class="v-row">
                   <span class="v-tag">v7</span>

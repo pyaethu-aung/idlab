@@ -51,8 +51,13 @@ being exactly right, not by performing effort.
 
 ## Accessibility & Inclusion
 
-WCAG AA throughout. All four accent palettes pass AA against their on-accent text values.
-`--ink-4` (oklch ~0.40 in dark) is the dimmest legible token; never use it for actionable copy.
-Color is never the sole carrier of state (active rows have a left bar and pip glyph alongside
-accent tinting). Real `<input>` elements underpin all custom controls. `prefers-reduced-motion`
-respected with instant state-swap alternatives.
+WCAG AA throughout, verified by measuring composited contrast in-browser rather than by
+inspection. All four accent palettes pass AA against their on-accent text values, and
+`--accent-ink` carries the accent wherever it is used as text. `--ink-4` (oklch ~0.61 in dark)
+is the dimmest legible token; never use it for actionable copy. Color is never the sole carrier
+of state (active rows have a left bar and pip alongside accent tinting). Custom controls are
+built on native elements: real `<input>` for the sliders and text fields, and
+`<button aria-pressed>` for the format and parse toggles, where the whole row is the control.
+Status messages that shortcuts can trigger without moving focus are live regions.
+`prefers-reduced-motion` is respected, with a static alternative wherever motion was the only
+signal.

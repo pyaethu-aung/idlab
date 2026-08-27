@@ -14,8 +14,8 @@ colors:
   seam-2: "oklch(0.36 0.008 60)"
   ink: "oklch(0.97 0.004 60)"
   ink-2: "oklch(0.78 0.005 60)"
-  ink-3: "oklch(0.55 0.005 60)"
-  ink-4: "oklch(0.40 0.006 60)"
+  ink-3: "oklch(0.68 0.005 60)"
+  ink-4: "oklch(0.61 0.006 60)"
   error: "oklch(0.72 0.17 25)"
   on-error: "oklch(0.15 0.02 25)"
 typography:
@@ -181,8 +181,8 @@ Color values are authored in OKLCH throughout; all four accents share equivalent
 - **Elevated Hairline** (`oklch(0.36 0.008 60)`, token `--seam-2`): Hover/focus border step.
 - **Warm White** (`oklch(0.97 0.004 60)`, token `--ink`): Primary content — headings, UUID values, primary labels.
 - **Body Ink** (`oklch(0.78 0.005 60)`, token `--ink-2`): Secondary content, ghost button labels.
-- **Muted Ink** (`oklch(0.55 0.005 60)`, token `--ink-3`): Metadata, hints, UUID length readout. Never actionable primary.
-- **Ghost Ink** (`oklch(0.40 0.006 60)`, token `--ink-4`): Index numbers, tertiary decoration. Absolute floor for informational text.
+- **Muted Ink** (`oklch(0.68 0.005 60)`, token `--ink-3`): Metadata, hints, UUID length readout. Never actionable primary.
+- **Ghost Ink** (`oklch(0.61 0.006 60)`, token `--ink-4`): Index numbers, tertiary decoration. Absolute floor for informational text.
 - **Error Red** (`oklch(0.72 0.17 25)` dark / `oklch(0.50 0.20 25)` light, token `--error`): Invalid UUID state — used for text, borders, fills, and the status dot glow. Follows the same contract as `--accent`: one role, never decorative. On light theme, lightness drops to 0.50 for WCAG AA contrast against near-white surfaces.
 - **On-Error** (`oklch(0.15 0.02 25)` dark / `oklch(0.97 0.004 60)` light, token `--on-error`): Text on error-colored fills (validator banner icon). Inverts between themes to stay readable.
 
@@ -198,6 +198,18 @@ reading as generic dark-mode.
 
 **The Floor Rule.** `--ink-4` is the dimmest token used for informational text. Anything lighter
 is decorative. Never use a lighter value for actionable copy.
+
+The two dim steps are lightness-floored, not chosen by eye: against the darkest ground each is
+used on (`--bg-3` for `--ink-4`, the accent-10% row tint for `--ink-3`) anything below L 0.60 /
+0.61 falls under 4.5:1. That is why the bottom of the dark ramp is compressed — four AA-passing
+steps over a 0.16 canvas cannot also be widely spaced.
+
+**The Ink/Fill Rule.** `--accent` fills; `--accent-ink` writes. As a fill the accent carries its
+own `--on-accent` text and is unconstrained. As text it has to clear 4.5:1 against whatever it
+sits on, and in light theme every palette fails that on an accent tint (lime 3.93:1, amber
+3.76:1). `--accent-ink` is the accent darkened 16% in light theme and the accent itself in dark.
+The two exceptions are the hero mark and the brand icon, which sit on `--bg` where every palette
+already passes and where the hero counts as large text.
 
 ## 3. Typography: Terminal Discipline
 
@@ -216,6 +228,9 @@ mono carries the signal, sans carries the context.
   number in the workbench chrome.
 - **Title** (Geist Mono 600, 13px, tracking +0.04em): Rail section keys in lowercase (`version`,
   `batch`); status flags in uppercase (`UPPER`, `STRIP`). Never title case.
+- **Lead** (Geist Mono 600, 18px, token `--fs-lead`): The parsed-structure card's segment
+  values. The one step between body and headline; larger than body so the hex groups read as
+  data, well short of the display sizes.
 - **Body** (Geist Mono 400, 14px, line-height 1.55): UUID row values — the primary content
   surface. Feature settings: `"zero"` (slashed zero), `"ss01"`.
 - **Label** (Geist Mono 600, 11px, tracking +0.04em): `<kbd>`, status cells, row index numbers.
@@ -266,7 +281,7 @@ Three roles, no more. Never invent a fourth.
 - **Shape:** 6px radius (`--r-md`) on CTA and ghost. 5px (`--r-sm`) on the row copy button to stay flush with UUID row height.
 - **CTA (Regenerate):** Accent fill + on-accent text. 8px/16px padding. Attached `<kbd>` at 11px. One per panel. On hover: `translateY(-1px)` over 80ms. No color shift — it is already at full saturation.
 - **Ghost:** `--bg-2` fill, 1px `--seam` border, `--ink-2` text. 6px/12px padding. Secondary actions (Copy All, Download, theme toggle). On hover: `--bg-3` fill, `--seam-2` border, `--ink` text over 120ms.
-- **Row copy (transparent):** No fill or border at rest. `--ink-3` label. 4px/8px padding. Opacity 0.4 until parent row is hovered (→ 1). On button hover: `--bg-3` fill, `--ink` text. On copied state: accent fill, on-accent text, "✓ copied" label. Settles in 140ms.
+- **Row copy (transparent):** No fill or border at rest — the border is `transparent`, not hidden behind an opacity fade. `--ink-3` label at rest, promoting to `--seam-2` border and `--ink` label when the row is hovered or anything inside it takes focus. 4px/8px padding. On button hover: `--bg-3` fill, `--ink` text. On copied state: accent fill, on-accent text, "✓ copied" label. Settles in 140ms. It recedes through the ink ramp rather than through opacity, so the label never drops below 4.5:1 while it is on screen.
 
 ### UUID Row
 
@@ -283,13 +298,16 @@ The signature component. Four-column grid: index (50px) / UUID code (1fr) / leng
 Three-column grid: tag (32px) / meta (1fr) / pip (14px).
 
 - **Default:** `--bg-2` fill, 1px `--seam` border, `--r-md` radius. Tag: `--bg-3` background, `--ink-3` text. Pip hidden.
-- **Active:** `color-mix(in oklch, var(--accent) 10%, var(--bg-2))` fill, `--accent` border, `inset 2px 0 0 var(--accent)` left bar. Tag: accent fill, on-accent text. Pip visible.
+- **Active:** `color-mix(in oklch, var(--accent) 10%, var(--bg-2))` fill, `--accent` border, `inset 2px 0 0 var(--accent)` left bar. Tag: accent fill, on-accent text. Pip visible — a 6px CSS dot in `--accent-ink`, faded in by opacity, not a bullet glyph.
 - **Hover (inactive):** `--bg-3` fill, `--seam-2` border over 120ms.
 
-### Format Option (Checkbox)
+### Format Option (Toggle)
 
-Two-column grid: check glyph (18px) / label text. Uses real `<input type="checkbox">` visually
-hidden for full keyboard operability. Visible state is the row.
+Two-column grid: check glyph (18px) / label text. The row itself is a
+`<button aria-pressed>`, not a hidden `<input type="checkbox">` — a native toggle-button
+pattern, so the whole row is the control and the pressed state reaches assistive tech through
+`aria-pressed` rather than through a visually hidden input. The batch slider is a real
+`<input type="range">` with a visually hidden `<label>`.
 
 - **Unchecked:** `--ink-4` check glyph. `--bg-2` row background.
 - **Checked:** `--accent` check glyph. `color-mix(in oklch, var(--accent) 8%, var(--bg-2))` row background, `--accent` border.
