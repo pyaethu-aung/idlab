@@ -94,7 +94,7 @@ function ControlPanel({
                   <span className="version-title">{v.title}</span>
                   <span className="version-desc">{v.desc}</span>
                 </span>
-                <span className="version-pip" aria-hidden="true">{active ? "●" : ""}</span>
+                <span className="version-pip" aria-hidden="true" />
               </button>
             );
           })}

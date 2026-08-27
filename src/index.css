@@ -171,7 +171,7 @@ kbd {
 .brand-name {
   font-weight: 700;
   letter-spacing: -0.01em;
-  font-size: 16px;
+  font-size: var(--fs-lg);
 }
 
 .topbar-nav {
@@ -546,9 +546,19 @@ kbd {
   line-height: 1.4;
 }
 
+/* A shape, not a glyph: drawn in CSS so it does not depend on the font's
+   bullet metrics and needs no off-ramp font-size. */
 .version-pip {
-  color: var(--accent-ink);
-  font-size: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-ink);
+  justify-self: center;
+  opacity: 0;
+}
+
+.version-row.is-active .version-pip {
+  opacity: 1;
 }
 
 /* ─── Batch ──────────────────────────────────────────────────────────────── */
@@ -1812,7 +1822,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .v-seg-val {
-  font-size: 18px;
+  font-size: var(--fs-lead);
   font-weight: var(--fw-semibold);
   color: var(--ink);
   letter-spacing: 0.01em;
@@ -1823,7 +1833,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .v-seg-cap {
-  font-size: 9px;
+  font-size: var(--fs-xxs);
   color: var(--ink-3);
   letter-spacing: var(--tracking-wide);
   text-transform: lowercase;
@@ -1841,7 +1851,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .v-seg-dash {
-  font-size: 18px;
+  font-size: var(--fs-lead);
   color: var(--ink-4);
   flex-shrink: 0;
 }
@@ -1921,7 +1931,7 @@ input.name-input.ts-field[type="time"] {
 }
 
 .v-prop-icon {
-  font-size: 12px;
+  font-size: var(--fs-sm);
   flex-shrink: 0;
 }
 
