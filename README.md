@@ -57,7 +57,8 @@ Press **Shift + ?** in the app for the context-aware overlay. Verb keys dispatch
 
 ## Tech Stack
 - React 19 + Vite
-- Tailwind CSS
+- Hand-authored CSS against the design tokens — no CSS framework
+- Self-hosted Geist / Geist Mono (SIL Open Font License 1.1); no third-party requests at runtime
 - `uuid` npm package
 - Clipboard and File APIs
 
@@ -69,6 +70,8 @@ All design tokens — colour, typography, spacing, radius, and motion — live i
 |------|---------|
 | `tokens.json` | Token definitions in W3C Design Token format |
 | `tokens.css` | CSS custom properties consumed by the app |
+| `fonts.css` | `@font-face` declarations for the self-hosted families |
+| `fonts/` | Geist / Geist Mono woff2 subsets, plus their `OFL.txt` |
 | `Design System.html` | Living reference page; open directly in a browser |
 
 `src/index.css` imports `tokens.css` as the single source of truth for all design values. To browse every token rendered visually, open `src/design-system/Design System.html` in a browser — it links to `tokens.css` automatically.
@@ -117,6 +120,24 @@ This is also the project's browser tool for **design critique**: prefer the
 Playwright CLI over a browser MCP. `e2e/snippets.spec.js` is a worked example
 that screenshots a panel in both themes — copy it to capture any surface for
 visual review.
+
+### Accessibility and focus-ring scanners
+
+Two pixel-level checks guard defects that unit tests and ESLint cannot see,
+because what matters is the colour that actually composites onto the screen:
+
+```bash
+npm run dev        # both need the dev server running
+npm run test:a11y  # contrast, touch targets, horizontal overflow
+npm run test:focus # focus rings clipped by a sibling or a viewport edge
+```
+
+`test:a11y` walks every route in both themes at desktop and mobile widths and
+measures contrast against each element's composited background, skipping text
+inside disabled controls (WCAG 1.4.3 exempts them). `test:focus` tabs through
+every control with real keypresses — `element.focus()` does not reliably set
+`:focus-visible` — and diffs focused against resting pixels on each edge. Both
+exit non-zero on failure, so either can gate CI.
 
 Key flows to cover:
 
