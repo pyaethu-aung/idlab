@@ -1,7 +1,11 @@
 {
   "detector": {
-    "ignoreRules": ["overused-font"],
-    "ignoreFiles": [],
+    "ignoreRules": [
+      "overused-font"
+    ],
+    "ignoreFiles": [
+      "src/design-system/Design System.html"
+    ],
     "ignoreValues": []
   }
 }
