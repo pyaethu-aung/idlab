@@ -5,6 +5,15 @@ import { test, expect } from "@playwright/test";
 test("jumps and cycles tabs, and dispatches per-tab verbs", async ({ page }) => {
   await page.goto("/uuid/generate");
 
+  // Every other spec drives the app through locators, which auto-retry; this
+  // one sends a raw key, which is delivered once and dropped if nothing is
+  // listening yet. The window keydown handler is attached from a useEffect,
+  // so it lands after paint -- meaning `load` is not the same thing as
+  // "interactive". Wait for the app to go quiet (webfonts included, since
+  // their swap repaints straight over this window) before the first press.
+  await page.waitForLoadState("networkidle");
+  await expect(page.locator(".topbar")).toBeVisible();
+
   // Alt+Shift+<digit> jumps directly to the Nth leaf in LEAF_ORDER.
   await page.keyboard.press("Alt+Shift+5");
   await expect(page).toHaveURL(/\/nanoid$/);
