@@ -1091,6 +1091,12 @@ input.name-input.ts-field[type="time"] {
 }
 
 /* ─── Status bar ─────────────────────────────────────────────────────────── */
+/* Every cell is nowrap, so the row overflows whenever its content exceeds the
+   viewport -- which has nothing to do with phones. Scoping this to 640px left
+   the bar pushing the document wider than the screen right through the tablet
+   band: 806px on the generator at a 768px viewport, 955px on the validator,
+   whose bar carries four extra cells. Unconditional, so the bar scrolls itself
+   at any width and the page never does. */
 .status {
   display: flex;
   align-items: center;
@@ -1102,6 +1108,13 @@ input.name-input.ts-field[type="time"] {
   color: var(--ink-3);
   position: sticky;
   bottom: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.status::-webkit-scrollbar {
+  display: none;
 }
 
 .status-cell {
@@ -2606,19 +2619,6 @@ input.name-input.ts-field[type="time"] {
   .row-copy {
     grid-area: copy;
     justify-self: start;
-  }
-
-  /* Every status cell is nowrap, so the trailing shortcut button pushed the
-     document wider than the viewport and the whole page scrolled sideways.
-     Let the bar scroll itself, the same way .topbar-nav does at 768px. */
-  .status {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .status::-webkit-scrollbar {
-    display: none;
   }
 
   .cx-row {
