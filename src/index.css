@@ -95,14 +95,8 @@ body {
   transition: transform var(--d-swap);
 }
 
-/* Restates the resting z-index because the global :focus-visible rule sets
-   z-index: 1 to lift focused controls over their siblings, and at equal
-   specificity that would win here -- dropping the focused link below the
-   sticky top bar (z-index 10), which then covered everything but the bottom
-   2px of its ring. This link needs to sit above the bar, not above a sibling. */
 .skip-link:focus-visible {
   transform: translateY(0);
-  z-index: calc(var(--z-modal) + 1);
 }
 
 /* The target takes focus programmatically; never ring it. */
@@ -116,17 +110,34 @@ button {
 }
 
 /* The ring is painted at outline-offset 2px, entirely outside the border box,
-   which leaves it vulnerable in two ways.
-
-   Siblings: in a tight flex/grid group (chips and toggles sit 2px apart) the
-   next sibling's opaque background paints after this element and covers the
-   ring's whole right edge. z-index lifts the focused control above its
-   neighbours -- flex and grid children honour z-index without position, and
-   on anything else the declaration is simply ignored. */
+   which leaves it vulnerable in two ways. */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--r-xs);
+}
+
+/* Siblings: in a tight group (chips and toggles sit 2-6px apart) the next
+   sibling's opaque background paints after this element and covers the ring's
+   whole right edge. Lifting the focused child fixes it -- flex and grid
+   children honour z-index without position.
+
+   Listed per group rather than set on :focus-visible globally. As a global it
+   silently outranked .skip-link's deliberate z-index and dropped the focused
+   link behind the sticky top bar; anything else that sets a considered
+   z-index and can take focus would collide the same way. */
+.export-chips > :focus-visible,
+.mode-switcher > :focus-visible,
+.snip-toggle > :focus-visible,
+.version-stack > :focus-visible,
+.batch-presets > :focus-visible,
+.ns-grid > :focus-visible,
+.opt-stack > :focus-visible,
+.v-opt-stack > :focus-visible,
+.v-sample-row > :focus-visible,
+.v-input-btns > :focus-visible,
+.cx-row > :focus-visible,
+.row > :focus-visible {
   z-index: 1;
 }
 
