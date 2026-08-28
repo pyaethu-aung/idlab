@@ -1,11 +1,4 @@
-/* This @import is the slow path -- it cannot start its request until this
-   stylesheet has parsed, serialising HTML -> CSS -> Google CSS -> woff2 -- but
-   hoisting it to a <link> in index.html put a third-party host in the document's
-   critical path, which made the e2e suite flake 3 runs in 5 when the network was
-   unavailable. Self-hosting the two woff2 subsets is the real fix: it drops the
-   third-party hop entirely and satisfies the production CSP in .docker/nginx.conf,
-   which blocks fonts.googleapis.com today. Left here until that call is made. */
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
+@import "./design-system/fonts.css";
 @import "./design-system/tokens.css";
 
 /* ─── Global base ────────────────────────────────────────────────────────── */
