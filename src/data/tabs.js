@@ -76,7 +76,9 @@ export function pathForLeaf(leaf) {
 
 // Legacy single-segment routes, kept alive so old links and bookmarks survive
 // the rebrand. (/bulk had already folded into the validator.)
-const LEGACY_PATHS = {
+// Exported so the build can pre-render a real page at each one; see the
+// gh-pages-spa-fallback plugin in vite.config.js.
+export const LEGACY_PATHS = {
   "/generator": "generator",
   "/validator": "validator",
   "/bulk": "validator",

@@ -34,6 +34,10 @@ jobs:
         run: npm run test:coverage
       - name: Build
         run: npm run build
+      # Pages has no rewrite rule, so a route without its own index.html 404s.
+      # Fail here rather than shipping a site whose deep links are all broken.
+      - name: Verify deep-link routes
+        run: npm run verify:dist
       - name: Disable Jekyll
         run: touch dist/.nojekyll
       - name: Setup Pages
